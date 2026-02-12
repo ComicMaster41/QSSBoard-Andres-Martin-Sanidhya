@@ -1,0 +1,13 @@
+cat > .gitignore << 'EOF'
+# IntelliJ / JetBrains
+.idea/
+*.iml
+
+# Java build output
+out/
+target/
+*.class
+
+# macOS
+.DS_Store
+EOF
