@@ -1,0 +1,42 @@
+package comp20050.qssboard;
+import java.util.ArrayList;
+public class Position {
+    private String raw_position;
+    private int row;
+    private int col;
+    String regex = "[,_\\s]";
+    ArrayList<Integer> position = new ArrayList<>(); // first index holds row, second index holds colun
+
+    public Position(String raw_position) {
+        this.raw_position = raw_position;
+    }
+
+    public ArrayList<Integer> extractPosition() {
+        String[] pos_str = raw_position.split(regex);
+        if (pos_str[0].equals("Rhombus") || pos_str[0].equals("OctCell")) {
+            row = Integer.parseInt(pos_str[1].substring(1, 2)); // gets the row number from string
+            col = Integer.parseInt(pos_str[2].substring(1, 2)); // gets the row number from string
+            position.add(row);
+            position.add(col);
+        }
+        else {
+            throw new IllegalArgumentException("Error in extractPosition() - invalid format of cellID given!");
+        }
+
+        return position;
+    }
+
+    public ArrayList<Integer> getPosition() {
+        return position;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+}
+

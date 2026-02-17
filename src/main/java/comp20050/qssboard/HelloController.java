@@ -5,12 +5,23 @@
 package comp20050.qssboard;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import kotlin.NotImplementedError;
+
 
 public class HelloController{
+    // Functions from backend - logic for handling the player
+    GameState state = new GameState();
+
+    // colours of different players
+    Color colorP1 = Color.WHITE;
+    Color colorP2 = Color.BLACK;
+
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -683,12 +694,44 @@ public class HelloController{
 
     @FXML
     void getCellID(MouseEvent event) {
+        Polygon cell = (Polygon) event.getSource();
 
+        // get row and col
+        Position pos = new Position(cell.getId());
+        QuaxBoard.TileType tile_type;
+
+        // get tile type:
+        if (cell.getId().charAt(0) == 'R'){
+            tile_type = QuaxBoard.TileType.RHOMBUS;
+        }
+        else {
+            tile_type = QuaxBoard.TileType.OCTAGON;
+        }
+
+        // make the move:
+        GameState.Player playerBeforeMove = state.getCurrentPlayer();
+        boolean success = state.makeMove(pos, tile_type);
+        if (!success) {
+            System.out.println("print");
+            // add some text here on teh screen
+            // TO-DO
+            throw new NotImplementedError();
+        }
+
+        if (playerBeforeMove == GameState.Player.P1) {
+            cell.setFill(colorP1);
+        }
+        else if (playerBeforeMove == GameState.Player.P2) {
+            cell.setFill(colorP2);
+        }
+        else { // player must be either P1 or P2. Otherwise, we have an error
+            throw new IllegalArgumentException("Error from Controller in getCellID - NO player option given");
+        }
     }
 
     @FXML
-    void getHexID(MouseEvent event) {
-
+    void getHexID(MouseEvent event) { // this function is not needed
+        getCellID(event);
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
