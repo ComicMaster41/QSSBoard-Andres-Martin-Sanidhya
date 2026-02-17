@@ -10,9 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Polygon;
 
-import static javafx.scene.paint.Color.BLACK;
-
-public class HelloController {
+public class HelloController{
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -20,82 +18,672 @@ public class HelloController {
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
 
-    @FXML // fx:id="OctCell1"
-    private Polygon OctCell1; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r0_c0"
+    private Polygon OctCell_r0_c0; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell10"
-    private Polygon OctCell10; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r0_c1"
+    private Polygon OctCell_r0_c1; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell11"
-    private Polygon OctCell11; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r0_c10"
+    private Polygon OctCell_r0_c10; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell12"
-    private Polygon OctCell12; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r0_c2"
+    private Polygon OctCell_r0_c2; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell13"
-    private Polygon OctCell13; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r0_c3"
+    private Polygon OctCell_r0_c3; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell14"
-    private Polygon OctCell14; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r0_c4"
+    private Polygon OctCell_r0_c4; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell15"
-    private Polygon OctCell15; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r0_c5"
+    private Polygon OctCell_r0_c5; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell2"
-    private Polygon OctCell2; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r0_c6"
+    private Polygon OctCell_r0_c6; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell3"
-    private Polygon OctCell3; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r0_c7"
+    private Polygon OctCell_r0_c7; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell4"
-    private Polygon OctCell4; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r0_c8"
+    private Polygon OctCell_r0_c8; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell42"
-    private Polygon OctCell42; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r0_c9"
+    private Polygon OctCell_r0_c9; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell5"
-    private Polygon OctCell5; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r10_c0"
+    private Polygon OctCell_r10_c0; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell6"
-    private Polygon OctCell6; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r10_c1"
+    private Polygon OctCell_r10_c1; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell7"
-    private Polygon OctCell7; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r10_c10"
+    private Polygon OctCell_r10_c10; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell8"
-    private Polygon OctCell8; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r10_c2"
+    private Polygon OctCell_r10_c2; // Value injected by FXMLLoader
 
-    @FXML // fx:id="OctCell9"
-    private Polygon OctCell9; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r10_c3"
+    private Polygon OctCell_r10_c3; // Value injected by FXMLLoader
 
-    @FXML // fx:id="hex1"
-    private Polygon hex1; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r10_c4"
+    private Polygon OctCell_r10_c4; // Value injected by FXMLLoader
 
-    @FXML // fx:id="hex2"
-    private Polygon hex2; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r10_c5"
+    private Polygon OctCell_r10_c5; // Value injected by FXMLLoader
 
-    @FXML // fx:id="hex3"
-    private Polygon hex3; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r10_c6"
+    private Polygon OctCell_r10_c6; // Value injected by FXMLLoader
 
-    @FXML // fx:id="hex5"
-    private Polygon hex5; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r10_c7"
+    private Polygon OctCell_r10_c7; // Value injected by FXMLLoader
 
-    @FXML // fx:id="hex6"
-    private Polygon hex6; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r10_c8"
+    private Polygon OctCell_r10_c8; // Value injected by FXMLLoader
 
-    @FXML // fx:id="hex7"
-    private Polygon hex7; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r10_c9"
+    private Polygon OctCell_r10_c9; // Value injected by FXMLLoader
 
-    @FXML // fx:id="hex8"
-    private Polygon hex8; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r1_c0"
+    private Polygon OctCell_r1_c0; // Value injected by FXMLLoader
 
-    @FXML // fx:id="hex9"
-    private Polygon hex9; // Value injected by FXMLLoader
+    @FXML // fx:id="OctCell_r1_c1"
+    private Polygon OctCell_r1_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r1_c10"
+    private Polygon OctCell_r1_c10; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r1_c2"
+    private Polygon OctCell_r1_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r1_c3"
+    private Polygon OctCell_r1_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r1_c4"
+    private Polygon OctCell_r1_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r1_c5"
+    private Polygon OctCell_r1_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r1_c6"
+    private Polygon OctCell_r1_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r1_c7"
+    private Polygon OctCell_r1_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r1_c8"
+    private Polygon OctCell_r1_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r1_c9"
+    private Polygon OctCell_r1_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r2_c0"
+    private Polygon OctCell_r2_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r2_c1"
+    private Polygon OctCell_r2_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r2_c10"
+    private Polygon OctCell_r2_c10; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r2_c2"
+    private Polygon OctCell_r2_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r2_c3"
+    private Polygon OctCell_r2_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r2_c4"
+    private Polygon OctCell_r2_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r2_c5"
+    private Polygon OctCell_r2_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r2_c6"
+    private Polygon OctCell_r2_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r2_c7"
+    private Polygon OctCell_r2_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r2_c8"
+    private Polygon OctCell_r2_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r2_c9"
+    private Polygon OctCell_r2_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r3_c0"
+    private Polygon OctCell_r3_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r3_c1"
+    private Polygon OctCell_r3_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r3_c10"
+    private Polygon OctCell_r3_c10; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r3_c2"
+    private Polygon OctCell_r3_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r3_c3"
+    private Polygon OctCell_r3_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r3_c4"
+    private Polygon OctCell_r3_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r3_c5"
+    private Polygon OctCell_r3_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r3_c6"
+    private Polygon OctCell_r3_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r3_c7"
+    private Polygon OctCell_r3_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r3_c8"
+    private Polygon OctCell_r3_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r3_c9"
+    private Polygon OctCell_r3_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r4_c0"
+    private Polygon OctCell_r4_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r4_c1"
+    private Polygon OctCell_r4_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r4_c10"
+    private Polygon OctCell_r4_c10; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r4_c2"
+    private Polygon OctCell_r4_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r4_c3"
+    private Polygon OctCell_r4_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r4_c4"
+    private Polygon OctCell_r4_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r4_c5"
+    private Polygon OctCell_r4_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r4_c6"
+    private Polygon OctCell_r4_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r4_c7"
+    private Polygon OctCell_r4_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r4_c8"
+    private Polygon OctCell_r4_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r4_c9"
+    private Polygon OctCell_r4_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r5_c0"
+    private Polygon OctCell_r5_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r5_c1"
+    private Polygon OctCell_r5_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r5_c10"
+    private Polygon OctCell_r5_c10; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r5_c2"
+    private Polygon OctCell_r5_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r5_c3"
+    private Polygon OctCell_r5_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r5_c4"
+    private Polygon OctCell_r5_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r5_c5"
+    private Polygon OctCell_r5_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r5_c6"
+    private Polygon OctCell_r5_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r5_c7"
+    private Polygon OctCell_r5_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r5_c8"
+    private Polygon OctCell_r5_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r5_c9"
+    private Polygon OctCell_r5_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r6_c0"
+    private Polygon OctCell_r6_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r6_c1"
+    private Polygon OctCell_r6_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r6_c10"
+    private Polygon OctCell_r6_c10; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r6_c2"
+    private Polygon OctCell_r6_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r6_c3"
+    private Polygon OctCell_r6_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r6_c4"
+    private Polygon OctCell_r6_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r6_c5"
+    private Polygon OctCell_r6_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r6_c6"
+    private Polygon OctCell_r6_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r6_c7"
+    private Polygon OctCell_r6_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r6_c8"
+    private Polygon OctCell_r6_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r6_c9"
+    private Polygon OctCell_r6_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r7_c0"
+    private Polygon OctCell_r7_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r7_c1"
+    private Polygon OctCell_r7_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r7_c10"
+    private Polygon OctCell_r7_c10; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r7_c2"
+    private Polygon OctCell_r7_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r7_c3"
+    private Polygon OctCell_r7_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r7_c4"
+    private Polygon OctCell_r7_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r7_c5"
+    private Polygon OctCell_r7_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r7_c6"
+    private Polygon OctCell_r7_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r7_c7"
+    private Polygon OctCell_r7_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r7_c8"
+    private Polygon OctCell_r7_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r7_c9"
+    private Polygon OctCell_r7_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r8_c0"
+    private Polygon OctCell_r8_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r8_c1"
+    private Polygon OctCell_r8_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r8_c10"
+    private Polygon OctCell_r8_c10; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r8_c2"
+    private Polygon OctCell_r8_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r8_c3"
+    private Polygon OctCell_r8_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r8_c4"
+    private Polygon OctCell_r8_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r8_c5"
+    private Polygon OctCell_r8_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r8_c6"
+    private Polygon OctCell_r8_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r8_c7"
+    private Polygon OctCell_r8_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r8_c8"
+    private Polygon OctCell_r8_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r8_c9"
+    private Polygon OctCell_r8_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r9_c0"
+    private Polygon OctCell_r9_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r9_c1"
+    private Polygon OctCell_r9_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r9_c10"
+    private Polygon OctCell_r9_c10; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r9_c2"
+    private Polygon OctCell_r9_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r9_c3"
+    private Polygon OctCell_r9_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r9_c4"
+    private Polygon OctCell_r9_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r9_c5"
+    private Polygon OctCell_r9_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r9_c6"
+    private Polygon OctCell_r9_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r9_c7"
+    private Polygon OctCell_r9_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r9_c8"
+    private Polygon OctCell_r9_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="OctCell_r9_c9"
+    private Polygon OctCell_r9_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r0_c0"
+    private Polygon Rhombus_r0_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r0_c1"
+    private Polygon Rhombus_r0_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r0_c2"
+    private Polygon Rhombus_r0_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r0_c3"
+    private Polygon Rhombus_r0_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r0_c4"
+    private Polygon Rhombus_r0_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r0_c5"
+    private Polygon Rhombus_r0_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r0_c6"
+    private Polygon Rhombus_r0_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r0_c7"
+    private Polygon Rhombus_r0_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r0_c8"
+    private Polygon Rhombus_r0_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r0_c9"
+    private Polygon Rhombus_r0_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r1_c0"
+    private Polygon Rhombus_r1_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r1_c1"
+    private Polygon Rhombus_r1_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r1_c2"
+    private Polygon Rhombus_r1_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r1_c3"
+    private Polygon Rhombus_r1_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r1_c4"
+    private Polygon Rhombus_r1_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r1_c5"
+    private Polygon Rhombus_r1_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r1_c6"
+    private Polygon Rhombus_r1_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r1_c7"
+    private Polygon Rhombus_r1_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r1_c8"
+    private Polygon Rhombus_r1_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r1_c9"
+    private Polygon Rhombus_r1_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r2_c0"
+    private Polygon Rhombus_r2_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r2_c1"
+    private Polygon Rhombus_r2_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r2_c2"
+    private Polygon Rhombus_r2_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r2_c3"
+    private Polygon Rhombus_r2_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r2_c4"
+    private Polygon Rhombus_r2_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r2_c5"
+    private Polygon Rhombus_r2_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r2_c6"
+    private Polygon Rhombus_r2_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r2_c7"
+    private Polygon Rhombus_r2_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r2_c8"
+    private Polygon Rhombus_r2_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r2_c9"
+    private Polygon Rhombus_r2_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r3_c0"
+    private Polygon Rhombus_r3_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r3_c1"
+    private Polygon Rhombus_r3_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r3_c2"
+    private Polygon Rhombus_r3_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r3_c3"
+    private Polygon Rhombus_r3_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r3_c4"
+    private Polygon Rhombus_r3_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r3_c5"
+    private Polygon Rhombus_r3_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r3_c6"
+    private Polygon Rhombus_r3_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r3_c7"
+    private Polygon Rhombus_r3_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r3_c8"
+    private Polygon Rhombus_r3_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r3_c9"
+    private Polygon Rhombus_r3_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r4_c0"
+    private Polygon Rhombus_r4_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r4_c1"
+    private Polygon Rhombus_r4_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r4_c2"
+    private Polygon Rhombus_r4_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r4_c3"
+    private Polygon Rhombus_r4_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r4_c4"
+    private Polygon Rhombus_r4_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r4_c5"
+    private Polygon Rhombus_r4_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r4_c6"
+    private Polygon Rhombus_r4_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r4_c7"
+    private Polygon Rhombus_r4_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r4_c8"
+    private Polygon Rhombus_r4_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r4_c9"
+    private Polygon Rhombus_r4_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r5_c0"
+    private Polygon Rhombus_r5_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r5_c1"
+    private Polygon Rhombus_r5_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r5_c2"
+    private Polygon Rhombus_r5_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r5_c3"
+    private Polygon Rhombus_r5_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r5_c4"
+    private Polygon Rhombus_r5_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r5_c5"
+    private Polygon Rhombus_r5_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r5_c6"
+    private Polygon Rhombus_r5_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r5_c7"
+    private Polygon Rhombus_r5_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r5_c8"
+    private Polygon Rhombus_r5_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r5_c9"
+    private Polygon Rhombus_r5_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r6_c0"
+    private Polygon Rhombus_r6_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r6_c1"
+    private Polygon Rhombus_r6_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r6_c2"
+    private Polygon Rhombus_r6_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r6_c3"
+    private Polygon Rhombus_r6_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r6_c4"
+    private Polygon Rhombus_r6_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r6_c5"
+    private Polygon Rhombus_r6_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r6_c6"
+    private Polygon Rhombus_r6_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r6_c7"
+    private Polygon Rhombus_r6_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r6_c8"
+    private Polygon Rhombus_r6_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r6_c9"
+    private Polygon Rhombus_r6_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r7_c0"
+    private Polygon Rhombus_r7_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r7_c1"
+    private Polygon Rhombus_r7_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r7_c2"
+    private Polygon Rhombus_r7_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r7_c3"
+    private Polygon Rhombus_r7_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r7_c4"
+    private Polygon Rhombus_r7_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r7_c5"
+    private Polygon Rhombus_r7_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r7_c6"
+    private Polygon Rhombus_r7_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r7_c7"
+    private Polygon Rhombus_r7_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r7_c8"
+    private Polygon Rhombus_r7_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r7_c9"
+    private Polygon Rhombus_r7_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r8_c0"
+    private Polygon Rhombus_r8_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r8_c1"
+    private Polygon Rhombus_r8_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r8_c2"
+    private Polygon Rhombus_r8_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r8_c3"
+    private Polygon Rhombus_r8_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r8_c4"
+    private Polygon Rhombus_r8_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r8_c5"
+    private Polygon Rhombus_r8_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r8_c6"
+    private Polygon Rhombus_r8_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r8_c7"
+    private Polygon Rhombus_r8_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r8_c8"
+    private Polygon Rhombus_r8_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r8_c9"
+    private Polygon Rhombus_r8_c9; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r9_c0"
+    private Polygon Rhombus_r9_c0; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r9_c1"
+    private Polygon Rhombus_r9_c1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r9_c2"
+    private Polygon Rhombus_r9_c2; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r9_c3"
+    private Polygon Rhombus_r9_c3; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r9_c4"
+    private Polygon Rhombus_r9_c4; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r9_c5"
+    private Polygon Rhombus_r9_c5; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r9_c6"
+    private Polygon Rhombus_r9_c6; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r9_c7"
+    private Polygon Rhombus_r9_c7; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r9_c8"
+    private Polygon Rhombus_r9_c8; // Value injected by FXMLLoader
+
+    @FXML // fx:id="Rhombus_r9_c9"
+    private Polygon Rhombus_r9_c9; // Value injected by FXMLLoader
 
     @FXML
     void getCellID(MouseEvent event) {
-        Polygon cell = (Polygon) event.getSource();
-        cell.setFill(BLACK);
+
     }
 
     @FXML
@@ -105,30 +693,227 @@ public class HelloController {
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        assert OctCell1 != null : "fx:id=\"OctCell1\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell10 != null : "fx:id=\"OctCell10\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell11 != null : "fx:id=\"OctCell11\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell12 != null : "fx:id=\"OctCell12\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell13 != null : "fx:id=\"OctCell13\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell14 != null : "fx:id=\"OctCell14\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell15 != null : "fx:id=\"OctCell15\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell2 != null : "fx:id=\"OctCell2\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell3 != null : "fx:id=\"OctCell3\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell4 != null : "fx:id=\"OctCell4\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell42 != null : "fx:id=\"OctCell42\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell5 != null : "fx:id=\"OctCell5\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell6 != null : "fx:id=\"OctCell6\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell7 != null : "fx:id=\"OctCell7\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell8 != null : "fx:id=\"OctCell8\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert OctCell9 != null : "fx:id=\"OctCell9\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert hex1 != null : "fx:id=\"hex1\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert hex2 != null : "fx:id=\"hex2\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert hex3 != null : "fx:id=\"hex3\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert hex5 != null : "fx:id=\"hex5\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert hex6 != null : "fx:id=\"hex6\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert hex7 != null : "fx:id=\"hex7\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert hex8 != null : "fx:id=\"hex8\" was not injected: check your FXML file 'hello-view.fxml'.";
-        assert hex9 != null : "fx:id=\"hex9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r0_c0 != null : "fx:id=\"OctCell_r0_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r0_c1 != null : "fx:id=\"OctCell_r0_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r0_c10 != null : "fx:id=\"OctCell_r0_c10\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r0_c2 != null : "fx:id=\"OctCell_r0_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r0_c3 != null : "fx:id=\"OctCell_r0_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r0_c4 != null : "fx:id=\"OctCell_r0_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r0_c5 != null : "fx:id=\"OctCell_r0_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r0_c6 != null : "fx:id=\"OctCell_r0_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r0_c7 != null : "fx:id=\"OctCell_r0_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r0_c8 != null : "fx:id=\"OctCell_r0_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r0_c9 != null : "fx:id=\"OctCell_r0_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r10_c0 != null : "fx:id=\"OctCell_r10_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r10_c1 != null : "fx:id=\"OctCell_r10_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r10_c10 != null : "fx:id=\"OctCell_r10_c10\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r10_c2 != null : "fx:id=\"OctCell_r10_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r10_c3 != null : "fx:id=\"OctCell_r10_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r10_c4 != null : "fx:id=\"OctCell_r10_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r10_c5 != null : "fx:id=\"OctCell_r10_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r10_c6 != null : "fx:id=\"OctCell_r10_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r10_c7 != null : "fx:id=\"OctCell_r10_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r10_c8 != null : "fx:id=\"OctCell_r10_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r10_c9 != null : "fx:id=\"OctCell_r10_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r1_c0 != null : "fx:id=\"OctCell_r1_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r1_c1 != null : "fx:id=\"OctCell_r1_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r1_c10 != null : "fx:id=\"OctCell_r1_c10\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r1_c2 != null : "fx:id=\"OctCell_r1_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r1_c3 != null : "fx:id=\"OctCell_r1_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r1_c4 != null : "fx:id=\"OctCell_r1_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r1_c5 != null : "fx:id=\"OctCell_r1_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r1_c6 != null : "fx:id=\"OctCell_r1_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r1_c7 != null : "fx:id=\"OctCell_r1_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r1_c8 != null : "fx:id=\"OctCell_r1_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r1_c9 != null : "fx:id=\"OctCell_r1_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r2_c0 != null : "fx:id=\"OctCell_r2_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r2_c1 != null : "fx:id=\"OctCell_r2_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r2_c10 != null : "fx:id=\"OctCell_r2_c10\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r2_c2 != null : "fx:id=\"OctCell_r2_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r2_c3 != null : "fx:id=\"OctCell_r2_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r2_c4 != null : "fx:id=\"OctCell_r2_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r2_c5 != null : "fx:id=\"OctCell_r2_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r2_c6 != null : "fx:id=\"OctCell_r2_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r2_c7 != null : "fx:id=\"OctCell_r2_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r2_c8 != null : "fx:id=\"OctCell_r2_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r2_c9 != null : "fx:id=\"OctCell_r2_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r3_c0 != null : "fx:id=\"OctCell_r3_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r3_c1 != null : "fx:id=\"OctCell_r3_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r3_c10 != null : "fx:id=\"OctCell_r3_c10\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r3_c2 != null : "fx:id=\"OctCell_r3_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r3_c3 != null : "fx:id=\"OctCell_r3_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r3_c4 != null : "fx:id=\"OctCell_r3_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r3_c5 != null : "fx:id=\"OctCell_r3_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r3_c6 != null : "fx:id=\"OctCell_r3_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r3_c7 != null : "fx:id=\"OctCell_r3_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r3_c8 != null : "fx:id=\"OctCell_r3_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r3_c9 != null : "fx:id=\"OctCell_r3_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r4_c0 != null : "fx:id=\"OctCell_r4_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r4_c1 != null : "fx:id=\"OctCell_r4_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r4_c10 != null : "fx:id=\"OctCell_r4_c10\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r4_c2 != null : "fx:id=\"OctCell_r4_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r4_c3 != null : "fx:id=\"OctCell_r4_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r4_c4 != null : "fx:id=\"OctCell_r4_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r4_c5 != null : "fx:id=\"OctCell_r4_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r4_c6 != null : "fx:id=\"OctCell_r4_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r4_c7 != null : "fx:id=\"OctCell_r4_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r4_c8 != null : "fx:id=\"OctCell_r4_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r4_c9 != null : "fx:id=\"OctCell_r4_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r5_c0 != null : "fx:id=\"OctCell_r5_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r5_c1 != null : "fx:id=\"OctCell_r5_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r5_c10 != null : "fx:id=\"OctCell_r5_c10\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r5_c2 != null : "fx:id=\"OctCell_r5_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r5_c3 != null : "fx:id=\"OctCell_r5_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r5_c4 != null : "fx:id=\"OctCell_r5_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r5_c5 != null : "fx:id=\"OctCell_r5_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r5_c6 != null : "fx:id=\"OctCell_r5_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r5_c7 != null : "fx:id=\"OctCell_r5_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r5_c8 != null : "fx:id=\"OctCell_r5_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r5_c9 != null : "fx:id=\"OctCell_r5_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r6_c0 != null : "fx:id=\"OctCell_r6_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r6_c1 != null : "fx:id=\"OctCell_r6_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r6_c10 != null : "fx:id=\"OctCell_r6_c10\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r6_c2 != null : "fx:id=\"OctCell_r6_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r6_c3 != null : "fx:id=\"OctCell_r6_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r6_c4 != null : "fx:id=\"OctCell_r6_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r6_c5 != null : "fx:id=\"OctCell_r6_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r6_c6 != null : "fx:id=\"OctCell_r6_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r6_c7 != null : "fx:id=\"OctCell_r6_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r6_c8 != null : "fx:id=\"OctCell_r6_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r6_c9 != null : "fx:id=\"OctCell_r6_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r7_c0 != null : "fx:id=\"OctCell_r7_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r7_c1 != null : "fx:id=\"OctCell_r7_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r7_c10 != null : "fx:id=\"OctCell_r7_c10\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r7_c2 != null : "fx:id=\"OctCell_r7_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r7_c3 != null : "fx:id=\"OctCell_r7_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r7_c4 != null : "fx:id=\"OctCell_r7_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r7_c5 != null : "fx:id=\"OctCell_r7_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r7_c6 != null : "fx:id=\"OctCell_r7_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r7_c7 != null : "fx:id=\"OctCell_r7_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r7_c8 != null : "fx:id=\"OctCell_r7_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r7_c9 != null : "fx:id=\"OctCell_r7_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r8_c0 != null : "fx:id=\"OctCell_r8_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r8_c1 != null : "fx:id=\"OctCell_r8_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r8_c10 != null : "fx:id=\"OctCell_r8_c10\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r8_c2 != null : "fx:id=\"OctCell_r8_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r8_c3 != null : "fx:id=\"OctCell_r8_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r8_c4 != null : "fx:id=\"OctCell_r8_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r8_c5 != null : "fx:id=\"OctCell_r8_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r8_c6 != null : "fx:id=\"OctCell_r8_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r8_c7 != null : "fx:id=\"OctCell_r8_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r8_c8 != null : "fx:id=\"OctCell_r8_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r8_c9 != null : "fx:id=\"OctCell_r8_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r9_c0 != null : "fx:id=\"OctCell_r9_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r9_c1 != null : "fx:id=\"OctCell_r9_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r9_c10 != null : "fx:id=\"OctCell_r9_c10\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r9_c2 != null : "fx:id=\"OctCell_r9_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r9_c3 != null : "fx:id=\"OctCell_r9_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r9_c4 != null : "fx:id=\"OctCell_r9_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r9_c5 != null : "fx:id=\"OctCell_r9_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r9_c6 != null : "fx:id=\"OctCell_r9_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r9_c7 != null : "fx:id=\"OctCell_r9_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r9_c8 != null : "fx:id=\"OctCell_r9_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert OctCell_r9_c9 != null : "fx:id=\"OctCell_r9_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r0_c0 != null : "fx:id=\"Rhombus_r0_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r0_c1 != null : "fx:id=\"Rhombus_r0_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r0_c2 != null : "fx:id=\"Rhombus_r0_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r0_c3 != null : "fx:id=\"Rhombus_r0_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r0_c4 != null : "fx:id=\"Rhombus_r0_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r0_c5 != null : "fx:id=\"Rhombus_r0_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r0_c6 != null : "fx:id=\"Rhombus_r0_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r0_c7 != null : "fx:id=\"Rhombus_r0_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r0_c8 != null : "fx:id=\"Rhombus_r0_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r0_c9 != null : "fx:id=\"Rhombus_r0_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r1_c0 != null : "fx:id=\"Rhombus_r1_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r1_c1 != null : "fx:id=\"Rhombus_r1_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r1_c2 != null : "fx:id=\"Rhombus_r1_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r1_c3 != null : "fx:id=\"Rhombus_r1_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r1_c4 != null : "fx:id=\"Rhombus_r1_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r1_c5 != null : "fx:id=\"Rhombus_r1_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r1_c6 != null : "fx:id=\"Rhombus_r1_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r1_c7 != null : "fx:id=\"Rhombus_r1_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r1_c8 != null : "fx:id=\"Rhombus_r1_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r1_c9 != null : "fx:id=\"Rhombus_r1_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r2_c0 != null : "fx:id=\"Rhombus_r2_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r2_c1 != null : "fx:id=\"Rhombus_r2_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r2_c2 != null : "fx:id=\"Rhombus_r2_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r2_c3 != null : "fx:id=\"Rhombus_r2_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r2_c4 != null : "fx:id=\"Rhombus_r2_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r2_c5 != null : "fx:id=\"Rhombus_r2_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r2_c6 != null : "fx:id=\"Rhombus_r2_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r2_c7 != null : "fx:id=\"Rhombus_r2_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r2_c8 != null : "fx:id=\"Rhombus_r2_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r2_c9 != null : "fx:id=\"Rhombus_r2_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r3_c0 != null : "fx:id=\"Rhombus_r3_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r3_c1 != null : "fx:id=\"Rhombus_r3_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r3_c2 != null : "fx:id=\"Rhombus_r3_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r3_c3 != null : "fx:id=\"Rhombus_r3_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r3_c4 != null : "fx:id=\"Rhombus_r3_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r3_c5 != null : "fx:id=\"Rhombus_r3_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r3_c6 != null : "fx:id=\"Rhombus_r3_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r3_c7 != null : "fx:id=\"Rhombus_r3_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r3_c8 != null : "fx:id=\"Rhombus_r3_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r3_c9 != null : "fx:id=\"Rhombus_r3_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r4_c0 != null : "fx:id=\"Rhombus_r4_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r4_c1 != null : "fx:id=\"Rhombus_r4_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r4_c2 != null : "fx:id=\"Rhombus_r4_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r4_c3 != null : "fx:id=\"Rhombus_r4_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r4_c4 != null : "fx:id=\"Rhombus_r4_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r4_c5 != null : "fx:id=\"Rhombus_r4_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r4_c6 != null : "fx:id=\"Rhombus_r4_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r4_c7 != null : "fx:id=\"Rhombus_r4_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r4_c8 != null : "fx:id=\"Rhombus_r4_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r4_c9 != null : "fx:id=\"Rhombus_r4_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r5_c0 != null : "fx:id=\"Rhombus_r5_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r5_c1 != null : "fx:id=\"Rhombus_r5_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r5_c2 != null : "fx:id=\"Rhombus_r5_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r5_c3 != null : "fx:id=\"Rhombus_r5_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r5_c4 != null : "fx:id=\"Rhombus_r5_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r5_c5 != null : "fx:id=\"Rhombus_r5_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r5_c6 != null : "fx:id=\"Rhombus_r5_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r5_c7 != null : "fx:id=\"Rhombus_r5_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r5_c8 != null : "fx:id=\"Rhombus_r5_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r5_c9 != null : "fx:id=\"Rhombus_r5_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r6_c0 != null : "fx:id=\"Rhombus_r6_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r6_c1 != null : "fx:id=\"Rhombus_r6_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r6_c2 != null : "fx:id=\"Rhombus_r6_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r6_c3 != null : "fx:id=\"Rhombus_r6_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r6_c4 != null : "fx:id=\"Rhombus_r6_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r6_c5 != null : "fx:id=\"Rhombus_r6_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r6_c6 != null : "fx:id=\"Rhombus_r6_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r6_c7 != null : "fx:id=\"Rhombus_r6_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r6_c8 != null : "fx:id=\"Rhombus_r6_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r6_c9 != null : "fx:id=\"Rhombus_r6_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r7_c0 != null : "fx:id=\"Rhombus_r7_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r7_c1 != null : "fx:id=\"Rhombus_r7_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r7_c2 != null : "fx:id=\"Rhombus_r7_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r7_c3 != null : "fx:id=\"Rhombus_r7_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r7_c4 != null : "fx:id=\"Rhombus_r7_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r7_c5 != null : "fx:id=\"Rhombus_r7_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r7_c6 != null : "fx:id=\"Rhombus_r7_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r7_c7 != null : "fx:id=\"Rhombus_r7_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r7_c8 != null : "fx:id=\"Rhombus_r7_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r7_c9 != null : "fx:id=\"Rhombus_r7_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r8_c0 != null : "fx:id=\"Rhombus_r8_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r8_c1 != null : "fx:id=\"Rhombus_r8_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r8_c2 != null : "fx:id=\"Rhombus_r8_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r8_c3 != null : "fx:id=\"Rhombus_r8_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r8_c4 != null : "fx:id=\"Rhombus_r8_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r8_c5 != null : "fx:id=\"Rhombus_r8_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r8_c6 != null : "fx:id=\"Rhombus_r8_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r8_c7 != null : "fx:id=\"Rhombus_r8_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r8_c8 != null : "fx:id=\"Rhombus_r8_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r8_c9 != null : "fx:id=\"Rhombus_r8_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r9_c0 != null : "fx:id=\"Rhombus_r9_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r9_c1 != null : "fx:id=\"Rhombus_r9_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r9_c2 != null : "fx:id=\"Rhombus_r9_c2\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r9_c3 != null : "fx:id=\"Rhombus_r9_c3\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r9_c4 != null : "fx:id=\"Rhombus_r9_c4\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r9_c5 != null : "fx:id=\"Rhombus_r9_c5\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r9_c6 != null : "fx:id=\"Rhombus_r9_c6\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r9_c7 != null : "fx:id=\"Rhombus_r9_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r9_c8 != null : "fx:id=\"Rhombus_r9_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert Rhombus_r9_c9 != null : "fx:id=\"Rhombus_r9_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
 
     }
 

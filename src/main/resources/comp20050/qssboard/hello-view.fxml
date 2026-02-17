@@ -1,437 +1,269 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.Double?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="917.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.HelloController">
-   <children>
-      <Polygon fx:id="OctCell1" fill="#ffb91f" layoutX="27.0" layoutY="-8.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-          <points>
-              <Double fx:value="157.1" />
-              <Double fx:value="76.3" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1100.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.HelloController">
+    <children>
+      <Group layoutX="20.0" layoutY="20.0">
+         <children>
+            <Group>
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" height="35.0" layoutX="140.0" layoutY="130.0" stroke="BLACK" strokeType="INSIDE" width="773.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" height="35.0" layoutX="140.0" layoutY="830.0" stroke="BLACK" strokeType="INSIDE" width="773.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a15100" height="30.0" layoutX="558.0" layoutY="482.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" width="735.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a15100" height="30.0" layoutX="-241.0" layoutY="482.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" width="735.0" />
+               </children>
+            </Group>
+         </children>
+      </Group>
+        <!-- Board scaled the same way as your original polygons -->
+        <Group scaleX="0.75" scaleY="0.75">
 
-              <Double fx:value="157.1" />
-              <Double fx:value="123.7" />
+            <Polygon fx:id="OctCell_r0_c0" fill="#c98c07" layoutX="27.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r0_c1" fill="#c98c07" layoutX="111.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r0_c2" fill="#c98c07" layoutX="195.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r0_c3" fill="#c98c07" layoutX="279.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r0_c4" fill="#c98c07" layoutX="363.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r0_c5" fill="#c98c07" layoutX="447.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r0_c6" fill="#c98c07" layoutX="531.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r0_c7" fill="#c98c07" layoutX="615.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r0_c8" fill="#c98c07" layoutX="699.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r0_c9" fill="#c98c07" layoutX="783.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r0_c10" fill="#c98c07" layoutX="867.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
 
-              <Double fx:value="123.7" />
-              <Double fx:value="157.1" />
+            <Polygon fx:id="OctCell_r1_c0" fill="#c98c07" layoutX="27.0" layoutY="77.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r1_c1" fill="#c98c07" layoutX="111.0" layoutY="77.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r1_c2" fill="#c98c07" layoutX="195.0" layoutY="77.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r1_c3" fill="#c98c07" layoutX="279.0" layoutY="77.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r1_c4" fill="#c98c07" layoutX="363.0" layoutY="77.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r1_c5" fill="#c98c07" layoutX="447.0" layoutY="77.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r1_c6" fill="#c98c07" layoutX="531.0" layoutY="77.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r1_c7" fill="#c98c07" layoutX="615.0" layoutY="77.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r1_c8" fill="#c98c07" layoutX="699.0" layoutY="77.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r1_c9" fill="#c98c07" layoutX="783.0" layoutY="77.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r1_c10" fill="#c98c07" layoutX="867.0" layoutY="77.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
 
-              <Double fx:value="76.3" />
-              <Double fx:value="157.1" />
+            <Polygon fx:id="OctCell_r2_c0" fill="#c98c07" layoutX="27.0" layoutY="162.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r2_c1" fill="#c98c07" layoutX="111.0" layoutY="162.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r2_c2" fill="#c98c07" layoutX="195.0" layoutY="162.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r2_c3" fill="#c98c07" layoutX="279.0" layoutY="162.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r2_c4" fill="#c98c07" layoutX="363.0" layoutY="162.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r2_c5" fill="#c98c07" layoutX="447.0" layoutY="162.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r2_c6" fill="#c98c07" layoutX="531.0" layoutY="162.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r2_c7" fill="#c98c07" layoutX="615.0" layoutY="162.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r2_c8" fill="#c98c07" layoutX="699.0" layoutY="162.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r2_c9" fill="#c98c07" layoutX="783.0" layoutY="162.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r2_c10" fill="#c98c07" layoutX="867.0" layoutY="162.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
 
-              <Double fx:value="42.9" />
-              <Double fx:value="123.7" />
+            <Polygon fx:id="OctCell_r3_c0" fill="#c98c07" layoutX="27.0" layoutY="247.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r3_c1" fill="#c98c07" layoutX="111.0" layoutY="247.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r3_c2" fill="#c98c07" layoutX="195.0" layoutY="247.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r3_c3" fill="#c98c07" layoutX="279.0" layoutY="247.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r3_c4" fill="#c98c07" layoutX="363.0" layoutY="247.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r3_c5" fill="#c98c07" layoutX="447.0" layoutY="247.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r3_c6" fill="#c98c07" layoutX="531.0" layoutY="247.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r3_c7" fill="#c98c07" layoutX="615.0" layoutY="247.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r3_c8" fill="#c98c07" layoutX="699.0" layoutY="247.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r3_c9" fill="#c98c07" layoutX="783.0" layoutY="247.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r3_c10" fill="#c98c07" layoutX="867.0" layoutY="247.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
 
-              <Double fx:value="42.9" />
-              <Double fx:value="76.3" />
+            <Polygon fx:id="OctCell_r4_c0" fill="#c98c07" layoutX="27.0" layoutY="332.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r4_c1" fill="#c98c07" layoutX="111.0" layoutY="332.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r4_c2" fill="#c98c07" layoutX="195.0" layoutY="332.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r4_c3" fill="#c98c07" layoutX="279.0" layoutY="332.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r4_c4" fill="#c98c07" layoutX="363.0" layoutY="332.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r4_c5" fill="#c98c07" layoutX="447.0" layoutY="332.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r4_c6" fill="#c98c07" layoutX="531.0" layoutY="332.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r4_c7" fill="#c98c07" layoutX="615.0" layoutY="332.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r4_c8" fill="#c98c07" layoutX="699.0" layoutY="332.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r4_c9" fill="#c98c07" layoutX="783.0" layoutY="332.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r4_c10" fill="#c98c07" layoutX="867.0" layoutY="332.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
 
-              <Double fx:value="76.3" />
-              <Double fx:value="42.9" />
+            <Polygon fx:id="OctCell_r5_c0" fill="#c98c07" layoutX="27.0" layoutY="417.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r5_c1" fill="#c98c07" layoutX="111.0" layoutY="417.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r5_c2" fill="#c98c07" layoutX="195.0" layoutY="417.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r5_c3" fill="#c98c07" layoutX="279.0" layoutY="417.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r5_c4" fill="#c98c07" layoutX="363.0" layoutY="417.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r5_c5" fill="#c98c07" layoutX="447.0" layoutY="417.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r5_c6" fill="#c98c07" layoutX="531.0" layoutY="417.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r5_c7" fill="#c98c07" layoutX="615.0" layoutY="417.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r5_c8" fill="#c98c07" layoutX="699.0" layoutY="417.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r5_c9" fill="#c98c07" layoutX="783.0" layoutY="417.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r5_c10" fill="#c98c07" layoutX="867.0" layoutY="417.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
 
-              <Double fx:value="123.7" />
-              <Double fx:value="42.9" />
-          </points>
+            <Polygon fx:id="OctCell_r6_c0" fill="#c98c07" layoutX="27.0" layoutY="502.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r6_c1" fill="#c98c07" layoutX="111.0" layoutY="502.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r6_c2" fill="#c98c07" layoutX="195.0" layoutY="502.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r6_c3" fill="#c98c07" layoutX="279.0" layoutY="502.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r6_c4" fill="#c98c07" layoutX="363.0" layoutY="502.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r6_c5" fill="#c98c07" layoutX="447.0" layoutY="502.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r6_c6" fill="#c98c07" layoutX="531.0" layoutY="502.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r6_c7" fill="#c98c07" layoutX="615.0" layoutY="502.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r6_c8" fill="#c98c07" layoutX="699.0" layoutY="502.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r6_c9" fill="#c98c07" layoutX="783.0" layoutY="502.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r6_c10" fill="#c98c07" layoutX="867.0" layoutY="502.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
 
-      </Polygon>
-       <Polygon fx:id="hex1" fill="#c98c07" layoutX="69.0" layoutY="35.0" onMouseClicked="#getHexID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-           <points>
-               <Double fx:value="100.0" />
-               <Double fx:value="64.9" />
+            <Polygon fx:id="OctCell_r7_c0" fill="#c98c07" layoutX="27.0" layoutY="587.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r7_c1" fill="#c98c07" layoutX="111.0" layoutY="587.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r7_c2" fill="#c98c07" layoutX="195.0" layoutY="587.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r7_c3" fill="#c98c07" layoutX="279.0" layoutY="587.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r7_c4" fill="#c98c07" layoutX="363.0" layoutY="587.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r7_c5" fill="#c98c07" layoutX="447.0" layoutY="587.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r7_c6" fill="#c98c07" layoutX="531.0" layoutY="587.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r7_c7" fill="#c98c07" layoutX="615.0" layoutY="587.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r7_c8" fill="#c98c07" layoutX="699.0" layoutY="587.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r7_c9" fill="#c98c07" layoutX="783.0" layoutY="587.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r7_c10" fill="#c98c07" layoutX="867.0" layoutY="587.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
 
-               <Double fx:value="135.1" />
-               <Double fx:value="100.0" />
+            <Polygon fx:id="OctCell_r8_c0" fill="#c98c07" layoutX="27.0" layoutY="672.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r8_c1" fill="#c98c07" layoutX="111.0" layoutY="672.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r8_c2" fill="#c98c07" layoutX="195.0" layoutY="672.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r8_c3" fill="#c98c07" layoutX="279.0" layoutY="672.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r8_c4" fill="#c98c07" layoutX="363.0" layoutY="672.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r8_c5" fill="#c98c07" layoutX="447.0" layoutY="672.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r8_c6" fill="#c98c07" layoutX="531.0" layoutY="672.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r8_c7" fill="#c98c07" layoutX="615.0" layoutY="672.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r8_c8" fill="#c98c07" layoutX="699.0" layoutY="672.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r8_c9" fill="#c98c07" layoutX="783.0" layoutY="672.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r8_c10" fill="#c98c07" layoutX="867.0" layoutY="672.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
 
-               <Double fx:value="100.0" />
-               <Double fx:value="135.1" />
+            <Polygon fx:id="OctCell_r9_c0" fill="#c98c07" layoutX="27.0" layoutY="757.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r9_c1" fill="#c98c07" layoutX="111.0" layoutY="757.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r9_c2" fill="#c98c07" layoutX="195.0" layoutY="757.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r9_c3" fill="#c98c07" layoutX="279.0" layoutY="757.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r9_c4" fill="#c98c07" layoutX="363.0" layoutY="757.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r9_c5" fill="#c98c07" layoutX="447.0" layoutY="757.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r9_c6" fill="#c98c07" layoutX="531.0" layoutY="757.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r9_c7" fill="#c98c07" layoutX="615.0" layoutY="757.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r9_c8" fill="#c98c07" layoutX="699.0" layoutY="757.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r9_c9" fill="#c98c07" layoutX="783.0" layoutY="757.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r9_c10" fill="#c98c07" layoutX="867.0" layoutY="757.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
 
-               <Double fx:value="64.9" />
-               <Double fx:value="100.0" />
-           </points>
-       </Polygon>
-      <Polygon fx:id="OctCell2" fill="#ffb91f" layoutX="111.0" layoutY="-8.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell4" fill="#ffb91f" layoutX="111.0" layoutY="77.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell3" fill="#ffb91f" layoutX="27.0" layoutY="77.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="hex2" fill="#c98c07" layoutX="69.0" layoutY="121.0" onMouseClicked="#getHexID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="100.0" />
-            <Double fx:value="64.9" />
-            <Double fx:value="135.1" />
-            <Double fx:value="100.0" />
-            <Double fx:value="100.0" />
-            <Double fx:value="135.1" />
-            <Double fx:value="64.9" />
-            <Double fx:value="100.0" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell8" fill="#ffb91f" layoutX="196.0" layoutY="-9.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="hex6" fill="#c98c07" layoutX="238.0" layoutY="34.0" onMouseClicked="#getHexID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="100.0" />
-            <Double fx:value="64.9" />
-            <Double fx:value="135.1" />
-            <Double fx:value="100.0" />
-            <Double fx:value="100.0" />
-            <Double fx:value="135.1" />
-            <Double fx:value="64.9" />
-            <Double fx:value="100.0" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell9" fill="#ffb91f" layoutX="280.0" layoutY="-9.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell11" fill="#ffb91f" layoutX="280.0" layoutY="76.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell10" fill="#ffb91f" layoutX="196.0" layoutY="76.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="hex7" fill="#c98c07" layoutX="238.0" layoutY="120.0" onMouseClicked="#getHexID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="100.0" />
-            <Double fx:value="64.9" />
-            <Double fx:value="135.1" />
-            <Double fx:value="100.0" />
-            <Double fx:value="100.0" />
-            <Double fx:value="135.1" />
-            <Double fx:value="64.9" />
-            <Double fx:value="100.0" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell5" fill="#ffb91f" layoutX="26.0" layoutY="162.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="hex3" fill="#c98c07" layoutX="68.0" layoutY="205.0" onMouseClicked="#getHexID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="100.0" />
-            <Double fx:value="64.9" />
-            <Double fx:value="135.1" />
-            <Double fx:value="100.0" />
-            <Double fx:value="100.0" />
-            <Double fx:value="135.1" />
-            <Double fx:value="64.9" />
-            <Double fx:value="100.0" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell6" fill="#ffb91f" layoutX="110.0" layoutY="162.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell42" fill="#ffb91f" layoutX="110.0" layoutY="247.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell7" fill="#ffb91f" layoutX="26.0" layoutY="247.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="hex5" fill="#c98c07" layoutX="68.0" layoutY="291.0" onMouseClicked="#getHexID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="100.0" />
-            <Double fx:value="64.9" />
-            <Double fx:value="135.1" />
-            <Double fx:value="100.0" />
-            <Double fx:value="100.0" />
-            <Double fx:value="135.1" />
-            <Double fx:value="64.9" />
-            <Double fx:value="100.0" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell12" fill="#ffb91f" layoutX="195.0" layoutY="161.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="hex8" fill="#c98c07" layoutX="237.0" layoutY="204.0" onMouseClicked="#getHexID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="100.0" />
-            <Double fx:value="64.9" />
-            <Double fx:value="135.1" />
-            <Double fx:value="100.0" />
-            <Double fx:value="100.0" />
-            <Double fx:value="135.1" />
-            <Double fx:value="64.9" />
-            <Double fx:value="100.0" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell13" fill="#ffb91f" layoutX="279.0" layoutY="161.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell15" fill="#ffb91f" layoutX="279.0" layoutY="246.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="OctCell14" fill="#ffb91f" layoutX="195.0" layoutY="246.0" onMouseClicked="#getCellID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="123.7" />
-            <Double fx:value="123.7" />
-            <Double fx:value="157.1" />
-            <Double fx:value="76.3" />
-            <Double fx:value="157.1" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-            <Double fx:value="76.3" />
-            <Double fx:value="76.3" />
-            <Double fx:value="42.9" />
-            <Double fx:value="123.7" />
-            <Double fx:value="42.9" />
-         </points>
-      </Polygon>
-      <Polygon fx:id="hex9" fill="#c98c07" layoutX="237.0" layoutY="290.0" onMouseClicked="#getHexID" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" strokeType="INSIDE">
-         <points>
-            <Double fx:value="100.0" />
-            <Double fx:value="64.9" />
-            <Double fx:value="135.1" />
-            <Double fx:value="100.0" />
-            <Double fx:value="100.0" />
-            <Double fx:value="135.1" />
-            <Double fx:value="64.9" />
-            <Double fx:value="100.0" />
-         </points>
-      </Polygon>
-   </children>
+            <Polygon fx:id="OctCell_r10_c0" fill="#c98c07" layoutX="27.0" layoutY="842.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r10_c1" fill="#c98c07" layoutX="111.0" layoutY="842.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r10_c2" fill="#c98c07" layoutX="195.0" layoutY="842.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r10_c3" fill="#c98c07" layoutX="279.0" layoutY="842.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r10_c4" fill="#c98c07" layoutX="363.0" layoutY="842.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r10_c5" fill="#c98c07" layoutX="447.0" layoutY="842.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r10_c6" fill="#c98c07" layoutX="531.0" layoutY="842.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r10_c7" fill="#c98c07" layoutX="615.0" layoutY="842.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r10_c8" fill="#c98c07" layoutX="699.0" layoutY="842.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r10_c9" fill="#c98c07" layoutX="783.0" layoutY="842.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="OctCell_r10_c10" fill="#c98c07" layoutX="867.0" layoutY="842.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+
+            <Polygon fx:id="Rhombus_r0_c0" fill="#ffb91f" layoutX="69.0" layoutY="34.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r0_c1" fill="#ffb91f" layoutX="153.0" layoutY="34.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r0_c2" fill="#ffb91f" layoutX="237.0" layoutY="34.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r0_c3" fill="#ffb91f" layoutX="321.0" layoutY="34.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r0_c4" fill="#ffb91f" layoutX="405.0" layoutY="34.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r0_c5" fill="#ffb91f" layoutX="489.0" layoutY="34.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r0_c6" fill="#ffb91f" layoutX="573.0" layoutY="34.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r0_c7" fill="#ffb91f" layoutX="657.0" layoutY="34.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r0_c8" fill="#ffb91f" layoutX="741.0" layoutY="34.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r0_c9" fill="#ffb91f" layoutX="825.0" layoutY="34.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+
+            <Polygon fx:id="Rhombus_r1_c0" fill="#ffb91f" layoutX="69.0" layoutY="119.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r1_c1" fill="#ffb91f" layoutX="153.0" layoutY="119.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r1_c2" fill="#ffb91f" layoutX="237.0" layoutY="119.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r1_c3" fill="#ffb91f" layoutX="321.0" layoutY="119.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r1_c4" fill="#ffb91f" layoutX="405.0" layoutY="119.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r1_c5" fill="#ffb91f" layoutX="489.0" layoutY="119.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r1_c6" fill="#ffb91f" layoutX="573.0" layoutY="119.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r1_c7" fill="#ffb91f" layoutX="657.0" layoutY="119.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r1_c8" fill="#ffb91f" layoutX="741.0" layoutY="119.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r1_c9" fill="#ffb91f" layoutX="825.0" layoutY="119.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+
+            <Polygon fx:id="Rhombus_r2_c0" fill="#ffb91f" layoutX="69.0" layoutY="204.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r2_c1" fill="#ffb91f" layoutX="153.0" layoutY="204.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r2_c2" fill="#ffb91f" layoutX="237.0" layoutY="204.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r2_c3" fill="#ffb91f" layoutX="321.0" layoutY="204.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r2_c4" fill="#ffb91f" layoutX="405.0" layoutY="204.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r2_c5" fill="#ffb91f" layoutX="489.0" layoutY="204.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r2_c6" fill="#ffb91f" layoutX="573.0" layoutY="204.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r2_c7" fill="#ffb91f" layoutX="657.0" layoutY="204.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r2_c8" fill="#ffb91f" layoutX="741.0" layoutY="204.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r2_c9" fill="#ffb91f" layoutX="825.0" layoutY="204.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+
+            <Polygon fx:id="Rhombus_r3_c0" fill="#ffb91f" layoutX="69.0" layoutY="289.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r3_c1" fill="#ffb91f" layoutX="153.0" layoutY="289.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r3_c2" fill="#ffb91f" layoutX="237.0" layoutY="289.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r3_c3" fill="#ffb91f" layoutX="321.0" layoutY="289.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r3_c4" fill="#ffb91f" layoutX="405.0" layoutY="289.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r3_c5" fill="#ffb91f" layoutX="489.0" layoutY="289.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r3_c6" fill="#ffb91f" layoutX="573.0" layoutY="289.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r3_c7" fill="#ffb91f" layoutX="657.0" layoutY="289.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r3_c8" fill="#ffb91f" layoutX="741.0" layoutY="289.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r3_c9" fill="#ffb91f" layoutX="825.0" layoutY="289.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+
+            <Polygon fx:id="Rhombus_r4_c0" fill="#ffb91f" layoutX="69.0" layoutY="374.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r4_c1" fill="#ffb91f" layoutX="153.0" layoutY="374.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r4_c2" fill="#ffb91f" layoutX="237.0" layoutY="374.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r4_c3" fill="#ffb91f" layoutX="321.0" layoutY="374.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r4_c4" fill="#ffb91f" layoutX="405.0" layoutY="374.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r4_c5" fill="#ffb91f" layoutX="489.0" layoutY="374.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r4_c6" fill="#ffb91f" layoutX="573.0" layoutY="374.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r4_c7" fill="#ffb91f" layoutX="657.0" layoutY="374.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r4_c8" fill="#ffb91f" layoutX="741.0" layoutY="374.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r4_c9" fill="#ffb91f" layoutX="825.0" layoutY="374.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+
+            <Polygon fx:id="Rhombus_r5_c0" fill="#ffb91f" layoutX="69.0" layoutY="459.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r5_c1" fill="#ffb91f" layoutX="153.0" layoutY="459.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r5_c2" fill="#ffb91f" layoutX="237.0" layoutY="459.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r5_c3" fill="#ffb91f" layoutX="321.0" layoutY="459.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r5_c4" fill="#ffb91f" layoutX="405.0" layoutY="459.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r5_c5" fill="#ffb91f" layoutX="489.0" layoutY="459.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r5_c6" fill="#ffb91f" layoutX="573.0" layoutY="459.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r5_c7" fill="#ffb91f" layoutX="657.0" layoutY="459.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r5_c8" fill="#ffb91f" layoutX="741.0" layoutY="459.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r5_c9" fill="#ffb91f" layoutX="825.0" layoutY="459.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+
+            <Polygon fx:id="Rhombus_r6_c0" fill="#ffb91f" layoutX="69.0" layoutY="544.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r6_c1" fill="#ffb91f" layoutX="153.0" layoutY="544.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r6_c2" fill="#ffb91f" layoutX="237.0" layoutY="544.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r6_c3" fill="#ffb91f" layoutX="321.0" layoutY="544.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r6_c4" fill="#ffb91f" layoutX="405.0" layoutY="544.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r6_c5" fill="#ffb91f" layoutX="489.0" layoutY="544.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r6_c6" fill="#ffb91f" layoutX="573.0" layoutY="544.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r6_c7" fill="#ffb91f" layoutX="657.0" layoutY="544.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r6_c8" fill="#ffb91f" layoutX="741.0" layoutY="544.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r6_c9" fill="#ffb91f" layoutX="825.0" layoutY="544.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+
+            <Polygon fx:id="Rhombus_r7_c0" fill="#ffb91f" layoutX="69.0" layoutY="629.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r7_c1" fill="#ffb91f" layoutX="153.0" layoutY="629.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r7_c2" fill="#ffb91f" layoutX="237.0" layoutY="629.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r7_c3" fill="#ffb91f" layoutX="321.0" layoutY="629.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r7_c4" fill="#ffb91f" layoutX="405.0" layoutY="629.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r7_c5" fill="#ffb91f" layoutX="489.0" layoutY="629.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r7_c6" fill="#ffb91f" layoutX="573.0" layoutY="629.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r7_c7" fill="#ffb91f" layoutX="657.0" layoutY="629.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r7_c8" fill="#ffb91f" layoutX="741.0" layoutY="629.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r7_c9" fill="#ffb91f" layoutX="825.0" layoutY="629.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+
+            <Polygon fx:id="Rhombus_r8_c0" fill="#ffb91f" layoutX="69.0" layoutY="714.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r8_c1" fill="#ffb91f" layoutX="153.0" layoutY="714.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r8_c2" fill="#ffb91f" layoutX="237.0" layoutY="714.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r8_c3" fill="#ffb91f" layoutX="321.0" layoutY="714.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r8_c4" fill="#ffb91f" layoutX="405.0" layoutY="714.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r8_c5" fill="#ffb91f" layoutX="489.0" layoutY="714.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r8_c6" fill="#ffb91f" layoutX="573.0" layoutY="714.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r8_c7" fill="#ffb91f" layoutX="657.0" layoutY="714.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r8_c8" fill="#ffb91f" layoutX="741.0" layoutY="714.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r8_c9" fill="#ffb91f" layoutX="825.0" layoutY="714.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+
+            <Polygon fx:id="Rhombus_r9_c0" fill="#ffb91f" layoutX="69.0" layoutY="799.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r9_c1" fill="#ffb91f" layoutX="153.0" layoutY="799.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r9_c2" fill="#ffb91f" layoutX="237.0" layoutY="799.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r9_c3" fill="#ffb91f" layoutX="321.0" layoutY="799.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r9_c4" fill="#ffb91f" layoutX="405.0" layoutY="799.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r9_c5" fill="#ffb91f" layoutX="489.0" layoutY="799.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r9_c6" fill="#ffb91f" layoutX="573.0" layoutY="799.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r9_c7" fill="#ffb91f" layoutX="657.0" layoutY="799.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r9_c8" fill="#ffb91f" layoutX="741.0" layoutY="799.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="Rhombus_r9_c9" fill="#ffb91f" layoutX="825.0" layoutY="799.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+
+        </Group>
+    </children>
 </AnchorPane>
