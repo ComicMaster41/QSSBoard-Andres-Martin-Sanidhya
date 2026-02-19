@@ -5,29 +5,25 @@
 package comp20050.qssboard;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import kotlin.NotImplementedError;
 
-
-public class HelloController{
-    // Functions from backend - logic for handling the player
-    GameState state = new GameState();
-
-    // colours of different players
-    Color colorP1 = Color.WHITE;
-    Color colorP2 = Color.BLACK;
-
+public class HelloController {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
+
+    @FXML // fx:id="BottomLetters"
+    private Group BottomLetters; // Value injected by FXMLLoader
+
+    @FXML // fx:id="LeftNumbers"
+    private Group LeftNumbers; // Value injected by FXMLLoader
 
     @FXML // fx:id="OctCell_r0_c0"
     private Polygon OctCell_r0_c0; // Value injected by FXMLLoader
@@ -692,50 +688,26 @@ public class HelloController{
     @FXML // fx:id="Rhombus_r9_c9"
     private Polygon Rhombus_r9_c9; // Value injected by FXMLLoader
 
+    @FXML // fx:id="RightNumbers"
+    private Group RightNumbers; // Value injected by FXMLLoader
+
+    @FXML // fx:id="TopLetters"
+    private Group TopLetters; // Value injected by FXMLLoader
+
     @FXML
     void getCellID(MouseEvent event) {
-        Polygon cell = (Polygon) event.getSource();
 
-        // get row and col
-        Position pos = new Position(cell.getId());
-        QuaxBoard.TileType tile_type;
-
-        // get tile type:
-        if (cell.getId().charAt(0) == 'R'){
-            tile_type = QuaxBoard.TileType.RHOMBUS;
-        }
-        else {
-            tile_type = QuaxBoard.TileType.OCTAGON;
-        }
-
-        // make the move:
-        GameState.Player playerBeforeMove = state.getCurrentPlayer();
-        boolean success = state.makeMove(pos, tile_type);
-        if (!success) {
-            System.out.println("print");
-            // add some text here on teh screen
-            // TO-DO
-            throw new NotImplementedError();
-        }
-
-        if (playerBeforeMove == GameState.Player.P1) {
-            cell.setFill(colorP1);
-        }
-        else if (playerBeforeMove == GameState.Player.P2) {
-            cell.setFill(colorP2);
-        }
-        else { // player must be either P1 or P2. Otherwise, we have an error
-            throw new IllegalArgumentException("Error from Controller in getCellID - NO player option given");
-        }
     }
 
     @FXML
-    void getHexID(MouseEvent event) { // this function is not needed
-        getCellID(event);
+    void getHexID(MouseEvent event) {
+
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
+        assert BottomLetters != null : "fx:id=\"BottomLetters\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert LeftNumbers != null : "fx:id=\"LeftNumbers\" was not injected: check your FXML file 'hello-view.fxml'.";
         assert OctCell_r0_c0 != null : "fx:id=\"OctCell_r0_c0\" was not injected: check your FXML file 'hello-view.fxml'.";
         assert OctCell_r0_c1 != null : "fx:id=\"OctCell_r0_c1\" was not injected: check your FXML file 'hello-view.fxml'.";
         assert OctCell_r0_c10 != null : "fx:id=\"OctCell_r0_c10\" was not injected: check your FXML file 'hello-view.fxml'.";
@@ -957,6 +929,8 @@ public class HelloController{
         assert Rhombus_r9_c7 != null : "fx:id=\"Rhombus_r9_c7\" was not injected: check your FXML file 'hello-view.fxml'.";
         assert Rhombus_r9_c8 != null : "fx:id=\"Rhombus_r9_c8\" was not injected: check your FXML file 'hello-view.fxml'.";
         assert Rhombus_r9_c9 != null : "fx:id=\"Rhombus_r9_c9\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert RightNumbers != null : "fx:id=\"RightNumbers\" was not injected: check your FXML file 'hello-view.fxml'.";
+        assert TopLetters != null : "fx:id=\"TopLetters\" was not injected: check your FXML file 'hello-view.fxml'.";
 
     }
 
