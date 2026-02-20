@@ -16,9 +16,11 @@ public class GameState {
         pos.extractPosition();
         int row = pos.getRow();
         int col = pos.getCol();
+        /*
         if (!game_board.isMoveValid(row, col, tileType)){
             return false;
         }
+         */
 
         game_board.makeMove(row, col, current_player, tileType);
         switchPlayerTurn();
