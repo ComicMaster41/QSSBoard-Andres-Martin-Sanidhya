@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1100.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.HelloController">
-    <children>
-        <!-- AI generated code -->
-        <!-- Column letters: TOP (above the top black border) -->
-        <Group fx:id="TopLetters" layoutX="-20.0">
+<StackPane fx:id="root" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.HelloController" alignment="TOP_CENTER" > <!-- ChatGPT suggestion instead of AnchorPane -->
+    <Group fx:id="boardWrapper">
+        <Group fx:id="Title">
+            <Label layoutX="450.0" layoutY="-1.0" style="-fx-font-size: 28px; -fx-font-weight: bold;" text="Quax (Human vs. Human)" textFill="#eb3b00"/>
+        </Group>
+        <!-- AI generated code with the letters/numbers because of redundancy -->
+        <Group fx:id="TopLetters" layoutX="75.0" layoutY="-21.0">
             <children>
                 <Text layoutX="225.0" layoutY="120.0" scaleX="3.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A" />
                 <Text layoutX="289.0" layoutY="120.0" scaleX="3.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="B" />
@@ -25,9 +29,7 @@
                 <Text layoutX="865.0" layoutY="120.0" scaleX="3.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="K" />
             </children>
         </Group>
-
-        <!-- Column letters: BOTTOM (below the bottom black border) -->
-        <Group fx:id="BottomLetters" layoutX="-20.0" layoutY="-20.0">
+        <Group fx:id="BottomLetters" layoutX="75.0" layoutY="-41.0">
             <children>
                 <Text layoutX="225.0" layoutY="905.0" scaleX="3.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A" />
                 <Text layoutX="289.0" layoutY="905.0" scaleX="3.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="B" />
@@ -39,19 +41,18 @@
                 <Text layoutX="673.0" layoutY="905.0" scaleX="3.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="H" />
                 <Text layoutX="737.0" layoutY="905.0" scaleX="3.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="I" />
                 <Text layoutX="801.0" layoutY="905.0" scaleX="3.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="J" />
+                <Text layoutX="865.0" layoutY="905.0" scaleX="3.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="K" />
             </children>
         </Group>
-        <Group>
+        <Group fx:id="BlackBorders" layoutX="95.0" layoutY="-21.0">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" height="35.0" layoutX="140.0" layoutY="130.0" stroke="BLACK" strokeType="INSIDE" width="773.0" />
                   <Rectangle arcHeight="5.0" arcWidth="5.0" height="35.0" layoutX="140.0" layoutY="830.0" stroke="BLACK" strokeType="INSIDE" width="773.0" />
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a15100" height="30.0" layoutX="558.0" layoutY="482.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" width="735.0" />
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a15100" height="30.0" layoutX="-241.0" layoutY="482.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" width="735.0" />
                </children>
-            </Group>
-
-        <!-- Row numbers: LEFT (inside left orange border) -->
-        <Group fx:id="LeftNumbers">
+        </Group>
+        <Group fx:id="LeftNumbers" layoutX="95.0" layoutY="-21.0">
             <children>
                 <Text layoutX="120.0" layoutY="190.0" scaleX="1.5" scaleY="1.5" scaleZ="1.5" strokeType="OUTSIDE" strokeWidth="0.0" text="11" />
                 <Text layoutX="120.0" layoutY="252.0" scaleX="1.5" scaleY="1.5" scaleZ="1.5" strokeType="OUTSIDE" strokeWidth="0.0" text="10" />
@@ -66,9 +67,7 @@
                 <Text layoutX="120.0" layoutY="810.0" scaleX="1.5" scaleY="1.5" scaleZ="1.5" strokeType="OUTSIDE" strokeWidth="0.0" text="1" />
             </children>
         </Group>
-
-        <!-- Row numbers: RIGHT (inside right orange border) -->
-        <Group fx:id="RightNumbers">
+        <Group fx:id="RightNumbers" layoutX="95.0" layoutY="-21.0">
             <children>
                 <Text layoutX="920.0" layoutY="190.0" scaleX="1.5" scaleY="1.5" scaleZ="1.5" strokeType="OUTSIDE" strokeWidth="0.0" text="11" />
                 <Text layoutX="920.0" layoutY="252.0" scaleX="1.5" scaleY="1.5" scaleZ="1.5" strokeType="OUTSIDE" strokeWidth="0.0" text="10" />
@@ -83,12 +82,9 @@
                 <Text layoutX="920.0" layoutY="810.0" scaleX="1.5" scaleY="1.5" scaleZ="1.5" strokeType="OUTSIDE" strokeWidth="0.0" text="1" />
             </children>
         </Group>
-
-                    <!-- end AI code -->
-        <!-- Board scaled the same way as your original polygons -->
-        <Group layoutX="-20.0" layoutY="-20.0" scaleX="0.75" scaleY="0.75">
-
-                              <Polygon fx:id="OctCell_r0_c0" fill="#c98c07" layoutX="27.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+        <!-- end AI code -->
+        <Group fx:id="ShapeLayout" layoutX="75.0" layoutY="-41.0" scaleX="0.75" scaleY="0.75">
+            <Polygon fx:id="OctCell_r0_c0" fill="#c98c07" layoutX="27.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
             <Polygon fx:id="OctCell_r0_c1" fill="#c98c07" layoutX="111.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
             <Polygon fx:id="OctCell_r0_c2" fill="#c98c07" layoutX="195.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
             <Polygon fx:id="OctCell_r0_c3" fill="#c98c07" layoutX="279.0" layoutY="-8.0" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
@@ -331,5 +327,8 @@
             <Polygon fx:id="Rhombus_r9_c9" fill="#ffb91f" layoutX="825.0" layoutY="799.5" onMouseClicked="#getHexID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
 
                           </Group>
-    </children>
-</AnchorPane>
+    </Group>
+   <padding>
+      <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
+   </padding>
+</StackPane>
