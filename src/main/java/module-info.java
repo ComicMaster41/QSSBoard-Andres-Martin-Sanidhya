@@ -8,7 +8,6 @@ module comp20050.qssboard {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
-    requires jdk.jfr;
 
     opens comp20050.qssboard to javafx.fxml;
     exports comp20050.qssboard;
