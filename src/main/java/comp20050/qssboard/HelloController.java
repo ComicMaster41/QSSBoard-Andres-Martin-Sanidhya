@@ -8,10 +8,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import kotlin.NotImplementedError;
+
 
 
 public class HelloController{
@@ -28,6 +30,24 @@ public class HelloController{
 
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
+
+
+
+
+
+
+
+    @FXML // fx:id="OctCell_r0_c0"
+    private Polygon OctCell_turn;
+
+    @FXML // fx:id="OctCell_r0_c0"
+    private Polygon Rhombus_turn;
+
+    @FXML
+    private Label turnLabel;
+
+
+
 
     @FXML // fx:id="OctCell_r0_c0"
     private Polygon OctCell_r0_c0; // Value injected by FXMLLoader
@@ -720,9 +740,16 @@ public class HelloController{
 
         if (playerBeforeMove == GameState.Player.P1) {
             cell.setFill(colorP1);
+            OctCell_turn.setFill(colorP2);
+            Rhombus_turn.setFill(colorP2);
+            turnLabel.setText("Black to play");
+
         }
         else if (playerBeforeMove == GameState.Player.P2) {
             cell.setFill(colorP2);
+            OctCell_turn.setFill(colorP1);
+            Rhombus_turn.setFill(colorP1);
+            turnLabel.setText("White to play");
         }
         else { // player must be either P1 or P2. Otherwise, we have an error
             throw new IllegalArgumentException("Error from Controller in getCellID - NO player option given");
