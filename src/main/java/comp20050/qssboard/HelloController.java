@@ -11,8 +11,32 @@ import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
+import kotlin.NotImplementedError;
+import javafx.scene.paint.Color;
+import javafx.scene.control.Label;
+
+
 
 public class HelloController {
+
+    // Functions from backend - logic for handling the player
+    GameState state = new GameState();
+
+    // colours of different players
+    Color colorP1 = Color.WHITE;
+    Color colorP2 = Color.BLACK;
+
+    @FXML // fx:id="OctCell_r0_c0"
+    private Polygon OctCell_turn;
+
+    @FXML // fx:id="OctCell_r0_c0"
+    private Polygon Rhombus_turn;
+
+    @FXML
+    private Label turnLabel;
+
+    private boolean isWhiteTurn = true;  // White starts
+
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -712,16 +736,68 @@ public class HelloController {
 
     @FXML
     void getCellID(MouseEvent event) {
+        updateTurnDisplay();
 
+        Polygon cell = (Polygon) event.getSource();
+
+        // get row and col
+        Position pos = new Position(cell.getId());
+        QuaxBoard.TileType tile_type;
+
+        // get tile type:
+        if (cell.getId().charAt(0) == 'R'){
+            tile_type = QuaxBoard.TileType.RHOMBUS;
+        }
+        else {
+            tile_type = QuaxBoard.TileType.OCTAGON;
+        }
+
+        // make the move:
+        GameState.Player playerBeforeMove = state.getCurrentPlayer();
+        boolean success = state.makeMove(pos, tile_type);
+        if (!success) {
+            System.out.println("print");
+            // add some text here on teh screen
+            // TO-DO
+            throw new NotImplementedError();
+        }
+
+        if (playerBeforeMove == GameState.Player.P1) {
+            cell.setFill(colorP1);
+        }
+        else if (playerBeforeMove == GameState.Player.P2) {
+            cell.setFill(colorP2);
+        }
+        else { // player must be either P1 or P2. Otherwise, we have an error
+            throw new IllegalArgumentException("Error from Controller in getCellID - NO player option given");
+        }
+
+        isWhiteTurn = !isWhiteTurn;
     }
 
     @FXML
     void getHexID(MouseEvent event) {
-
+        getCellID(event);
     }
 
+    private void updateTurnDisplay() {
+        if (isWhiteTurn) {
+            OctCell_turn.setFill(colorP1);
+            Rhombus_turn.setFill(colorP1);
+            turnLabel.setText("White to play");
+        } else {
+            OctCell_turn.setFill(colorP2);
+            Rhombus_turn.setFill(colorP2);
+            turnLabel.setText("Black to play");
+        }
+    }
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
+
+        // just to give initla white colour
+        OctCell_turn.setFill(colorP1);
+        Rhombus_turn.setFill(colorP1);
+        isWhiteTurn = !isWhiteTurn;
         assert BlackBorders != null : "fx:id=\"BlackBorders\" was not injected: check your FXML file 'hello-view.fxml'.";
         assert BottomLetters != null : "fx:id=\"BottomLetters\" was not injected: check your FXML file 'hello-view.fxml'.";
         assert LeftNumbers != null : "fx:id=\"LeftNumbers\" was not injected: check your FXML file 'hello-view.fxml'.";
