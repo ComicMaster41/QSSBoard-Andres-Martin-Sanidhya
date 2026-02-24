@@ -6,8 +6,11 @@ package comp20050.qssboard;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
@@ -1030,5 +1033,15 @@ public class HelloController {
         assert root != null : "fx:id=\"root\" was not injected: check your FXML file 'hello-view.fxml'.";
 
     }
+    // Create button variable
+    @FXML
+    private Button activatePieButton;
 
+    @FXML
+    public void handlePieButtonClick(ActionEvent actionEvent) {
+        // May have to move this to an update method
+        activatePieButton.setVisible(false);
+        activatePieButton.setManaged(false); // not entirely necessary considering we don't care if it has space on board
+        // Ai recommendation to include this setManaged
+    }
 }
