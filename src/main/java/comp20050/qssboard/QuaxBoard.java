@@ -6,43 +6,49 @@ public class QuaxBoard {
         RHOMBUS
     };
 
-    private GameState.Player[][] state_board_octagon;
-    private GameState.Player[][] state_board_rhombus;
-
+    private Tile[][] state_board;
 
 
     public QuaxBoard() {
-        this.state_board_octagon = new GameState.Player[11][11];
-        this.state_board_rhombus = new GameState.Player[11][11];
+
+        this.state_board = new Tile[11][21];
+        initialise_board();
+    }
+
+    private void initialise_board() {
+        Tile new_tile;
+        for (int i = 0; i < Tile.NUM_ROWS; i++) {
+            for (int j = 0; j < Tile.NUM_COLS; j++) {
+                if (j % 2 == 0) {
+                    new_tile =  new Tile(TileType.OCTAGON);
+                }
+                else {
+                    new_tile =  new Tile(TileType.RHOMBUS);
+                }
+                state_board[i][j] = new_tile;
+            }
+        }
     }
 
     public boolean isMoveValid(int row, int col, TileType t) { // returns if the board position is empty
-       if (t == TileType.OCTAGON) {
-           if (state_board_octagon[row][col] == null) {
-               return true;
-           } else {
-               return false;
-           }
-       }
-       else {
-           if (state_board_rhombus[row][col] == null) {
-               return true;
-           } else {
-               return false;
-           }
+        if (state_board[row][col] == null || state_board[row][col].owner == null) {
+           return true;
+       } else {
+           return false;
        }
     }
     public void makeMove(int row, int col, GameState.Player current_player, TileType t) {
-        if (t == TileType.OCTAGON) {
-            state_board_octagon[row][col] = current_player;
-        }
-        else {
-            state_board_rhombus[row][col] = current_player;
-        }
-        // logic for dsa to store the player's chain (i.e. a linked list for each player) will go here:
+        Tile tile = new Tile(t); // this sets TileType
+        state_board[row][col] = tile;
+        state_board[row][col].owner = current_player;
+        System.out.println("Row " + row + " Col " + col + " is of type " + state_board[row][col].type + " and belongs to " + state_board[row][col].owner);
+
     }
 
-    public GameState.Player[][] getStateBoard() {
-        return state_board_octagon;
+    public Tile[][] getStateBoard() {
+        return state_board;
+    }
+    public void changeTileOwner(int row, int col, GameState.Player current_player) {
+        state_board[row][col].owner = current_player;
     }
 }

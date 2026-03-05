@@ -340,6 +340,7 @@
 
         <Polygon fx:id="Rhombus_turn" fill="#ffb91f" layoutX="1100" layoutY="720" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
     </Group>
+
     <!--ACTIVATE PIE BUTTON BELOW -->
    <Button fx:id="activatePieButton" mnemonicParsing="false" onAction="#handlePieButtonClick" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Activate Pie Rule" translateX="600.0">
       <effect>

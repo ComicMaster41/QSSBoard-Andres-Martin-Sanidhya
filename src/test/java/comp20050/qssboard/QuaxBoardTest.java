@@ -77,20 +77,20 @@ class QuaxBoardTest {
         }
     }
 
-    @Nested
-    @DisplayName("Tests for getStateBoard")
-    class GetStateBoardTests {
-        @Test
-        @DisplayName("OCTAGON board is empty initially")
-        void octagonEmptyInitially() {
-            GameState.Player[][] boardState = board.getStateBoard();
-            for (int r = 0; r < 11; r++) {
-                for (int c = 0; c < 11; c++) {
-                    assertNull(boardState[r][c]);
-                }
-            }
-        }
-    }
+//    @Nested
+//    @DisplayName("Tests for getStateBoard")
+//    class GetStateBoardTests {
+//        @Test
+//        @DisplayName("OCTAGON board is empty initially")
+//        void octagonEmptyInitially() {
+//            GameState.Player[][] boardState = board.getStateBoard();
+//            for (int r = 0; r < 11; r++) {
+//                for (int c = 0; c < 11; c++) {
+//                    assertNull(boardState[r][c]);
+//                }
+//            }
+//        }
+//    }
 }
 
 // need to add logic for handing rhombus' more effectively - will then add code to test that

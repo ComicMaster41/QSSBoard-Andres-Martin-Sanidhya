@@ -5,8 +5,8 @@ public class GameState {
         P1,
         P2
     };
-    private Player current_player;
-    QuaxBoard game_board = new QuaxBoard();
+    public Player current_player;
+    public QuaxBoard game_board = new QuaxBoard(); // allow all classes to access the board
 
     public GameState() {
         current_player = Player.P1;
@@ -16,11 +16,10 @@ public class GameState {
         pos.extractPosition();
         int row = pos.getRow();
         int col = pos.getCol();
-        /*
+
         if (!game_board.isMoveValid(row, col, tileType)){
             return false;
         }
-         */
 
         game_board.makeMove(row, col, current_player, tileType);
         switchPlayerTurn();
@@ -34,5 +33,7 @@ public class GameState {
     public Player getCurrentPlayer() {
         return current_player;
     }
+
+
 
 }
