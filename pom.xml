@@ -134,7 +134,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>comp20050.qssboard.HelloApplication</mainClass>
+                                    <mainClass>comp20050.qssboard.Launcher</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

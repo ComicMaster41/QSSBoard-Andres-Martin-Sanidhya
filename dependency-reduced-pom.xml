@@ -35,7 +35,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>comp20050.qssboard.HelloApplication</mainClass>
+                  <mainClass>comp20050.qssboard.Launcher</mainClass>
                 </transformer>
               </transformers>
             </configuration>
