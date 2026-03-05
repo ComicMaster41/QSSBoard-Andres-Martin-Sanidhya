@@ -16,45 +16,29 @@ class QuaxBoardTest {
     @DisplayName("Tests for isMoveValid")
     class IsMoveValidTests {
         @Test
-        @DisplayName("Empty OCTAGON position should be valid")
-        void emptyOctagonValid() {
+        @DisplayName("Empty position should be valid")
+        void emptyPositionValid() {
             assertTrue(board.isMoveValid(0, 0, QuaxBoard.TileType.OCTAGON));
+            assertTrue(board.isMoveValid(0, 1, QuaxBoard.TileType.RHOMBUS));
         }
 
         @Test
-        @DisplayName("Empty RHOMBUS position should be valid")
-        void emptyRhombusValid() {
-            assertTrue(board.isMoveValid(0, 0, QuaxBoard.TileType.RHOMBUS));
-        }
+        @DisplayName("Occupied position should be invalid")
+        void occupiedPositionInvalid() {
+            board.makeMove(0, 0, GameState.Player.P1, QuaxBoard.TileType.OCTAGON);
+            board.makeMove(0, 1, GameState.Player.P2, QuaxBoard.TileType.RHOMBUS);
 
-        @Test
-        @DisplayName("Occupied OCTAGON position should be invalid")
-        void occupiedOctagonInvalid() {
-            board.makeMove(1, 1, GameState.Player.P1, QuaxBoard.TileType.OCTAGON);
-            assertFalse(board.isMoveValid(1, 1, QuaxBoard.TileType.OCTAGON));
-        }
-
-        @Test
-        @DisplayName("Occupied RHOMBUS position should be invalid")
-        void occupiedRhombusInvalid() {
-            board.makeMove(2, 2, GameState.Player.P1, QuaxBoard.TileType.RHOMBUS);
-            assertFalse(board.isMoveValid(2, 2, QuaxBoard.TileType.RHOMBUS));
-        }
-
-        @Test
-        @DisplayName("Different board types are independent")
-        void octagonAndRhombusIndependence() {
-            board.makeMove(3, 3, GameState.Player.P1, QuaxBoard.TileType.OCTAGON);
-            assertTrue(board.isMoveValid(3, 3, QuaxBoard.TileType.RHOMBUS));
+            assertFalse(board.isMoveValid(0, 0, QuaxBoard.TileType.OCTAGON));
+            assertFalse(board.isMoveValid(0, 1, QuaxBoard.TileType.RHOMBUS));
         }
 
         @Test
         @DisplayName("Out-of-bounds move throws exception")
-        void outOfBoundsMove() {
+        void outOfBounds() {
             assertThrows(ArrayIndexOutOfBoundsException.class,
                     () -> board.isMoveValid(11, 0, QuaxBoard.TileType.OCTAGON));
             assertThrows(ArrayIndexOutOfBoundsException.class,
-                    () -> board.isMoveValid(0, 11, QuaxBoard.TileType.RHOMBUS));
+                    () -> board.isMoveValid(0, 21, QuaxBoard.TileType.RHOMBUS));
         }
     }
 
@@ -62,11 +46,22 @@ class QuaxBoardTest {
     @DisplayName("Tests for makeMove")
     class MakeMoveTests {
         @Test
-        @DisplayName("Making a move on occupied position overwrites")
+        @DisplayName("Making a move sets tile owner correctly")
+        void makeMoveSetsOwner() {
+            board.makeMove(0, 0, GameState.Player.P1, QuaxBoard.TileType.OCTAGON);
+            assertEquals(GameState.Player.P1, board.getStateBoard()[0][0].owner);
+
+            board.makeMove(0, 1, GameState.Player.P2, QuaxBoard.TileType.RHOMBUS);
+            assertEquals(GameState.Player.P2, board.getStateBoard()[0][1].owner);
+        }
+
+        @Test
+        @DisplayName("Making a move on occupied tile overwrites owner")
         void makeMoveOverwrite() {
             board.makeMove(0, 0, GameState.Player.P1, QuaxBoard.TileType.OCTAGON);
             board.makeMove(0, 0, GameState.Player.P2, QuaxBoard.TileType.OCTAGON);
-            assertEquals(GameState.Player.P2, board.getStateBoard()[0][0]);
+
+            assertEquals(GameState.Player.P2, board.getStateBoard()[0][0].owner);
         }
 
         @Test
@@ -77,20 +72,30 @@ class QuaxBoardTest {
         }
     }
 
-//    @Nested
-//    @DisplayName("Tests for getStateBoard")
-//    class GetStateBoardTests {
-//        @Test
-//        @DisplayName("OCTAGON board is empty initially")
-//        void octagonEmptyInitially() {
-//            GameState.Player[][] boardState = board.getStateBoard();
-//            for (int r = 0; r < 11; r++) {
-//                for (int c = 0; c < 11; c++) {
-//                    assertNull(boardState[r][c]);
-//                }
-//            }
-//        }
-//    }
-}
+    @Nested
+    @DisplayName("Tests for changeTileOwner")
+    class ChangeTileOwnerTests {
 
-// need to add logic for handing rhombus' more effectively - will then add code to test that
+        @Test
+        @DisplayName("Changing tile owner updates tile correctly")
+        void changeOwnerUpdatesTile() {
+            board.makeMove(0, 0, GameState.Player.P1, QuaxBoard.TileType.OCTAGON);
+            board.changeTileOwner(0, 0, GameState.Player.P2);
+
+            assertEquals(GameState.Player.P2, board.getStateBoard()[0][0].owner);
+        }
+    }
+
+
+    @Nested
+    @DisplayName("Tests for board initialization and getStateBoard")
+    class BoardInitializationTests {
+        @Test
+        @DisplayName("getStateBoard returns correct board reference")
+        void getStateBoardReturnsCorrectBoard() {
+            Tile[][] state = board.getStateBoard();
+            assertEquals(Tile.NUM_ROWS, state.length, "Number of rows should match");
+            assertEquals(Tile.NUM_COLS, state[0].length, "Number of columns should match");
+        }
+    }
+}

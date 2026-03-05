@@ -30,14 +30,17 @@ public class HelloController {
     Color colorP2 = Color.WHITE;
 
     @FXML // fx:id="OctCell_r0_c0"
-    private Polygon OctCell_turn;
+    protected Polygon OctCell_turn;
 
     @FXML // fx:id="OctCell_r0_c0"
-    private Polygon Rhombus_turn;
+    protected Polygon Rhombus_turn;
 
     @FXML
-    private Label turnLabel;
+    protected Label turnLabel;
 
+    // Create button variable
+    @FXML
+    protected Button activatePieButton;
     int moves_made = 0;
 
     @FXML
@@ -114,9 +117,7 @@ public class HelloController {
         turnLabel.setText("Black to play");
 
     }
-    // Create button variable
-    @FXML
-    private Button activatePieButton;
+
 
     @FXML
     public void handlePieButtonClick(ActionEvent actionEvent) {

@@ -48,6 +48,7 @@ public class QuaxBoard {
     public Tile[][] getStateBoard() {
         return state_board;
     }
+
     public void changeTileOwner(int row, int col, GameState.Player current_player) {
         state_board[row][col].owner = current_player;
     }

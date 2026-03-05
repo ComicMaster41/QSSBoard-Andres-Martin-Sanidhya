@@ -24,7 +24,7 @@ class GameStateTest {
     @Test
     @DisplayName("makeMove updates board and switches player")
     void makeMoveSwitchesPlayer() {
-        Position pos = new Position("OctCell_r0_c0");
+        Position pos = new Position("O_0_0");
         GameState.Player currentBefore = gameState.getCurrentPlayer();
         boolean result = gameState.makeMove(pos, QuaxBoard.TileType.OCTAGON);
 
