@@ -43,54 +43,50 @@ public class HelloController {
     protected Button activatePieButton;
     int moves_made = 0;
 
+
+    // AI-Gen suggestion so that we can test this functionality
+    QuaxBoard.TileType getTileTypeFromId(String id) {
+        if (id.charAt(0) == 'R') {
+            return QuaxBoard.TileType.RHOMBUS;
+        }
+        return QuaxBoard.TileType.OCTAGON;
+    }
+
     @FXML
     void getCellID(MouseEvent event) {
         Polygon cell = (Polygon) event.getSource();
+        handleCellSelection(cell);
+    }
 
-        // get row and col
+    @FXML
+    void handleCellSelection(Polygon cell) {
         Position pos = new Position(cell.getId());
-        QuaxBoard.TileType tile_type;
+        QuaxBoard.TileType tile_type = getTileTypeFromId(cell.getId());
 
-        // get tile type:
-        if (cell.getId().charAt(0) == 'R'){
-            tile_type = QuaxBoard.TileType.RHOMBUS;
-        }
-        else {
-            tile_type = QuaxBoard.TileType.OCTAGON;
-        }
-
-        // make the move:
         GameState.Player playerBeforeMove = state.getCurrentPlayer();
         boolean success = state.makeMove(pos, tile_type);
         if (!success) {
             return;
         }
 
-
         if (playerBeforeMove == GameState.Player.P1) {
             cell.setFill(colorP1);
-        }
-        else if (playerBeforeMove == GameState.Player.P2) {
+        } else if (playerBeforeMove == GameState.Player.P2) {
             cell.setFill(colorP2);
-        }
-        else { // player must be either P1 or P2. Otherwise, we have an error
+        } else {
             throw new IllegalArgumentException("Error from Controller in getCellID - NO player option given");
         }
 
         moves_made++;
-        // isWhiteTurn = !isWhiteTurn;
 
-        // deactivate pie button:
         if (moves_made == 1) {
             activatePieButton.setVisible(true);
-        }
-        else {
+        } else {
             activatePieButton.setVisible(false);
         }
-
         updateTurnDisplay();
-
     }
+
 
     private void updateTurnDisplay() {
         GameState.Player current = state.getCurrentPlayer();
