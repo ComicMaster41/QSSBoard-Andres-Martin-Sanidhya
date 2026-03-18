@@ -92,7 +92,7 @@ public class HelloController {
         GameState.Player current = state.getCurrentPlayer();
 
         if (current == GameState.Player.P1) {
-            // P1 is black in your original mapping
+            // P1 is black in original mapping
             OctCell_turn.setFill(colorP1);
             Rhombus_turn.setFill(colorP1);
             turnLabel.setText((colorP1 == Color.BLACK ? "Black" : "White") + " to play");
@@ -128,7 +128,7 @@ public class HelloController {
             for (int col = 0; col < Tile.NUM_COLS; col++) {
                 if (board[row][col] != null && board[row][col].owner == GameState.Player.P1){
                     board[row][col].owner = GameState.Player.P2;
-                    System.out.println("AFTER PIE RULE: Row " + row + " Col " + col + " is of type " + board[row][col].type + " and belongs to " + board[row][col].owner);
+                    // System.out.println("AFTER PIE RULE: Row " + row + " Col " + col + " is of type " + board[row][col].type + " and belongs to " + board[row][col].owner);
                 }
             }
         }

@@ -41,8 +41,7 @@ public class QuaxBoard {
         Tile tile = new Tile(t); // this sets TileType
         state_board[row][col] = tile;
         state_board[row][col].owner = current_player;
-        System.out.println("Row " + row + " Col " + col + " is of type " + state_board[row][col].type + " and belongs to " + state_board[row][col].owner);
-
+       //  System.out.println("Row " + row + " Col " + col + " is of type " + state_board[row][col].type + " and belongs to " + state_board[row][col].owner);
     }
 
     public Tile[][] getStateBoard() {
@@ -51,5 +50,12 @@ public class QuaxBoard {
 
     public void changeTileOwner(int row, int col, GameState.Player current_player) {
         state_board[row][col].owner = current_player;
+    }
+
+    public boolean isTileEmpty(int row, int col) {
+        return state_board[row][col].owner == null;
+    }
+    public GameState.Player getTileOwner(int row, int col) {
+        return state_board[row][col].getOwner();
     }
 }
