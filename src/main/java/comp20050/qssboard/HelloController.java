@@ -124,20 +124,31 @@ public class HelloController {
 
 
         // find only occupied cell:
-        for (int row = 0; row < Tile.NUM_ROWS; row++) {
-            for (int col = 0; col < Tile.NUM_COLS; col++) {
-                if (board[row][col] != null && board[row][col].owner == GameState.Player.P1){
-                    board[row][col].owner = GameState.Player.P2;
-                    // System.out.println("AFTER PIE RULE: Row " + row + " Col " + col + " is of type " + board[row][col].type + " and belongs to " + board[row][col].owner);
-                }
-            }
-        }
+//        for (int row = 0; row < Tile.NUM_ROWS; row++) {
+//            for (int col = 0; col < Tile.NUM_COLS; col++) {
+//                if (board[row][col] != null && board[row][col].owner == GameState.Player.P1){
+//                    board[row][col].owner = GameState.Player.P2;
+//                    // System.out.println("AFTER PIE RULE: Row " + row + " Col " + col + " is of type " + board[row][col].type + " and belongs to " + board[row][col].owner);
+//                }
+//            }
+//        }
 
-        state.current_player =  GameState.Player.P1;
-        Color temp;
-        temp = colorP1;
+//        state.current_player =  GameState.Player.P1;
+//        Color temp;
+//        temp = colorP1;
+//        colorP1 = colorP2;
+//        colorP2 = temp;
+        // swap LOGICAL ownership
+        QuaxBoard.TileOwner temp = state.game_board.p1Color;
+        state.game_board.p1Color = state.game_board.p2Color;
+        state.game_board.p2Color = temp;
+
+        // swap UI colors (what user sees)
+        Color tempColor = colorP1;
         colorP1 = colorP2;
-        colorP2 = temp;
+        colorP2 = tempColor;
+
+        state.current_player = GameState.Player.P1;
 
         activatePieButton.setVisible(false);
     }

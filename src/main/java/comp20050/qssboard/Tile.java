@@ -1,9 +1,8 @@
 package comp20050.qssboard;
 
 public class Tile {
-
     public QuaxBoard.TileType type;
-    public GameState.Player owner;
+    public QuaxBoard.TileOwner owner;
     public static final int NUM_ROWS = 11;
     public static final int NUM_COLS = 21;
 
@@ -12,11 +11,11 @@ public class Tile {
         this.owner = null;
     }
 
-    public GameState.Player getOwner() {
+    public QuaxBoard.TileOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(GameState.Player new_owner) {
+    public void setOwner(QuaxBoard.TileOwner new_owner) {
         owner = new_owner;
     }
 

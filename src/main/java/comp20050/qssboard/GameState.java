@@ -1,5 +1,7 @@
 package comp20050.qssboard;
 
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 
 public class GameState {
@@ -25,7 +27,7 @@ public class GameState {
         }
 
         game_board.makeMove(row, col, current_player, tileType);
-        if(checkWin(current_player)) {
+        if(checkWin(game_board.getColor(current_player))) {
             System.out.println(current_player + " wins!");
         }
 
@@ -33,13 +35,14 @@ public class GameState {
         return true;
     }
 
-    public boolean checkWin(Player player) {
+    public boolean checkWin(QuaxBoard.TileOwner colour) {
         visited = new boolean[Tile.NUM_ROWS][Tile.NUM_COLS]; // RESET HERE
 
-        if (player.equals(Player.P1)) {
+        if (colour == QuaxBoard.TileOwner.BLACK) {
+
             for (int col = 0; col < Tile.NUM_COLS; col++) {
-                if (game_board.getTileOwner(0, col) == player) { // this tile is occupied by the player, so we start dfs
-                    if (dfs(0, col, player)) {
+                if (game_board.getTileOwner(0, col) == colour) { // this tile is occupied by the player, so we start dfs
+                    if (dfs(0, col, colour)) {
                         return true;
                     }
                 }
@@ -47,8 +50,8 @@ public class GameState {
         }
         else {
             for (int row = 0; row < Tile.NUM_ROWS; row++) {
-                if (game_board.getTileOwner(row, 0) == player) { // this tile is occupied by the player, so we start dfs
-                    if (dfs(row, 0, player)) {
+                if (game_board.getTileOwner(row, 0) == colour) { // this tile is occupied by the player, so we start dfs
+                    if (dfs(row, 0, colour  )) {
                         return true;
                     }
                 }
@@ -57,11 +60,12 @@ public class GameState {
         return false;
     }
 
-    public boolean dfs(int row, int col, Player player) {
-        if (player.equals(Player.P1) && row == 10) {
+    public boolean dfs(int row, int col, QuaxBoard.TileOwner colour) {
+        System.out.println("DFS visiting: " + row + "," + col);
+        if (colour == QuaxBoard.TileOwner.BLACK && row == 10) {
             return true;
         }
-        if (player.equals(Player.P2) && col == 20) {
+        if (colour == QuaxBoard.TileOwner.WHITE && col == 20) {
             return true;
         }
 
@@ -71,8 +75,8 @@ public class GameState {
             int n_row = n[0];
             int n_col = n[1];
 
-            if (!visited[n_row][n_col] && game_board.getTileOwner(n_row, n_col) == player) {
-                if (dfs(n_row, n_col, player)) {
+            if (!visited[n_row][n_col] && game_board.getTileOwner(n_row, n_col) == colour) {
+                if (dfs(n_row, n_col, colour)) {
                     return true;
                 }
             }
@@ -83,14 +87,30 @@ public class GameState {
     public ArrayList<int[]> getNeighbours(int row, int col) {
         ArrayList<int[]> neighbours = new ArrayList<>();
 
-        int[][] directions = {
-                {-1, 0}, {1, 0},   // up, down
-                {0, -1}, {0, 1},   // left, right - rhomubs
-                {0, -2}, {0, 2},   // left, right - octagon
-                {-1, -1}, {1, 1}   // diagonals (adjust later if needed)
-        };
+        if (game_board.getTileType(row, col) == QuaxBoard.TileType.OCTAGON) {
+            // Octagon connections
+            int[][] dirs = {
+                    {-1, 0}, {1, 0},   // UP, DOWN - OCTAGON
+                    {0, -2}, {0, 2},   // LEFT, RIGHT - OCTAGON
+                    {-1, -1}, {-1, 1}, // B_LEFT DIAGONAL, B_RIGHT DIAGONAL - RHOMBUS
+                    {1, -1}, {1, 1}    // U_LEFT DIAGONAL, U_RIGHT DIAGONAL - RHOMBUS
+            };
 
-        // these are all the directions, now find all corresponding tiles that neighbour given tile
+            addValid(neighbours, row, col, dirs);
+        }
+        else {
+            // Rhombus connections
+            int[][] dirs = {
+                    {0, -1}, {0, 1}, // B_LEFT, B_RIGHT - OCTAGON
+                    {1, -1}, {1, 1}  // U_LEFT, U_RIGHT - OCTAGON
+            };
+
+            addValid(neighbours, row, col, dirs);
+        }
+
+        return neighbours;
+    }
+    public void addValid(ArrayList<int[]> neighbours, int row, int col, int[][] directions) {
         for (int i = 0; i < directions.length; i++) {
             int new_row = row + directions[i][0];
             int new_col = col + directions[i][1];
@@ -102,8 +122,6 @@ public class GameState {
                 neighbours.add(new int[]{new_row, new_col});
             }
         }
-
-        return neighbours;
     }
     public void switchPlayerTurn() {
         current_player = (current_player == Player.P1) ? (Player.P2) : (Player.P1);
@@ -112,8 +130,6 @@ public class GameState {
     public Player getCurrentPlayer() {
         return current_player;
     }
-
-
 
 
 }
