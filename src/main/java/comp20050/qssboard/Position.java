@@ -41,5 +41,9 @@ public class Position {
         return col;
     }
 
+    public String getRawPosition() {
+        return raw_position;
+    }
+
 }
 

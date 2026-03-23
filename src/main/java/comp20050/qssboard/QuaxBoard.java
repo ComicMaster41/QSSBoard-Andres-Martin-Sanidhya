@@ -44,9 +44,23 @@ public class QuaxBoard {
            return false;
        }
     }
+    public Boolean[][] getValidMoves() {
+        Boolean[][] valid_moves = new Boolean[11][21];
+        for (int i = 0; i < Tile.NUM_ROWS; i++) {
+            for (int j = 0; j < Tile.NUM_COLS; j++) {
+                if (state_board[i][j] == null || state_board[i][j].owner == null) {
+                    valid_moves[i][j] = true;
+                }
+                else {
+                    valid_moves[i][j] = false;
+                }
+            }
+        }
+        return valid_moves;
+    }
     public void makeMove(int row, int col, GameState.Player current_player, TileType t) {
         Tile tile = new Tile(t); // this sets TileType
-        state_board[row][col] = tile;
+        // state_board[row][col] = tile;
         state_board[row][col].owner = getColor(current_player);
        //  System.out.println("Row " + row + " Col " + col + " is of type " + state_board[row][col].type + " and belongs to " + state_board[row][col].owner);
     }
@@ -68,6 +82,9 @@ public class QuaxBoard {
 
     public TileType getTileType(int row, int col) {
         return state_board[row][col].type;
+    }
+    public Tile getTile(int row, int col) {
+        return state_board[row][col];
     }
 
 }

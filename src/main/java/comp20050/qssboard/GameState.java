@@ -16,7 +16,6 @@ public class GameState {
     public GameState() {
         current_player = Player.P1;
     }
-
     public boolean makeMove(Position pos, QuaxBoard.TileType tileType) { // isMoveValid is called here
         pos.extractPosition();
         int row = pos.getRow();
@@ -61,7 +60,7 @@ public class GameState {
     }
 
     public boolean dfs(int row, int col, QuaxBoard.TileOwner colour) {
-        System.out.println("DFS visiting: " + row + "," + col);
+        // System.out.println("DFS visiting: " + row + "," + col);
         if (colour == QuaxBoard.TileOwner.BLACK && row == 10) {
             return true;
         }
@@ -130,6 +129,4 @@ public class GameState {
     public Player getCurrentPlayer() {
         return current_player;
     }
-
-
 }

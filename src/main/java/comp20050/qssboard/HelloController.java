@@ -7,6 +7,7 @@ package comp20050.qssboard;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -14,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
+import javafx.util.Duration;
 import kotlin.NotImplementedError;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Label;
@@ -28,6 +30,9 @@ public class HelloController {
     // colours of different players
     Color colorP1 = Color.BLACK;
     Color colorP2 = Color.WHITE;
+
+    @FXML
+    protected Group ShapeLayout;
 
     @FXML // fx:id="OctCell_r0_c0"
     protected Polygon OctCell_turn;
@@ -85,8 +90,44 @@ public class HelloController {
             activatePieButton.setVisible(false);
         }
         updateTurnDisplay();
+
+        //BOT LOGIC:
+        // after Black has made their move, white just automatically makes next move
+        if (state.getCurrentPlayer() == GameState.Player.P2) {
+            // AI CODE TO ADD LITTLE PAUSE
+            PauseTransition pause = new PauseTransition(Duration.millis(500)); // 0.5 sec delay
+            pause.setOnFinished(e -> makeBotMove());
+            pause.play();
+            // END AI CODE
+        }
     }
 
+    public void makePlayerMove() {
+
+    }
+    public void makeBotMove() {
+        Bot bot = new Bot(state);
+        Position botMove = bot.makeMove(); // need to implement a bot class
+
+        String botMoveID = botMove.getRawPosition();
+        if (botMove == null) {
+            return;
+        }
+        if (!state.makeMove(botMove, QuaxBoard.TileType.OCTAGON)) { // dont need to pass in tile type
+            throw new IllegalArgumentException("Error making bot move");
+        }
+        System.out.println("#" + botMoveID);
+        Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
+        cell.setFill(colorP2);
+        moves_made++;
+        if (moves_made == 1) {
+            activatePieButton.setVisible(true);
+        } else {
+            activatePieButton.setVisible(false);
+        }
+
+        updateTurnDisplay();
+    }
 
     private void updateTurnDisplay() {
         GameState.Player current = state.getCurrentPlayer();
