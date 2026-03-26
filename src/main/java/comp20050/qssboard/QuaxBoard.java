@@ -1,5 +1,7 @@
 package comp20050.qssboard;
 
+import java.util.ArrayList;
+
 public class QuaxBoard {
     public enum TileType {
         OCTAGON,
@@ -10,7 +12,6 @@ public class QuaxBoard {
     TileOwner p2Color = TileOwner.WHITE;
 
     private Tile[][] state_board;
-
 
     public QuaxBoard() {
 
@@ -37,13 +38,28 @@ public class QuaxBoard {
         else return p2Color;
     }
 
-    public boolean isMoveValid(int row, int col, TileType t) { // returns if the board position is empty
-        if (state_board[row][col] == null || state_board[row][col].owner == null) {
-           return true;
-       } else {
-           return false;
-       }
+    public boolean isInBounds(int row, int col) {
+        if (row >= 0 && row < Tile.NUM_ROWS && col >= 0 && col < Tile.NUM_COLS)
+            return true;
+        else return false;
     }
+
+    public boolean isCorrectCellType (int row, int col, TileType t) {
+        if (t == TileType.RHOMBUS)
+            return col % 2 == 0;
+        else return col % 2 != 0;
+    }
+
+    public boolean isMoveValid(int row, int col, TileType t) {
+        if (t == null) return false;
+        // QUESTION: UNSURE IF THIS IS THE SAME THING?
+        if (state_board[row][col] == null || state_board[row][col].owner == null) {
+            return true;
+        }
+
+        else return false;
+    }
+
     public Boolean[][] getValidMoves() {
         Boolean[][] valid_moves = new Boolean[11][21];
         for (int i = 0; i < Tile.NUM_ROWS; i++) {
@@ -58,6 +74,12 @@ public class QuaxBoard {
         }
         return valid_moves;
     }
+
+    public QuaxBoard copyBoard() {
+        QuaxBoard cpyBoard = new QuaxBoard();
+
+    }
+
     public void makeMove(int row, int col, GameState.Player current_player, TileType t) {
         Tile tile = new Tile(t); // this sets TileType
         // state_board[row][col] = tile;

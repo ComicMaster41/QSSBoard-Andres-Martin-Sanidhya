@@ -23,4 +23,18 @@ public class Bot {
         Position pos = new Position(botMoveId);
         return pos;
     }
+
+    // Scores a board position from the bot's perspective
+
+    // Returns true when minimax should stop expanding this branch
+
+    // Creates a deep copy of the game state / board for simulation
+
+    // Applies a move to a copied state during simulation
+
+    // Gets all legal moves available in the current state
+
+    // Optional: convert board coordinates into a Position object
+
+    // Optional: helper to determine whose turn it is in simulation
 }
