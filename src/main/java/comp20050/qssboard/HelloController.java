@@ -95,7 +95,7 @@ public class HelloController {
         // after Black has made their move, white just automatically makes next move
         if (state.getCurrentPlayer() == GameState.Player.P2) {
             // AI CODE TO ADD LITTLE PAUSE
-            PauseTransition pause = new PauseTransition(Duration.millis(500)); // 0.5 sec delay
+            PauseTransition pause = new PauseTransition(Duration.millis(1000)); // 0.5 sec delay
             pause.setOnFinished(e -> makeBotMove());
             pause.play();
             // END AI CODE

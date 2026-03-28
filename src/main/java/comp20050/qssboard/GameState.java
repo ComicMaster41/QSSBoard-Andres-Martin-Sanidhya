@@ -21,8 +21,10 @@ public class GameState {
         int row = pos.getRow();
         int col = pos.getCol();
 
+
         if (!game_board.isMoveValid(row, col, tileType)){
-            return false;
+            throw new IllegalArgumentException("Invalid move - " + row + ", " + col);
+            // return false;
         }
 
         game_board.makeMove(row, col, current_player, tileType);
