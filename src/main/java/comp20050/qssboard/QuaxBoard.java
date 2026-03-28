@@ -60,6 +60,7 @@ public class QuaxBoard {
         else return false;
     }
 
+    // MAY DELETE
     public Boolean[][] getValidMoves() {
         Boolean[][] valid_moves = new Boolean[11][21];
         for (int i = 0; i < Tile.NUM_ROWS; i++) {
@@ -78,6 +79,16 @@ public class QuaxBoard {
     public QuaxBoard copyBoard() {
         QuaxBoard cpyBoard = new QuaxBoard();
 
+        for (int row = 0; row < Tile.NUM_ROWS; row++) {
+            for (int col = 0; col < Tile.NUM_COLS; col++) {
+                Tile originalTile = this.state_board[row][col];
+                Tile copiedTile = new Tile(originalTile.type);
+                copiedTile.owner = originalTile.owner;
+                cpyBoard.state_board[row][col] = copiedTile;
+            }
+        }
+
+        return cpyBoard;
     }
 
     public void makeMove(int row, int col, GameState.Player current_player, TileType t) {

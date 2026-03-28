@@ -14,7 +14,13 @@ public class GameState {
     public boolean[][] visited = new boolean[11][21];
 
     public GameState() {
-        current_player = Player.P1;
+        this.game_board = new QuaxBoard();
+        this.current_player = Player.P1;
+    }
+
+    public GameState(QuaxBoard game_board, Player current_player) {
+        this.game_board = game_board; // QUESTION: wouldn't it be better to put this in quaxboard?
+        this.current_player = Player.P1;
     }
     public boolean makeMove(Position pos, QuaxBoard.TileType tileType) { // isMoveValid is called here
         pos.extractPosition();
@@ -83,6 +89,24 @@ public class GameState {
 
         return false;
     }
+
+    // QUESTION: why is getValidMoves important if we're effectively doing the same thing but returning actual positions
+    public ArrayList<Position> getLegalMoves() {
+        ArrayList<Position> moves = new ArrayList<>();
+
+        for (int i = 0; i < Tile.NUM_ROWS; i++) {
+            for (int j = 0; j < Tile.NUM_COLS; j++) {
+                if (game_board.isTileEmpty(i, j)) {
+                    Tile tile = game_board.getTile(i, j);
+                    String prefix = (tile.type == QuaxBoard.TileType.RHOMBUS) ? "R" : "O";
+                    moves.add(new Position(prefix + "_" + i + "_" + j));
+                }
+            }
+        }
+
+        return moves;
+    }
+
     public ArrayList<int[]> getNeighbours(int row, int col) {
         ArrayList<int[]> neighbours = new ArrayList<>();
 
@@ -124,6 +148,11 @@ public class GameState {
     }
     public void switchPlayerTurn() {
         current_player = (current_player == Player.P1) ? (Player.P2) : (Player.P1);
+    }
+
+    public GameState copyState() {
+        QuaxBoard copiedBoard = this.game_board.copyBoard();
+        return new GameState(copiedBoard, this.current_player);
     }
 
     public Player getCurrentPlayer() {
