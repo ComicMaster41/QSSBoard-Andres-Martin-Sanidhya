@@ -260,7 +260,7 @@
             <Polygon fx:id="R_6_9" fill="#ffb91f" layoutX="405.0" layoutY="289.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
             <Polygon fx:id="R_6_11" fill="#ffb91f" layoutX="489.0" layoutY="289.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
             <Polygon fx:id="R_6_13" fill="#ffb91f" layoutX="573.0" layoutY="289.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
-            <Polygon fx:id="R_5_15" fill="#ffb91f" layoutX="657.0" layoutY="289.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="R_6_15" fill="#ffb91f" layoutX="657.0" layoutY="289.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
             <Polygon fx:id="R_6_17" fill="#ffb91f" layoutX="741.0" layoutY="289.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
             <Polygon fx:id="R_6_19" fill="#ffb91f" layoutX="825.0" layoutY="289.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
 
@@ -271,7 +271,7 @@
             <Polygon fx:id="R_5_9" fill="#ffb91f" layoutX="405.0" layoutY="374.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
             <Polygon fx:id="R_5_11" fill="#ffb91f" layoutX="489.0" layoutY="374.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
             <Polygon fx:id="R_5_13" fill="#ffb91f" layoutX="573.0" layoutY="374.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
-            <Polygon fx:id="R_4_15" fill="#ffb91f" layoutX="657.0" layoutY="374.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
+            <Polygon fx:id="R_5_15" fill="#ffb91f" layoutX="657.0" layoutY="374.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
             <Polygon fx:id="R_5_17" fill="#ffb91f" layoutX="741.0" layoutY="374.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
             <Polygon fx:id="R_5_19" fill="#ffb91f" layoutX="825.0" layoutY="374.5" onMouseClicked="#getCellID" points="100.0,64.9,135.1,100.0,100.0,135.1,64.9,100.0" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
 
@@ -351,6 +351,7 @@
          </DropShadow>
       </effect>
    </Button>
+
    <padding>
       <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
    </padding>

@@ -27,14 +27,16 @@ public class GameState {
         int row = pos.getRow();
         int col = pos.getCol();
 
+
         if (!game_board.isMoveValid(row, col, tileType)){
-            return false;
+            throw new IllegalArgumentException("Invalid move - " + row + ", " + col);
+            // return false;
         }
 
         game_board.makeMove(row, col, current_player, tileType);
-        if(checkWin(game_board.getColor(current_player))) {
+       /* if(checkWin(game_board.getColor(current_player))) {
             System.out.println(current_player + " wins!");
-        }
+        }*/
 
         switchPlayerTurn();
         return true;

@@ -13,6 +13,7 @@ public class QuaxBoard {
 
     private Tile[][] state_board;
 
+
     public QuaxBoard() {
 
         this.state_board = new Tile[11][21];
@@ -38,6 +39,9 @@ public class QuaxBoard {
         else return p2Color;
     }
 
+    public boolean isMoveValid(int row, int col, TileType t) { // returns if the board position is empty
+        System.out.println(state_board[row][col].owner);
+    }
     public boolean isInBounds(int row, int col) {
         if (row >= 0 && row < Tile.NUM_ROWS && col >= 0 && col < Tile.NUM_COLS)
             return true;
@@ -50,15 +54,6 @@ public class QuaxBoard {
         else return col % 2 != 0;
     }
 
-    public boolean isMoveValid(int row, int col, TileType t) {
-        if (t == null) return false;
-        // QUESTION: UNSURE IF THIS IS THE SAME THING?
-        if (state_board[row][col] == null || state_board[row][col].owner == null) {
-            return true;
-        }
-
-        else return false;
-    }
 
     // MAY DELETE
     public Boolean[][] getValidMoves() {

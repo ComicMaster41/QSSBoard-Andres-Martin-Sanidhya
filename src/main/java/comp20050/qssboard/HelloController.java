@@ -113,8 +113,7 @@ public class HelloController {
         if (botMove == null) {
             return;
         }
-        QuaxBoard.TileType botTileType = getTileTypeFromId(botMove.getRawPosition()); // SUGGESTINON FROM CHAT, WE'LL LOOK AT IT LATER
-        if (!state.makeMove(botMove, botTileType)) {
+        if (!state.makeMove(botMove, QuaxBoard.TileType.OCTAGON)) { // dont need to pass in tile type
             throw new IllegalArgumentException("Error making bot move");
         }
         System.out.println("#" + botMoveID);

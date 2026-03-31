@@ -34,6 +34,7 @@ class HelloControllerTest {
         octCellTurn = new Polygon();
         rhombusTurn = new Polygon();
         turnLabel = new Label();
+        state = new GameState();
 
         controller.activatePieButton = activatePieButton;
         controller.OctCell_turn = octCellTurn;
@@ -110,4 +111,34 @@ class HelloControllerTest {
         assertEquals(Color.BLACK, controller.OctCell_turn.getFill());
         assertEquals(Color.BLACK, controller.Rhombus_turn.getFill());
     }
+
+    GameState state;
+    void placeTile(int row, int col, QuaxBoard.TileOwner owner) {
+        state.game_board.getTile(row, col).setOwner(owner);
+    }@Test
+    void testBlackNotWinningOnEmptyBoard() {
+        assertFalse(state.checkWin(QuaxBoard.TileOwner.BLACK));
+    }
+
+    @Test
+    void testWhiteNotWinningOnEmptyBoard() {
+        assertFalse(state.checkWin(QuaxBoard.TileOwner.WHITE));
+    }
+
+    @Test
+    void testBlackWinsWithStraightLine() {
+        for (int row = 0; row <= 10; row++) {
+            placeTile(row, 0, QuaxBoard.TileOwner.BLACK);
+        }
+        assertTrue(state.checkWin(QuaxBoard.TileOwner.BLACK));
+    }
+
+    @Test
+    void testBlackDoesNotWinWithIncompletePath() { //column 1 row 0- 9
+        for (int row = 0; row <= 9; row++) {
+            placeTile(row, 0, QuaxBoard.TileOwner.BLACK);
+        }
+        assertFalse(state.checkWin(QuaxBoard.TileOwner.BLACK));
+    }
+
 }
