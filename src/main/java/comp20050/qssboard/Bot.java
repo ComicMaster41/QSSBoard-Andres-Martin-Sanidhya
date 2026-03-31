@@ -36,7 +36,7 @@ public class Bot {
 
         Position bestMove = null;
         int bestValue = Integer.MIN_VALUE;
-        int depth = 2; // or 3
+        int depth = 3; // or 3, increasing depth means it looks ahead more
 
         for (Position move : legalMoves) {
             GameState child = state.copyState();
@@ -44,7 +44,7 @@ public class Bot {
 
             int eval = minmax(child, depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
 
-            if (eval > bestValue) {
+            if (eval >= bestValue) {
                 bestValue = eval;
                 bestMove = move;
             }
@@ -67,9 +67,9 @@ public class Bot {
 
     // TOOK FROM CHAT, this is our heuristic function I believe
     private int evaluate(GameState simState) {
-        int ownDist = computeDistance(simState, state.current_player);
+        int ownDist = computeDistance(simState, simState.current_player);
         GameState.Player oppPlayer =
-                (state.current_player == GameState.Player.P1) ? GameState.Player.P2 : GameState.Player.P1;
+                (simState.current_player == GameState.Player.P1) ? GameState.Player.P2 : GameState.Player.P1;
         int oppDist = computeDistance(simState, oppPlayer);
 
         return oppDist - ownDist;
@@ -80,10 +80,29 @@ public class Bot {
                                   QuaxBoard.TileOwner own, QuaxBoard.TileOwner opp) {
         QuaxBoard.TileOwner owner = simState.game_board.getTileOwner(row, col);
 
+        // make this more robust to hit different cases
+        // QUESTION: does it hit rounding around a player, borders, blocking opponent
         if (owner == opp) return 1_000_000;
         if (owner == own) return 0;
         return 1; // empty tile
     }
+
+    private void evaluateNeighbours(GameState simState, Node curr, int INF, QuaxBoard.TileOwner own, QuaxBoard.TileOwner opp, int[][] dist, PriorityQueue pq) {
+        for (int[] n : simState.getNeighbours(curr.row, curr.col)) {
+            int nearRow = n[0];
+            int nearCol = n[1];
+
+            int nextCost = tileTraversalCost(simState, nearRow, nearCol, own, opp);
+            if (nextCost >= INF) continue;
+
+            int newDist = curr.cost + nextCost;
+            if (newDist < dist[nearRow][nearCol]) {
+                dist[nearRow][nearCol] = newDist;
+                pq.add(new Node(nearRow, nearCol, newDist));
+            }
+        }
+    }
+
 
     // QUESTION: changed simState from GameState to QuaxBoard bc. getValidMoves was in that class
     int minmax(GameState simState, int depth, int alpha, int beta, boolean isMax) {
@@ -139,6 +158,8 @@ public class Bot {
         QuaxBoard.TileOwner own;
         QuaxBoard.TileOwner opp;
 
+        // you can skip two to consider a legal move
+
         if (player == GameState.Player.P1) {
             own = QuaxBoard.TileOwner.BLACK;
             opp = QuaxBoard.TileOwner.WHITE;
@@ -170,20 +191,7 @@ public class Bot {
                 Node curr = pq.poll();
 
                 if (curr.cost > dist[curr.row][curr.col]) continue;
-
-                for (int[] n : simState.getNeighbours(curr.row, curr.col)) {
-                    int nearRow = n[0];
-                    int nearCol = n[1];
-
-                    int nextCost = tileTraversalCost(simState, nearRow, nearCol, own, opp);
-                    if (nextCost >= INF) continue;
-
-                    int newDist = curr.cost + nextCost;
-                    if (newDist < dist[nearRow][nearCol]) {
-                        dist[nearRow][nearCol] = newDist;
-                        pq.add(new Node(nearRow, nearCol, newDist));
-                    }
-                }
+                evaluateNeighbours(simState, curr, INF, own, opp, dist, pq);
             }
 
             int best = INF;
@@ -207,20 +215,7 @@ public class Bot {
 
                 if (curr.cost > dist[curr.row][curr.col]) continue;;
 
-                // QUESTION: BOTH ABOVE AND BELOW DO SAME, CAN'T WE MERGE?
-                for (int[] n : simState.getNeighbours(curr.row, curr.col)) {
-                    int nearRow = n[0];
-                    int nearCol = n[1];
-
-                    int nextCost = tileTraversalCost(simState, nearRow, nearCol, own, opp);
-                    if (nextCost >= INF) continue;
-
-                    int newDist = curr.cost + nextCost;
-                    if (newDist < dist[nearRow][nearCol]) {
-                        dist[nearRow][nearCol] = newDist;
-                        pq.add(new Node(nearRow, nearCol, newDist));
-                    }
-                }
+                evaluateNeighbours(simState, curr, INF, own, opp, dist, pq);
             }
 
             int best = INF;
