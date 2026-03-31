@@ -40,7 +40,9 @@ public class QuaxBoard {
     }
 
     public boolean isMoveValid(int row, int col, TileType t) { // returns if the board position is empty
-        System.out.println(state_board[row][col].owner);
+        if (t == null) return false;
+        if (state_board[row][col] == null || state_board[row][col].owner == null) return true;
+        else  return false;
     }
     public boolean isInBounds(int row, int col) {
         if (row >= 0 && row < Tile.NUM_ROWS && col >= 0 && col < Tile.NUM_COLS)
