@@ -47,6 +47,8 @@ public class HelloController {
     @FXML
     protected Button activatePieButton;
     int moves_made = 0;
+    boolean gameOver = false;
+    GameState.Player winner = null;
 
 
     // AI-Gen suggestion so that we can test this functionality
@@ -65,6 +67,8 @@ public class HelloController {
 
     @FXML
     void handleCellSelection(Polygon cell) {
+        if (gameOver) return;
+
         Position pos = new Position(cell.getId());
         QuaxBoard.TileType tile_type = getTileTypeFromId(cell.getId());
 
@@ -82,23 +86,25 @@ public class HelloController {
             throw new IllegalArgumentException("Error from Controller in getCellID - NO player option given");
         }
 
-        moves_made++;
+        // check win using the player who just moved, before the turn switched
+        if (state.checkWin(state.game_board.getColor(playerBeforeMove))) {
+            gameOver = true;
+            winner = playerBeforeMove;
+        }
 
+        moves_made++;
         if (moves_made == 1) {
             activatePieButton.setVisible(true);
         } else {
             activatePieButton.setVisible(false);
         }
+
         updateTurnDisplay();
 
-        //BOT LOGIC:
-        // after Black has made their move, white just automatically makes next move
         if (state.getCurrentPlayer() == GameState.Player.P2) {
-            // AI CODE TO ADD LITTLE PAUSE
-            PauseTransition pause = new PauseTransition(Duration.millis(1000)); // 0.5 sec delay
+            PauseTransition pause = new PauseTransition(Duration.millis(1000));
             pause.setOnFinished(e -> makeBotMove());
             pause.play();
-            // END AI CODE
         }
     }
 
@@ -106,16 +112,27 @@ public class HelloController {
 
     }
     public void makeBotMove() {
+        if (gameOver) return;
+
         Bot bot = new Bot(state);
-        Position botMove = bot.makeMove(); // need to implement a bot class
+        Position botMove = bot.makeMove();
 
         String botMoveID = botMove.getRawPosition();
         if (botMove == null) {
             return;
         }
-        if (!state.makeMove(botMove, QuaxBoard.TileType.OCTAGON)) { // dont need to pass in tile type
+
+        GameState.Player playerBeforeMove = state.getCurrentPlayer();
+        if (!state.makeMove(botMove, QuaxBoard.TileType.OCTAGON)) {
             throw new IllegalArgumentException("Error making bot move");
         }
+
+        // check win using the player who just moved, before the turn switched
+        if (state.checkWin(state.game_board.getColor(playerBeforeMove))) {
+            gameOver = true;
+            winner = playerBeforeMove;
+        }
+
         System.out.println("#" + botMoveID);
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
         cell.setFill(colorP2);
@@ -132,15 +149,21 @@ public class HelloController {
     private void updateTurnDisplay() {
         GameState.Player current = state.getCurrentPlayer();
 
-        if (current == GameState.Player.P1) {
-            // P1 is black in original mapping
-            OctCell_turn.setFill(colorP1);
-            Rhombus_turn.setFill(colorP1);
-            turnLabel.setText((colorP1 == Color.BLACK ? "Black" : "White") + " to play");
-        } else if (current == GameState.Player.P2) {
-            OctCell_turn.setFill(colorP2);
-            Rhombus_turn.setFill(colorP2);
-            turnLabel.setText((colorP2 == Color.BLACK ? "Black" : "White") + " to play");
+        if (!gameOver) {
+            if (current == GameState.Player.P1) {
+                OctCell_turn.setFill(colorP1);
+                Rhombus_turn.setFill(colorP1);
+                turnLabel.setText((colorP1 == Color.BLACK ? "Black" : "White") + " to play");
+            } else if (current == GameState.Player.P2) {
+                OctCell_turn.setFill(colorP2);
+                Rhombus_turn.setFill(colorP2);
+                turnLabel.setText((colorP2 == Color.BLACK ? "Black" : "White") + " to play");
+            }
+        } else {
+            Color winnerColor = (winner == GameState.Player.P1) ? colorP1 : colorP2;
+            OctCell_turn.setFill(winnerColor);
+            Rhombus_turn.setFill(winnerColor);
+            turnLabel.setText((winnerColor == Color.BLACK ? "Black" : "White") + " is the winner");
         }
     }
 

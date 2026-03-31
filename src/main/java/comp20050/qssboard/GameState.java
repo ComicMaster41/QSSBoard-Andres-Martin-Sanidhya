@@ -28,9 +28,9 @@ public class GameState {
         }
 
         game_board.makeMove(row, col, current_player, tileType);
-        if(checkWin(game_board.getColor(current_player))) {
+       /* if(checkWin(game_board.getColor(current_player))) {
             System.out.println(current_player + " wins!");
-        }
+        }*/
 
         switchPlayerTurn();
         return true;
