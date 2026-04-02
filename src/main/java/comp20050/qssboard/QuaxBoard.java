@@ -74,6 +74,9 @@ public class QuaxBoard {
     }
 
     public QuaxBoard copyBoard() {
+        // This is going to copy the entire board. Maybe that is good for some scenarios, but for optomization purposes, that can be a lot to consider
+        // Question: is it necessary to copy the entire board, and if it isn't whats an alternative to still consider different states?
+        // Maybe we can see from a certain chunk if there's black
         QuaxBoard cpyBoard = new QuaxBoard();
 
         for (int row = 0; row < Tile.NUM_ROWS; row++) {

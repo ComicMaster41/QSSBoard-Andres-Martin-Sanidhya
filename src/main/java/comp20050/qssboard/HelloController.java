@@ -45,7 +45,7 @@ public class HelloController {
 
     // Create button variable
     @FXML
-    protected Button activatePieButton;
+    protected Button activatePieButton; // Bug with bot where you can make a second choice...
     int moves_made = 0;
     boolean gameOver = false;
     GameState.Player winner = null;

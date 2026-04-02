@@ -30,13 +30,9 @@ public class GameState {
 
         if (!game_board.isMoveValid(row, col, tileType)){
             throw new IllegalArgumentException("Invalid move - " + row + ", " + col);
-            // return false;
         }
 
         game_board.makeMove(row, col, current_player, tileType);
-       /* if(checkWin(game_board.getColor(current_player))) {
-            System.out.println(current_player + " wins!");
-        }*/
 
         switchPlayerTurn();
         return true;
@@ -68,7 +64,6 @@ public class GameState {
     }
 
     public boolean dfs(int row, int col, QuaxBoard.TileOwner colour) {
-        // System.out.println("DFS visiting: " + row + "," + col);
         if (colour == QuaxBoard.TileOwner.BLACK && row == 10) {
             return true;
         }
@@ -98,13 +93,19 @@ public class GameState {
 
         for (int i = 0; i < Tile.NUM_ROWS; i++) {
             for (int j = 0; j < Tile.NUM_COLS; j++) {
-                if (game_board.isTileEmpty(i, j)) {
+                if (game_board.isTileEmpty(i, j)) { // QUESTION: unsure about checking if a tile is empty
                     Tile tile = game_board.getTile(i, j);
                     String prefix = (tile.type == QuaxBoard.TileType.RHOMBUS) ? "R" : "O";
                     moves.add(new Position(prefix + "_" + i + "_" + j));
                 }
             }
         }
+
+        /*
+        * My thoughts: I think that we can get legal moves from a certain chunk of the board, so we iterate over a certain chunk of the map
+        * we can consider the entire board but might need to sort or reorder what are good conditions, but then the question becomes
+        * how do we sort the legal paths according to the best ones? maybe we can calculate the costs for all the paths and sort by the shortest
+        * */
 
         return moves;
     }
