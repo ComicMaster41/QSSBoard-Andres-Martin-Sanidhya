@@ -120,7 +120,7 @@ public class GameState {
                     {-1, 0}, {1, 0},   // UP, DOWN - OCTAGON
                     {0, -2}, {0, 2},   // LEFT, RIGHT - OCTAGON
                     {-1, -1}, {-1, 1}, // B_LEFT DIAGONAL, B_RIGHT DIAGONAL - RHOMBUS
-                    {1, -1}, {1, 1}    // U_LEFT DIAGONAL, U_RIGHT DIAGONAL - RHOMBUS
+                    {0, -1}, {0, 1}    // U_LEFT DIAGONAL, U_RIGHT DIAGONAL - RHOMBUS
             };
 
             addValid(neighbours, row, col, dirs);
