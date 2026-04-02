@@ -6,7 +6,6 @@ import java.util.PriorityQueue;
 
 public class Bot {
     public GameState state;
-    public GameState.Player botPlayer;
     private static final int INF = 1_000_000;
 
     private static class Node {
@@ -24,7 +23,6 @@ public class Bot {
 
     public Bot(GameState state) {
         this.state = state;
-        // QUESTION: like constructor in GameState, can I create botPlayer variable to use
     }
 
     // bot doesnt make move after player
@@ -41,7 +39,7 @@ public class Bot {
 
         Position bestMove = null;
         int bestValue = Integer.MIN_VALUE;
-        int depth = 3; // or 2, increasing depth means it looks ahead more
+        int depth = 2; // or 2, increasing depth means it looks ahead more
 
         for (Position move : legalMoves) {
             GameState child = state.copyState();
@@ -50,7 +48,7 @@ public class Bot {
 
             int eval = minmax(child, depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
 
-            if (eval >= bestValue) {
+            if (eval > bestValue) {
                 bestValue = eval;
                 bestMove = move;
             }
@@ -170,7 +168,7 @@ public class Bot {
 
     // QUESTION: changed simState from GameState to QuaxBoard bc. getValidMoves was in that class
     int minmax(GameState simState, int depth, int alpha, int beta, boolean isMax) {
-        if (depth == 0 || simState.getLegalMoves().isEmpty()) { // LATER: check terminal wins
+        if (depth == 0 ) { // LATER: check terminal wins, || simState.getLegalMoves().isEmpty()
             return heuristic(simState);
             // ^^ We have compute distance in evaluate, but I don't see that working for the rest of minmax, making me think that its extra work
         }
@@ -186,6 +184,7 @@ public class Bot {
                 applyMove(child, move);
 
                 int eval = minmax(child, depth - 1, alpha, beta, false);
+                System.out.println("Depth " + depth + " moves: " + legalMoves.size());
                 bestValue = Math.max(bestValue, eval);
                 alpha = Math.max(alpha, bestValue);
 
