@@ -18,9 +18,10 @@ public class GameState {
         this.current_player = Player.P1;
     }
 
+    // QUESTION: Why do we have two constructors?
     public GameState(QuaxBoard game_board, Player current_player) {
         this.game_board = game_board; // QUESTION: wouldn't it be better to put this in quaxboard?
-        this.current_player = Player.P1;
+        this.current_player = current_player; // BUG SUGGESTION: changing Player.p1 to currentplayer
     }
     public boolean makeMove(Position pos, QuaxBoard.TileType tileType) { // isMoveValid is called here
         pos.extractPosition();
@@ -93,7 +94,7 @@ public class GameState {
 
         for (int i = 0; i < Tile.NUM_ROWS; i++) {
             for (int j = 0; j < Tile.NUM_COLS; j++) {
-                if (game_board.isTileEmpty(i, j)) { // QUESTION: unsure about checking if a tile is empty
+                if (game_board.isTileEmpty(i, j)) {
                     Tile tile = game_board.getTile(i, j);
                     String prefix = (tile.type == QuaxBoard.TileType.RHOMBUS) ? "R" : "O";
                     moves.add(new Position(prefix + "_" + i + "_" + j));

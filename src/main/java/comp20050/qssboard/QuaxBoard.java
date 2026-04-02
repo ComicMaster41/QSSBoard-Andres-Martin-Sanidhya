@@ -57,22 +57,6 @@ public class QuaxBoard {
     }
 
 
-    // MAY DELETE
-    public Boolean[][] getValidMoves() {
-        Boolean[][] valid_moves = new Boolean[11][21];
-        for (int i = 0; i < Tile.NUM_ROWS; i++) {
-            for (int j = 0; j < Tile.NUM_COLS; j++) {
-                if (state_board[i][j] == null || state_board[i][j].owner == null) {
-                    valid_moves[i][j] = true;
-                }
-                else {
-                    valid_moves[i][j] = false;
-                }
-            }
-        }
-        return valid_moves;
-    }
-
     public QuaxBoard copyBoard() {
         // This is going to copy the entire board. Maybe that is good for some scenarios, but for optomization purposes, that can be a lot to consider
         // Question: is it necessary to copy the entire board, and if it isn't whats an alternative to still consider different states?

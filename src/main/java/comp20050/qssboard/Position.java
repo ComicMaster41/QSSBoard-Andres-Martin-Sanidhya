@@ -19,6 +19,7 @@ public class Position {
             row = Integer.parseInt(pos_str[1]);
             col = Integer.parseInt(pos_str[2]);
 
+            position.clear(); // for clarity
             position.add(row);
             position.add(col);
         }
