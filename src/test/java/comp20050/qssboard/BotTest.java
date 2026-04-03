@@ -96,5 +96,5 @@ class BotTest {
         int after = bot.computeDistance(gameState, gameState.game_board.p2Color);
 
         assertTrue(after <= before);
-    }
+    } 
 }

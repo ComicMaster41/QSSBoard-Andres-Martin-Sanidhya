@@ -1,5 +1,6 @@
 package comp20050.qssboard;
 
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Polygon;
@@ -39,12 +40,14 @@ class HelloControllerTest {
         turnLabel = new Label();
         state = new GameState();
 
+        controller.ShapeLayout = new Group();
+        controller.activatePieButton = new Button();
         controller.state = state;
         controller.activatePieButton = activatePieButton;
         controller.OctCell_turn = octCellTurn;
         controller.Rhombus_turn = rhombusTurn;
         controller.turnLabel = turnLabel;
-
+        controller.inputEnabled = true;
         controller.initialize();
     }
 

@@ -30,7 +30,7 @@ public class GameState {
 
 
         if (!game_board.isMoveValid(row, col, tileType)){
-            throw new IllegalArgumentException("Invalid move - " + row + ", " + col);
+            return false;
         }
 
         game_board.makeMove(row, col, current_player, tileType);
@@ -45,7 +45,7 @@ public class GameState {
         if (colour == QuaxBoard.TileOwner.BLACK) {
 
             for (int col = 0; col < Tile.NUM_COLS; col++) {
-                if (game_board.getTileOwner(0, col) == colour) { // this tile is occupied by the player, so we start dfs
+                if (game_board.getTileOwner(0, col) == colour && game_board.getTileType(0, col) == QuaxBoard.TileType.OCTAGON) { // this tile is occupied by the player, so we start dfs
                     if (dfs(0, col, colour)) {
                         return true;
                     }
@@ -54,7 +54,7 @@ public class GameState {
         }
         else {
             for (int row = 0; row < Tile.NUM_ROWS; row++) {
-                if (game_board.getTileOwner(row, 0) == colour) { // this tile is occupied by the player, so we start dfs
+                if (game_board.getTileOwner(row, 0) == colour && game_board.getTileType(row, 0) == QuaxBoard.TileType.OCTAGON) { // this tile is occupied by the player, so we start dfs
                     if (dfs(row, 0, colour  )) {
                         return true;
                     }
@@ -65,10 +65,10 @@ public class GameState {
     }
 
     public boolean dfs(int row, int col, QuaxBoard.TileOwner colour) {
-        if (colour == QuaxBoard.TileOwner.BLACK && row == 10) {
+        if (colour == QuaxBoard.TileOwner.BLACK && row == 10 && game_board.getTileType(row, col) == QuaxBoard.TileType.OCTAGON) {
             return true;
         }
-        if (colour == QuaxBoard.TileOwner.WHITE && col == 20) {
+        if (colour == QuaxBoard.TileOwner.WHITE && col == 20 && game_board.getTileType(row, col) == QuaxBoard.TileType.OCTAGON) {
             return true;
         }
 

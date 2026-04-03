@@ -11,6 +11,7 @@ import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -26,7 +27,7 @@ public class HelloController {
 
     // Functions from backend - logic for handling the player
     GameState state = new GameState();
-
+    boolean inputEnabled = true;
     // colours of different players
     Color colorP1 = Color.BLACK;
     Color colorP2 = Color.WHITE;
@@ -67,7 +68,7 @@ public class HelloController {
 
     @FXML
     void handleCellSelection(Polygon cell) {
-        if (gameOver) return;
+        if (gameOver || !inputEnabled) return; // block clicks during bot move
 
         Position pos = new Position(cell.getId());
         QuaxBoard.TileType tile_type = getTileTypeFromId(cell.getId());
@@ -102,10 +103,27 @@ public class HelloController {
         updateTurnDisplay();
 
         if (state.getCurrentPlayer() == GameState.Player.P2) {
+            setInputEnabled(false); // lock UI
+
             PauseTransition pause = new PauseTransition(Duration.millis(1000));
-            pause.setOnFinished(e -> makeBotMove());
+            pause.setOnFinished(e ->  {
+                makeBotMove();
+                setInputEnabled(true); // unlock UI after bot moves
+            });
             pause.play();
         }
+    }
+
+    private void setInputEnabled(boolean enabled) {
+        inputEnabled = enabled;
+        // Disable all clickable cells
+        for (Node node : ShapeLayout.getChildren()) {
+            if (node instanceof Polygon) {
+                node.setMouseTransparent(!enabled);
+            }
+        }
+        // Disable pie button too
+        activatePieButton.setMouseTransparent(!enabled);
     }
 
     public void makeBotMove() {
@@ -180,6 +198,8 @@ public class HelloController {
 
     @FXML
     public void handlePieButtonClick(ActionEvent actionEvent) {
+        if (!inputEnabled || gameOver) return; // block during bot move
+
         // May have to move this to an update method
         // basically, if P2 clicks pie button, we want to have it so that the the only tile on the board
         // which was placed by P1, is now owned by P2
