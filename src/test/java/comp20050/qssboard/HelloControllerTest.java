@@ -135,6 +135,23 @@ class HelloControllerTest {
         }
         assertFalse(state.checkWin(QuaxBoard.TileOwner.BLACK));
     }
+    @Test
+    void testWhiteWinsWithStraightLine() {
+        for (int col = 0; col <= 20; col++) {
+            placeTile(0, col, QuaxBoard.TileOwner.BLACK);
+        }
+        assertTrue(state.checkWin(QuaxBoard.TileOwner.BLACK));
+    }
+
+    @Test
+    void testWhiteDoesNotWinWithIncompletePath() { //column 1 row 0- 9
+        for (int col = 0; col <= 19; col++) {
+            placeTile(0, col, QuaxBoard.TileOwner.BLACK);
+        }
+        assertFalse(state.checkWin(QuaxBoard.TileOwner.BLACK));
+    }
+
+
 
     @Test
     @DisplayName("handlePieButtonClick swaps player colors and sets current player to P1")
