@@ -49,10 +49,10 @@ class QuaxBoardTest {
         @DisplayName("Making a move sets tile owner correctly")
         void makeMoveSetsOwner() {
             board.makeMove(0, 0, GameState.Player.P1, QuaxBoard.TileType.OCTAGON);
-            assertEquals(GameState.Player.P1, board.getStateBoard()[0][0].owner);
+            assertEquals(QuaxBoard.TileOwner.BLACK, board.getStateBoard()[0][0].owner);
 
             board.makeMove(0, 1, GameState.Player.P2, QuaxBoard.TileType.RHOMBUS);
-            assertEquals(GameState.Player.P2, board.getStateBoard()[0][1].owner);
+            assertEquals(QuaxBoard.TileOwner.WHITE, board.getStateBoard()[0][1].owner);
         }
 
         @Test
@@ -61,7 +61,7 @@ class QuaxBoardTest {
             board.makeMove(0, 0, GameState.Player.P1, QuaxBoard.TileType.OCTAGON);
             board.makeMove(0, 0, GameState.Player.P2, QuaxBoard.TileType.OCTAGON);
 
-            assertEquals(GameState.Player.P2, board.getStateBoard()[0][0].owner);
+            assertEquals(QuaxBoard.TileOwner.WHITE, board.getStateBoard()[0][0].owner);
         }
 
         @Test
@@ -82,7 +82,7 @@ class QuaxBoardTest {
             board.makeMove(0, 0, GameState.Player.P1, QuaxBoard.TileType.OCTAGON);
             board.changeTileOwner(0, 0, GameState.Player.P2);
 
-            assertEquals(GameState.Player.P2, board.getStateBoard()[0][0].owner);
+            assertEquals(QuaxBoard.TileOwner.WHITE, board.getStateBoard()[0][0].owner);
         }
     }
 

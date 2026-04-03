@@ -70,7 +70,7 @@ public class Bot {
         return oppDist - myDist;
     }
 
-    private void applyMove(GameState simState, Position move) {
+    public void applyMove(GameState simState, Position move) {
         move.extractPosition();
         int row = move.getRow();
         int col = move.getCol();
@@ -166,15 +166,12 @@ public class Bot {
         return INF;
     }
 
-    // QUESTION: changed simState from GameState to QuaxBoard bc. getValidMoves was in that class
-    int minmax(GameState simState, int depth, int alpha, int beta, boolean isMax) {
+    public int minmax(GameState simState, int depth, int alpha, int beta, boolean isMax) {
         if (depth == 0 ) { // LATER: check terminal wins, || simState.getLegalMoves().isEmpty()
             return heuristic(simState);
-            // ^^ We have compute distance in evaluate, but I don't see that working for the rest of minmax, making me think that its extra work
         }
 
         ArrayList<Position> legalMoves = simState.getLegalMoves();
-
         if (isMax) {
             int bestValue = Integer.MIN_VALUE;
 
@@ -184,7 +181,7 @@ public class Bot {
                 applyMove(child, move);
 
                 int eval = minmax(child, depth - 1, alpha, beta, false);
-                System.out.println("Depth " + depth + " moves: " + legalMoves.size());
+                // System.out.println("Depth " + depth + " moves: " + legalMoves.size());
                 bestValue = Math.max(bestValue, eval);
                 alpha = Math.max(alpha, bestValue);
 

@@ -88,7 +88,6 @@ public class GameState {
         return false;
     }
 
-    // QUESTION: why is getValidMoves important if we're effectively doing the same thing but returning actual positions
     public ArrayList<Position> getLegalMoves() {
         ArrayList<Position> moves = new ArrayList<>();
 

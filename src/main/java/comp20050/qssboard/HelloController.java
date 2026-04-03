@@ -108,9 +108,6 @@ public class HelloController {
         }
     }
 
-    public void makePlayerMove() {
-
-    }
     public void makeBotMove() {
         if (gameOver) return;
 
@@ -132,7 +129,6 @@ public class HelloController {
             winner = playerBeforeMove;
         }
 
-        System.out.println("#" + botMoveID);
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
         cell.setFill(colorP2);
         moves_made++;
@@ -168,6 +164,10 @@ public class HelloController {
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
+        OctCell_turn.setOnMouseClicked(null);
+        Rhombus_turn.setOnMouseClicked(null);
+        OctCell_turn.setMouseTransparent(true);
+        Rhombus_turn.setMouseTransparent(true);
         activatePieButton.setVisible(false);
 
         // just to give initla white colour
@@ -185,22 +185,6 @@ public class HelloController {
         // which was placed by P1, is now owned by P2
         Tile[][] board = state.game_board.getStateBoard();
 
-
-        // find only occupied cell:
-//        for (int row = 0; row < Tile.NUM_ROWS; row++) {
-//            for (int col = 0; col < Tile.NUM_COLS; col++) {
-//                if (board[row][col] != null && board[row][col].owner == GameState.Player.P1){
-//                    board[row][col].owner = GameState.Player.P2;
-//                    // System.out.println("AFTER PIE RULE: Row " + row + " Col " + col + " is of type " + board[row][col].type + " and belongs to " + board[row][col].owner);
-//                }
-//            }
-//        }
-
-//        state.current_player =  GameState.Player.P1;
-//        Color temp;
-//        temp = colorP1;
-//        colorP1 = colorP2;
-//        colorP2 = temp;
         // swap LOGICAL ownership
         QuaxBoard.TileOwner temp = state.game_board.p1Color;
         state.game_board.p1Color = state.game_board.p2Color;

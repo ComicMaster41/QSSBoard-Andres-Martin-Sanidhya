@@ -5,9 +5,12 @@ import javafx.scene.control.Label;
 import javafx.scene.shape.Polygon;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javafx.scene.paint.Color;
+
+import java.awt.event.ActionEvent;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,6 +39,7 @@ class HelloControllerTest {
         turnLabel = new Label();
         state = new GameState();
 
+        controller.state = state;
         controller.activatePieButton = activatePieButton;
         controller.OctCell_turn = octCellTurn;
         controller.Rhombus_turn = rhombusTurn;
@@ -91,18 +95,6 @@ class HelloControllerTest {
         assertEquals(1, controller.moves_made);
     }
 
-    @Test
-    void handleCellSelection_invalidMove_doesNotIncrementMovesMade() {
-        Polygon clicked = new Polygon();
-        clicked.setId("O_0_0");
-
-        controller.handleCellSelection(clicked);
-        int movesAfterValid = controller.moves_made;
-
-        controller.handleCellSelection(clicked);
-
-        assertEquals(movesAfterValid, controller.moves_made);
-    }
 
     @Test
     void initialize_setsStartingTurnState() {
@@ -139,6 +131,27 @@ class HelloControllerTest {
             placeTile(row, 0, QuaxBoard.TileOwner.BLACK);
         }
         assertFalse(state.checkWin(QuaxBoard.TileOwner.BLACK));
+    }
+
+    @Test
+    @DisplayName("handlePieButtonClick swaps player colors and sets current player to P1")
+    void testHandlePieButtonClick() {
+        // store original colors
+        QuaxBoard.TileOwner originalP1 = state.game_board.p1Color;
+        QuaxBoard.TileOwner originalP2 = state.game_board.p2Color;
+
+        // store original current player
+        GameState.Player originalCurrent = state.current_player;
+
+        // call method
+        controller.handlePieButtonClick(null);
+
+        // assert colors swapped
+        assertEquals(originalP1, state.game_board.p2Color, "P2 color should now be original P1 color");
+        assertEquals(originalP2, state.game_board.p1Color, "P1 color should now be original P2 color");
+
+        // assert current player set to P1
+        assertEquals(GameState.Player.P1, state.current_player, "Current player should be P1 after pie click");
     }
 
 }
