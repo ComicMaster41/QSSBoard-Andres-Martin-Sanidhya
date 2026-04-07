@@ -15,7 +15,7 @@
 
     <Group fx:id="boardWrapper">
         <Group fx:id="Title">
-            <Label layoutX="450.0" layoutY="-1.0" style="-fx-font-size: 28px; -fx-font-weight: bold;" text="Quax (Human vs. Human)" textFill="#eb3b00" />
+            <Label layoutX="450.0" layoutY="-1.0" style="-fx-font-size: 28px; -fx-font-weight: bold;" text="Quax (Human vs. Bot)" textFill="#eb3b00" />
         </Group>
         <!-- AI generated code with the letters/numbers because of redundancy -->
         <Group fx:id="TopLetters" layoutX="75.0" layoutY="-21.0">
