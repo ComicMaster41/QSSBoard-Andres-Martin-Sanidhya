@@ -49,7 +49,7 @@ public class HelloController {
     protected Button activatePieButton; // Bug with bot where you can make a second choice...
 
     @FXML
-    protected Button showStrategyButton;
+    protected Button activateShowStrategyButton;
 
     int moves_made = 0;
     boolean gameOver = false;
@@ -226,6 +226,6 @@ public class HelloController {
     @FXML
     public void handleShowStrategyButtonClick(ActionEvent actionEvent) {
         Show = !Show;
-        showStrategyButton.setText(Show ? "Hide Strategy" : "Show Strategy");
+        activateShowStrategyButton.setText(Show ? "Hide Strategy" : "Show Strategy");
     }
 }
