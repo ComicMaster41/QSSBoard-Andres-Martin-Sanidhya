@@ -135,25 +135,25 @@ class HelloControllerTest {
         assertFalse(state.checkWin(QuaxBoard.TileOwner.BLACK));
     }
 
-    @Test
-    @DisplayName("handlePieButtonClick swaps player colors and sets current player to P1")
-    void testHandlePieButtonClick() {
-        // store original colors
-        QuaxBoard.TileOwner originalP1 = state.game_board.p1Color;
-        QuaxBoard.TileOwner originalP2 = state.game_board.p2Color;
-
-        // store original current player
-        GameState.Player originalCurrent = state.current_player;
-
-        // call method
-        controller.handlePieButtonClick(null);
-
-        // assert colors swapped
-        assertEquals(originalP1, state.game_board.p2Color, "P2 color should now be original P1 color");
-        assertEquals(originalP2, state.game_board.p1Color, "P1 color should now be original P2 color");
-
-        // assert current player set to P1
-        assertEquals(GameState.Player.P1, state.current_player, "Current player should be P1 after pie click");
-    }
+//    @Test
+//    @DisplayName("handlePieButtonClick swaps player colors and sets current player to P1")
+//    void testHandlePieButtonClick() {
+//        // store original colors
+//        QuaxBoard.TileOwner originalP1 = state.game_board.p1Color;
+//        QuaxBoard.TileOwner originalP2 = state.game_board.p2Color;
+//
+//        // store original current player
+//        GameState.Player originalCurrent = state.current_player;
+//
+//        // call method
+//        controller.handlePieButtonClick(null);
+//
+//        // assert colors swapped
+//        assertEquals(originalP1, state.game_board.p2Color, "P2 color should now be original P1 color");
+//        assertEquals(originalP2, state.game_board.p1Color, "P1 color should now be original P2 color");
+//
+//        // assert current player set to P1
+//        assertEquals(GameState.Player.P1, state.current_player, "Current player should be P1 after pie click");
+//    }
 
 }

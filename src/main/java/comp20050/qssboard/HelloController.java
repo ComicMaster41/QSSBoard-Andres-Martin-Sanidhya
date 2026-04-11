@@ -28,7 +28,7 @@ public class HelloController {
     Color colorP1 = Color.BLACK;
     Color colorP2 = Color.WHITE;
 
-    String moveMadeId;
+    Position moveMadeId;
     @FXML
     protected Group ShapeLayout;
 
@@ -73,7 +73,7 @@ public class HelloController {
         if (gameOver || !inputEnabled) return; // block clicks during bot move
 
         Position pos = new Position(cell.getId());
-        moveMadeId = pos.getRawPosition();
+        moveMadeId = pos;
         QuaxBoard.TileType tile_type = getTileTypeFromId(cell.getId());
 
         GameState.Player playerBeforeMove = state.getCurrentPlayer();
@@ -228,7 +228,8 @@ public class HelloController {
 
         // colorP2 is White, and colorP1 is Black
 
-        Polygon cell = (Polygon) ShapeLayout.lookup("#" + moveMadeId);
+        Polygon cell = (Polygon) ShapeLayout.lookup("#" + moveMadeId.getRawPosition());
+        state.game_board.changeTileOwner(moveMadeId.getRow(), moveMadeId.getCol(), GameState.Player.P2);
         cell.setFill(colorP2);
         state.current_player = GameState.Player.P1; // it is now Black's turn
         updateTurnDisplay(); // notify that it is Black's turn
