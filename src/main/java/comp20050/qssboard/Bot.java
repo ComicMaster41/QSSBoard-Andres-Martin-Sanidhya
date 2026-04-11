@@ -8,6 +8,18 @@ public class Bot {
     public GameState state;
     private static final int INF = 1_000_000;
 
+    private int bestScore;
+
+    public class ScoredMove {
+        public Position move;
+        public int score;
+
+        public ScoredMove(Position move, int score) {
+            this.move = move;
+            this.score = score;
+        }
+    };
+
     private static class Node {
         int row;
         int col;
@@ -20,10 +32,17 @@ public class Bot {
         }
     }
 
+    private ArrayList<ScoredMove> scoredMoves = new ArrayList<>();
+    private Position bestMove;
 
     public Bot(GameState state) {
         this.state = state;
     }
+
+    public ArrayList<ScoredMove> getScoredMoves() {return scoredMoves;}
+
+    public Position getBestMove() { return bestMove; }
+    public void setBestmove(Position bestMove) {this.bestMove = bestMove;}
 
     // bot doesnt make move after player
     // board representation can be off. getNeighbour->addValid
@@ -37,20 +56,19 @@ public class Bot {
             return null;
         }
 
-        Position bestMove = null;
         int bestValue = Integer.MIN_VALUE;
         int depth = 2; // or 2, increasing depth means it looks ahead more
 
+        scoredMoves.clear();
         for (Position move : legalMoves) {
             GameState child = state.copyState();
             applyMove(child, move);
-            // there was apply here but im thinking it should be in minmax insteead
 
             int eval = minmax(child, depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-
+            scoredMoves.add(new ScoredMove(move, eval));
             if (eval > bestValue) {
                 bestValue = eval;
-                bestMove = move;
+                setBestmove(move);
             }
         }
 
@@ -172,11 +190,14 @@ public class Bot {
         }
 
         ArrayList<Position> legalMoves = simState.getLegalMoves();
+
+
         if (isMax) {
             int bestValue = Integer.MIN_VALUE;
 
             for (Position move : legalMoves) {
                 GameState child = simState.copyState();
+
                 // Make sure that it's doing a deep copy and not a shallow copy. So we need to find what kind of copy it's doing
                 applyMove(child, move);
 

@@ -101,12 +101,6 @@ public class GameState {
             }
         }
 
-        /*
-        * My thoughts: I think that we can get legal moves from a certain chunk of the board, so we iterate over a certain chunk of the map
-        * we can consider the entire board but might need to sort or reorder what are good conditions, but then the question becomes
-        * how do we sort the legal paths according to the best ones? maybe we can calculate the costs for all the paths and sort by the shortest
-        * */
-
         return moves;
     }
 

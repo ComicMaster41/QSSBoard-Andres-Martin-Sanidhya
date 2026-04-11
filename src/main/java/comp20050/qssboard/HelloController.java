@@ -5,6 +5,7 @@
 package comp20050.qssboard;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.animation.PauseTransition;
@@ -16,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import kotlin.NotImplementedError;
 import javafx.scene.paint.Color;
@@ -51,10 +53,20 @@ public class HelloController {
     @FXML
     protected Button activateShowStrategyButton;
 
+    @FXML
+    protected Text weightText;
+
     int moves_made = 0;
     boolean gameOver = false;
-    boolean Show = false;
+    static boolean Show = false;
+
+    public static boolean getShow() {
+        return Show;
+    }
+
     GameState.Player winner = null;
+
+    private final ArrayList<Node> strategyVisuals = new ArrayList<>();
 
 
     // AI-Gen suggestion so that we can test this functionality
@@ -137,13 +149,55 @@ public class HelloController {
         Bot bot = new Bot(state);
         Position botMove = bot.makeMove();
 
-        String botMoveID = botMove.getRawPosition();
         if (botMove == null) {
             return;
         }
+        String botMoveID = botMove.getRawPosition();
+
         GameState.Player playerBeforeMove = state.getCurrentPlayer();
         if (!state.makeMove(botMove, QuaxBoard.TileType.OCTAGON)) {
             throw new IllegalArgumentException("Error making bot move");
+        }
+
+        // Clear the old values
+        for (javafx.scene.Node node :strategyVisuals) {
+            ShapeLayout.getChildren().remove(node);
+        }
+
+        // Show all paths and their weights
+        if (HelloController.getShow()) {
+            for (Bot.ScoredMove m : bot.getScoredMoves()) {
+                Polygon toCell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
+                if (toCell == null) continue;
+
+                double startX = toCell.getBoundsInParent().getCenterX();
+                double startY = toCell.getBoundsInParent().getCenterY();
+
+                Arrow arrow = new Arrow();
+                arrow.setColor(javafx.scene.paint.Color.RED);
+                arrow.setThickness(3.0);
+                arrow.setStartX(startX);
+                arrow.setStartY(startY);
+                arrow.setEndX(startX + 500);
+                arrow.setEndY(startY);
+
+
+                Label weightLabel = new Label(String.valueOf(m.score));
+                weightLabel.setLayoutX(startX + 500 + 10);
+                weightLabel.setLayoutY(startY - 10);
+                weightLabel.setStyle("-fx-text-fill: #930000; -fx-font-weight: bold; -fx-font-size: 40px;");
+                // FIX OFFSET AND FIGURE OUT WHY NUMBERS ARE NEGATIVE
+
+                // Highlight best move in green
+                if (m.move.equals(bot.getBestMove())) {
+                    arrow.setColor(Color.GREEN);
+                    weightLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold; -fx-font-size: 40px;");
+                }
+
+                ShapeLayout.getChildren().addAll(arrow, weightLabel);
+                strategyVisuals.add(arrow); // QUESTION: what's the point of this?
+                strategyVisuals.add(weightLabel);
+            }
         }
 
         // check win using the player who just moved, before the turn switched
