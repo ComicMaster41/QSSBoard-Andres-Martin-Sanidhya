@@ -9,6 +9,7 @@ module comp20050.qssboard {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.desktop;
+    requires annotations;
 
     opens comp20050.qssboard to javafx.fxml;
     exports comp20050.qssboard;

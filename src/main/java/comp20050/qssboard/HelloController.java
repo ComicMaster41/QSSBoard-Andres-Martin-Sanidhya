@@ -4,9 +4,8 @@
 
 package comp20050.qssboard;
 
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
+
 
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
@@ -22,7 +21,7 @@ import javafx.util.Duration;
 import kotlin.NotImplementedError;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Label;
-
+import org.jetbrains.annotations.NotNull;
 
 
 public class HelloController {
@@ -52,9 +51,6 @@ public class HelloController {
 
     @FXML
     protected Button activateShowStrategyButton;
-
-    @FXML
-    protected Text weightText;
 
     int moves_made = 0;
     boolean gameOver = false;
@@ -143,6 +139,15 @@ public class HelloController {
         activatePieButton.setMouseTransparent(!enabled);
     }
 
+    public void drawLegend() {
+        // anything green is best move
+        // anything red is bad move
+
+        // green tile is the move bot is going to make
+
+
+    }
+
     public void makeBotMove() {
         if (gameOver) return;
 
@@ -163,40 +168,46 @@ public class HelloController {
         for (javafx.scene.Node node :strategyVisuals) {
             ShapeLayout.getChildren().remove(node);
         }
+        strategyVisuals.clear();
 
         // Show all paths and their weights
         if (HelloController.getShow()) {
+            int index = 0;
+            double boardSplit = ShapeLayout.getBoundsInLocal().getWidth() / 2;
             for (Bot.ScoredMove m : bot.getScoredMoves()) {
-                Polygon toCell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
+                Polygon toCell = (Polygon) ShapeLayout.lookup("#" + m.move.getRawPosition());
                 if (toCell == null) continue;
 
                 double startX = toCell.getBoundsInParent().getCenterX();
                 double startY = toCell.getBoundsInParent().getCenterY();
 
+                double endX;
+                if (startX > boardSplit) endX = startX + 300;
+                else endX = startX - 300;
+
+                double endY = startY + (index * 15);
+                index++;
+
                 Arrow arrow = new Arrow();
                 arrow.setColor(javafx.scene.paint.Color.RED);
                 arrow.setThickness(3.0);
+
                 arrow.setStartX(startX);
                 arrow.setStartY(startY);
-                arrow.setEndX(startX + 500);
-                arrow.setEndY(startY);
+                arrow.setEndX(endX);
+                arrow.setEndY(endY);
 
+                javafx.scene.text.Text weightText = new javafx.scene.text.Text(String.valueOf(m.score));
+                weightText.setX(endX + (startX > boardSplit ? 5 : -30));
+                weightText.setY(startY - 10);
+                weightText.setFill(javafx.scene.paint.Color.RED);
+                weightText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
-                Label weightLabel = new Label(String.valueOf(m.score));
-                weightLabel.setLayoutX(startX + 500 + 10);
-                weightLabel.setLayoutY(startY - 10);
-                weightLabel.setStyle("-fx-text-fill: #930000; -fx-font-weight: bold; -fx-font-size: 40px;");
-                // FIX OFFSET AND FIGURE OUT WHY NUMBERS ARE NEGATIVE
-
-                // Highlight best move in green
-                if (m.move.equals(bot.getBestMove())) {
-                    arrow.setColor(Color.GREEN);
-                    weightLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold; -fx-font-size: 40px;");
-                }
-
-                ShapeLayout.getChildren().addAll(arrow, weightLabel);
-                strategyVisuals.add(arrow); // QUESTION: what's the point of this?
-                strategyVisuals.add(weightLabel);
+                ShapeLayout.getChildren().add(weightText);
+                ShapeLayout.getChildren().add(arrow);
+                // Clear the arrows on the next bot move
+                strategyVisuals.add(arrow);
+                strategyVisuals.add(weightText);
             }
         }
 
@@ -216,6 +227,22 @@ public class HelloController {
         }
 
         updateTurnDisplay();
+    }
+
+    @NotNull
+    private static Label getLabel(Bot.ScoredMove m, double startX, double startY) {
+        Label weightLabel = new Label(String.valueOf(m.score));
+        weightLabel.setLayoutX(startX + 500 + 10);
+        weightLabel.setLayoutY(startY - 10);
+        // FIX OFFSET AND FIGURE OUT WHY NUMBERS ARE NEGATIVE
+
+        // Highlight best move in green
+        if (m.score >= 0) {
+            weightLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold; -fx-font-size: 40px;");
+        } else {
+            weightLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold; -fx-font-size: 40px;");
+        }
+        return weightLabel;
     }
 
     private void updateTurnDisplay() {

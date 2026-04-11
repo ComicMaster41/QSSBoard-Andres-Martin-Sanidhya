@@ -51,7 +51,6 @@ public class Bot {
     public Position makeMove() {
         ArrayList<Position> legalMoves = state.getLegalMoves();
 
-
         if (legalMoves.isEmpty()) {
             return null;
         }
@@ -70,7 +69,11 @@ public class Bot {
                 bestValue = eval;
                 setBestmove(move);
             }
+
         }
+
+        scoredMoves.sort(Comparator.comparingInt(a -> a.score));
+        scoredMoves = new ArrayList<>(scoredMoves.subList(0, Math.min(5, scoredMoves.size())));
 
         return bestMove;
     }
