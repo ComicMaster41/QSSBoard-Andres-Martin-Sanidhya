@@ -24,7 +24,12 @@ public class HelloController {
 
     // Functions from backend - logic for handling the player
     GameState state = new GameState();
-    GameState.Player botPlayer = GameState.Player.P2;
+
+    /**
+     * If true, the bot plays white (P2) this game; if false, black (P1).
+     * Flips each time a game ends and {@link #restartGame()} runs, so the bot alternates colours every round.
+     */
+    private boolean botHasWhiteStones = true;
 
     boolean inputEnabled = true;
     // colours of different players
@@ -56,6 +61,10 @@ public class HelloController {
     boolean Show = false;
     GameState.Player winner = null;
 
+
+    private GameState.Player botSeat() {
+        return botHasWhiteStones ? GameState.Player.P2 : GameState.Player.P1;
+    }
 
     // AI-Gen suggestion so that we can test this functionality
     QuaxBoard.TileType getTileTypeFromId(String id) {
@@ -107,7 +116,7 @@ public class HelloController {
 
         updateTurnDisplay();
 
-        if (state.getCurrentPlayer() == botPlayer) {
+        if (state.getCurrentPlayer() == botSeat()) {
             setInputEnabled(false); // lock UI
 
             PauseTransition pause = new PauseTransition(Duration.millis(1000));
@@ -133,7 +142,7 @@ public class HelloController {
 
     public void makeBotMove() {
         if (gameOver) return;
-        Bot bot = new Bot(state, moveMadeId);
+        Bot bot = new Bot(state, moveMadeId, botSeat());
         if (moves_made == 1) {
             boolean pressButton = bot.decideToPressPie();
             if (pressButton) {
@@ -210,7 +219,7 @@ public class HelloController {
         Rhombus_turn.setFill(colorP1);
         turnLabel.setText("Black to play");
 
-        if (state.getCurrentPlayer() == botPlayer) {
+        if (state.getCurrentPlayer() == botSeat()) {
             setInputEnabled(false); // lock UI
 
             PauseTransition pause = new PauseTransition(Duration.millis(1000));
@@ -251,16 +260,15 @@ public class HelloController {
 
     public void restartGame() {
         // reinitialise all variables
+        botHasWhiteStones = !botHasWhiteStones;
         state = new GameState();
         inputEnabled = true;
-        Color temp;
         colorP1 = Color.BLACK;
         colorP2 = Color.WHITE;
         moves_made = 0;
         gameOver = false;
         Show = false;
         winner = null;
-        botPlayer = (state.getCurrentPlayer() == GameState.Player.P1) ? GameState.Player.P1 : GameState.Player.P2;
         state.current_player = GameState.Player.P1;
         moveMadeId = null;
         resetCellColours();

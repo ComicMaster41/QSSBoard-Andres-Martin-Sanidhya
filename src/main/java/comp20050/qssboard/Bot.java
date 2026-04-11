@@ -8,6 +8,7 @@ import java.util.PriorityQueue;
 public class Bot {
     public GameState state;
     private Position lastMoveMadeId;
+    private final GameState.Player botPlayer;
     private static final int INF = 1_000_000;
 
     private static class Node {
@@ -23,9 +24,14 @@ public class Bot {
     }
 
 
-    public Bot(GameState state, Position lastMoveMadeId) {
+    public Bot(GameState state, Position lastMoveMadeId, GameState.Player botPlayer) {
         this.state = state;
         this.lastMoveMadeId = lastMoveMadeId;
+        this.botPlayer = botPlayer;
+    }
+
+    private static GameState.Player opponent(GameState.Player p) {
+        return p == GameState.Player.P1 ? GameState.Player.P2 : GameState.Player.P1;
     }
 
     // bot doesnt make move after player
@@ -72,8 +78,8 @@ public class Bot {
     }
 
     public int heuristic(GameState simState) {
-        QuaxBoard.TileOwner botColor = simState.game_board.p2Color;
-        QuaxBoard.TileOwner playerColor = simState.game_board.p1Color;
+        QuaxBoard.TileOwner botColor = simState.game_board.getColor(botPlayer);
+        QuaxBoard.TileOwner playerColor = simState.game_board.getColor(opponent(botPlayer));
 
         if (simState.checkWin(botColor)) return 100000;
         if (simState.checkWin(playerColor)) return -100000;

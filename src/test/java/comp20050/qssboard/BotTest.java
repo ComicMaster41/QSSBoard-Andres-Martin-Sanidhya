@@ -15,7 +15,7 @@ class BotTest {
     @BeforeEach
     void setUp() {
         gameState = new GameState();
-        bot = new Bot(gameState, null);
+        bot = new Bot(gameState, null, GameState.Player.P1);
     }
 
 
