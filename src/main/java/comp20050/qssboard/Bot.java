@@ -1,5 +1,6 @@
 package comp20050.qssboard;
 
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -42,6 +43,7 @@ public class Bot {
         int depth = 2; // or 2, increasing depth means it looks ahead more
 
         for (Position move : legalMoves) {
+            // System.out.println(move.extractPosition());
             GameState child = state.copyState();
             applyMove(child, move);
             // there was apply here but im thinking it should be in minmax insteead
@@ -170,12 +172,12 @@ public class Bot {
         if (depth == 0 ) { // LATER: check terminal wins, || simState.getLegalMoves().isEmpty()
             return heuristic(simState);
         }
-
         ArrayList<Position> legalMoves = simState.getLegalMoves();
         if (isMax) {
             int bestValue = Integer.MIN_VALUE;
 
             for (Position move : legalMoves) {
+
                 GameState child = simState.copyState();
                 // Make sure that it's doing a deep copy and not a shallow copy. So we need to find what kind of copy it's doing
                 applyMove(child, move);
@@ -198,7 +200,6 @@ public class Bot {
             for (Position move : legalMoves) {
                 GameState child = simState.copyState();
                 applyMove(child, move);
-
                 int eval = minmax(child, depth - 1, alpha, beta, true);
                 bestValue = Math.min(bestValue, eval);
                 beta = Math.min(beta, bestValue);

@@ -1,6 +1,5 @@
 package comp20050.qssboard;
 
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 

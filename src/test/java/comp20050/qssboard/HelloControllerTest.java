@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import javafx.scene.paint.Color;
 
-import java.awt.event.ActionEvent;
 
 import static org.junit.jupiter.api.Assertions.*;
 

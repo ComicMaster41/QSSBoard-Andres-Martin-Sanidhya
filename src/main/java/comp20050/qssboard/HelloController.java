@@ -4,8 +4,6 @@
 
 package comp20050.qssboard;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
@@ -14,10 +12,8 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
-import kotlin.NotImplementedError;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Label;
 
