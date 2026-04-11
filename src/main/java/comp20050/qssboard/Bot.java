@@ -7,6 +7,7 @@ import java.util.PriorityQueue;
 
 public class Bot {
     public GameState state;
+    private Position lastMoveMadeId;
     private static final int INF = 1_000_000;
 
     private static class Node {
@@ -22,8 +23,9 @@ public class Bot {
     }
 
 
-    public Bot(GameState state) {
+    public Bot(GameState state, Position lastMoveMadeId) {
         this.state = state;
+        this.lastMoveMadeId = lastMoveMadeId;
     }
 
     // bot doesnt make move after player
@@ -32,7 +34,6 @@ public class Bot {
 
     public Position makeMove() {
         ArrayList<Position> legalMoves = state.getLegalMoves();
-
 
         if (legalMoves.isEmpty()) {
             return null;
@@ -57,6 +58,17 @@ public class Bot {
         }
 
         return bestMove;
+    }
+
+    public boolean decideToPressPie() {
+        int row = lastMoveMadeId.getRow();
+        int col = lastMoveMadeId.getCol();
+
+        // if the first move made by Black is anywhere on the edge of the board -> then bot should press the pie button
+        if (row == 0 || row == 10 || col == 0 || col == 20) {
+            return true;
+        }
+        return false;
     }
 
     public int heuristic(GameState simState) {

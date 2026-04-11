@@ -12,6 +12,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 import javafx.scene.paint.Color;
@@ -23,6 +24,8 @@ public class HelloController {
 
     // Functions from backend - logic for handling the player
     GameState state = new GameState();
+    GameState.Player botPlayer = GameState.Player.P2;
+
     boolean inputEnabled = true;
     // colours of different players
     Color colorP1 = Color.BLACK;
@@ -82,18 +85,17 @@ public class HelloController {
             return;
         }
 
-        if (playerBeforeMove == GameState.Player.P1) {
-            cell.setFill(colorP1);
-        } else if (playerBeforeMove == GameState.Player.P2) {
-            cell.setFill(colorP2);
-        } else {
-            throw new IllegalArgumentException("Error from Controller in getCellID - NO player option given");
-        }
+        paintCell(cell, playerBeforeMove);
 
         // check win using the player who just moved, before the turn switched
         if (state.checkWin(state.game_board.getColor(playerBeforeMove))) {
             gameOver = true;
             winner = playerBeforeMove;
+            updateTurnDisplay();
+            PauseTransition pause = new PauseTransition(Duration.millis(2000));
+            pause.setOnFinished(event -> {restartGame();});
+            pause.play();
+            return;
         }
 
         moves_made++;
@@ -105,16 +107,16 @@ public class HelloController {
 
         updateTurnDisplay();
 
-//        if (state.getCurrentPlayer() == GameState.Player.P2) {
-//            setInputEnabled(false); // lock UI
-//
-//            PauseTransition pause = new PauseTransition(Duration.millis(1000));
-//            pause.setOnFinished(e ->  {
-//                makeBotMove();
-//                setInputEnabled(true); // unlock UI after bot moves
-//            });
-//            pause.play();
-//        }
+        if (state.getCurrentPlayer() == botPlayer) {
+            setInputEnabled(false); // lock UI
+
+            PauseTransition pause = new PauseTransition(Duration.millis(1000));
+            pause.setOnFinished(e ->  {
+                makeBotMove();
+                setInputEnabled(true); // unlock UI after bot moves
+            });
+            pause.play();
+        }
     }
 
     private void setInputEnabled(boolean enabled) {
@@ -131,9 +133,17 @@ public class HelloController {
 
     public void makeBotMove() {
         if (gameOver) return;
+        Bot bot = new Bot(state, moveMadeId);
+        if (moves_made == 1) {
+            boolean pressButton = bot.decideToPressPie();
+            if (pressButton) {
+                handlePieButtonClick();
+                return;
+            }
 
-        Bot bot = new Bot(state);
+        }
         Position botMove = bot.makeMove();
+        moveMadeId = botMove;
 
         String botMoveID = botMove.getRawPosition();
         if (botMove == null) {
@@ -148,10 +158,14 @@ public class HelloController {
         if (state.checkWin(state.game_board.getColor(playerBeforeMove))) {
             gameOver = true;
             winner = playerBeforeMove;
+            updateTurnDisplay();
+            PauseTransition pause = new PauseTransition(Duration.millis(2000));
+            pause.setOnFinished(event -> {restartGame();});
+            pause.play();
         }
 
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
-        cell.setFill(colorP2);
+        paintCell(cell, playerBeforeMove);
         moves_made++;
         if (moves_made == 1) {
             activatePieButton.setVisible(true);
@@ -195,30 +209,23 @@ public class HelloController {
         OctCell_turn.setFill(colorP1);
         Rhombus_turn.setFill(colorP1);
         turnLabel.setText("Black to play");
+
+        if (state.getCurrentPlayer() == botPlayer) {
+            setInputEnabled(false); // lock UI
+
+            PauseTransition pause = new PauseTransition(Duration.millis(1000));
+            pause.setOnFinished(e ->  {
+                makeBotMove();
+                setInputEnabled(true); // unlock UI after bot moves
+            });
+            pause.play();
+        }
     }
 
 
     @FXML
-    public void handlePieButtonClick(ActionEvent actionEvent) {
-        if (!inputEnabled || gameOver) return; // block during bot move
-
-        // May have to move this to an update method
-        // basically, if P2 clicks pie button, we want to have it so that the the only tile on the board
-        // which was placed by P1, is now owned by P2
+    public void handlePieButtonClick() {
         Tile[][] board = state.game_board.getStateBoard();
-
-        // THIS IS OLD VERSION - DON'T THINK IT'S RIGHT
-        // swap LOGICAL ownership
-//        QuaxBoard.TileOwner temp = state.game_board.p1Color;
-//        state.game_board.p1Color = state.game_board.p2Color;
-//        state.game_board.p2Color = temp;
-//
-//        // swap UI colors (what user sees)
-//        Color tempColor = colorP1;
-//        colorP1 = colorP2;
-//        colorP2 = tempColor;
-//
-//        state.current_player = GameState.Player.P1;
 
         // NEW VERSION:
         // White clicks pie button
@@ -227,18 +234,57 @@ public class HelloController {
         // But, P1 is still Black, it just that White clicking pie button is White's turn
 
         // colorP2 is White, and colorP1 is Black
-
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + moveMadeId.getRawPosition());
         state.game_board.changeTileOwner(moveMadeId.getRow(), moveMadeId.getCol(), GameState.Player.P2);
-        cell.setFill(colorP2);
+        GameState.Player playerBeforeMove = state.getCurrentPlayer();
+        paintCell(cell, playerBeforeMove);
         state.current_player = GameState.Player.P1; // it is now Black's turn
         updateTurnDisplay(); // notify that it is Black's turn
-        
+
         activatePieButton.setVisible(false);
     }
     @FXML
-    public void handleShowStrategyButtonClick(ActionEvent actionEvent) {
+    public void handleShowStrategyButtonClick() {
         Show = !Show;
         activateShowStrategyButton.setText(Show ? "Hide Strategy" : "Show Strategy");
+    }
+
+    public void restartGame() {
+        // reinitialise all variables
+        state = new GameState();
+        inputEnabled = true;
+        Color temp;
+        colorP1 = Color.BLACK;
+        colorP2 = Color.WHITE;
+        moves_made = 0;
+        gameOver = false;
+        Show = false;
+        winner = null;
+        botPlayer = (state.getCurrentPlayer() == GameState.Player.P1) ? GameState.Player.P1 : GameState.Player.P2;
+        state.current_player = GameState.Player.P1;
+        moveMadeId = null;
+        resetCellColours();
+        initialize();
+        System.out.println("restart game");
+    }
+
+    public void resetCellColours() {
+        int col;
+        for (Node node : ShapeLayout.getChildren()) {
+            if (node instanceof Polygon) {
+                Position pos = new Position(node.getId());
+                col = pos.getCol();
+                if (col % 2 == 0) {
+                    ((Polygon) node).setFill(Paint.valueOf("#c98c07"));
+                }
+                else {
+                    ((Polygon) node).setFill(Paint.valueOf("#ffb91f"));
+                }
+            }
+        }
+    }
+
+    public void paintCell(Polygon cell, GameState.Player player) {
+        cell.setFill(player == GameState.Player.P1 ? colorP1 : colorP2);
     }
 }
