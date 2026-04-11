@@ -28,6 +28,7 @@ public class HelloController {
     Color colorP1 = Color.BLACK;
     Color colorP2 = Color.WHITE;
 
+    String moveMadeId;
     @FXML
     protected Group ShapeLayout;
 
@@ -72,6 +73,7 @@ public class HelloController {
         if (gameOver || !inputEnabled) return; // block clicks during bot move
 
         Position pos = new Position(cell.getId());
+        moveMadeId = pos.getRawPosition();
         QuaxBoard.TileType tile_type = getTileTypeFromId(cell.getId());
 
         GameState.Player playerBeforeMove = state.getCurrentPlayer();
@@ -103,16 +105,16 @@ public class HelloController {
 
         updateTurnDisplay();
 
-        if (state.getCurrentPlayer() == GameState.Player.P2) {
-            setInputEnabled(false); // lock UI
-
-            PauseTransition pause = new PauseTransition(Duration.millis(1000));
-            pause.setOnFinished(e ->  {
-                makeBotMove();
-                setInputEnabled(true); // unlock UI after bot moves
-            });
-            pause.play();
-        }
+//        if (state.getCurrentPlayer() == GameState.Player.P2) {
+//            setInputEnabled(false); // lock UI
+//
+//            PauseTransition pause = new PauseTransition(Duration.millis(1000));
+//            pause.setOnFinished(e ->  {
+//                makeBotMove();
+//                setInputEnabled(true); // unlock UI after bot moves
+//            });
+//            pause.play();
+//        }
     }
 
     private void setInputEnabled(boolean enabled) {
@@ -205,18 +207,32 @@ public class HelloController {
         // which was placed by P1, is now owned by P2
         Tile[][] board = state.game_board.getStateBoard();
 
+        // THIS IS OLD VERSION - DON'T THINK IT'S RIGHT
         // swap LOGICAL ownership
-        QuaxBoard.TileOwner temp = state.game_board.p1Color;
-        state.game_board.p1Color = state.game_board.p2Color;
-        state.game_board.p2Color = temp;
+//        QuaxBoard.TileOwner temp = state.game_board.p1Color;
+//        state.game_board.p1Color = state.game_board.p2Color;
+//        state.game_board.p2Color = temp;
+//
+//        // swap UI colors (what user sees)
+//        Color tempColor = colorP1;
+//        colorP1 = colorP2;
+//        colorP2 = tempColor;
+//
+//        state.current_player = GameState.Player.P1;
 
-        // swap UI colors (what user sees)
-        Color tempColor = colorP1;
-        colorP1 = colorP2;
-        colorP2 = tempColor;
+        // NEW VERSION:
+        // White clicks pie button
+        // The Black tile on board should become White
+        // It should then be Black's turn to play
+        // But, P1 is still Black, it just that White clicking pie button is White's turn
 
-        state.current_player = GameState.Player.P1;
+        // colorP2 is White, and colorP1 is Black
 
+        Polygon cell = (Polygon) ShapeLayout.lookup("#" + moveMadeId);
+        cell.setFill(colorP2);
+        state.current_player = GameState.Player.P1; // it is now Black's turn
+        updateTurnDisplay(); // notify that it is Black's turn
+        
         activatePieButton.setVisible(false);
     }
     @FXML
