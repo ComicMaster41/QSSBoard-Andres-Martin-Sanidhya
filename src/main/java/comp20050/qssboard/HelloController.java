@@ -43,8 +43,13 @@ public class HelloController {
     // Create button variable
     @FXML
     protected Button activatePieButton; // Bug with bot where you can make a second choice...
+
+    @FXML
+    protected Button activateShowStrategyButton;
+
     int moves_made = 0;
     boolean gameOver = false;
+    boolean Show = false;
     GameState.Player winner = null;
 
 
@@ -188,7 +193,6 @@ public class HelloController {
         OctCell_turn.setFill(colorP1);
         Rhombus_turn.setFill(colorP1);
         turnLabel.setText("Black to play");
-
     }
 
 
@@ -214,5 +218,10 @@ public class HelloController {
         state.current_player = GameState.Player.P1;
 
         activatePieButton.setVisible(false);
+    }
+    @FXML
+    public void handleShowStrategyButtonClick(ActionEvent actionEvent) {
+        Show = !Show;
+        activateShowStrategyButton.setText(Show ? "Hide Strategy" : "Show Strategy");
     }
 }

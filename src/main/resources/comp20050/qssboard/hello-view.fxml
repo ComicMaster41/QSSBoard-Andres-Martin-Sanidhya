@@ -351,6 +351,15 @@
          </DropShadow>
       </effect>
    </Button>
+    <Button fx:id="activateShowStrategyButton" mnemonicParsing="false" onAction="#handleShowStrategyButtonClick" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="ShowStrategy" translateX="600.0" translateY="-100.0">
+        <effect>
+            <DropShadow>
+                <color>
+                    <Color green="0.23508772253990173" blue="0.8815789222717285" />
+                </color>
+            </DropShadow>
+        </effect>
+    </Button>
 
    <padding>
       <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
