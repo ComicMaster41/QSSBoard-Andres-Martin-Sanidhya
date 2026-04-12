@@ -7,6 +7,20 @@ public class Position {
     String regex = "[,_\\s]";
     ArrayList<Integer> position = new ArrayList<>(); // first index holds row, second index holds colun
 
+    // Two comparators taken from Claude AI
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Position)) return false;
+        Position other = (Position) obj;
+        return this.row == other.row && this.col == other.col;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(row, col);
+    }
+
     public Position(String raw_position) {
         this.raw_position = raw_position;
     }

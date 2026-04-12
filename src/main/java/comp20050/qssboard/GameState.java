@@ -90,13 +90,34 @@ public class GameState {
 
     public ArrayList<Position> getLegalMoves() {
         ArrayList<Position> moves = new ArrayList<>();
+        boolean[][] seen = new boolean[Tile.NUM_ROWS][Tile.NUM_COLS];
 
         for (int i = 0; i < Tile.NUM_ROWS; i++) {
             for (int j = 0; j < Tile.NUM_COLS; j++) {
-                if (game_board.isTileEmpty(i, j)) {
-                    Tile tile = game_board.getTile(i, j);
-                    String prefix = (tile.type == QuaxBoard.TileType.RHOMBUS) ? "R" : "O";
-                    moves.add(new Position(prefix + "_" + i + "_" + j));
+                if (!game_board.isTileEmpty(i, j)) {
+                    for (int[] n : getNeighbours(i, j)) {
+                        int nr = n[0];
+                        int nc = n[1];
+                        if (game_board.isTileEmpty(nr, nc) && !seen[nr][nc]) {
+                            seen[nr][nc] = true;
+                            Tile tile = game_board.getTile(nr, nc);
+                            String prefix = (tile.type == QuaxBoard.TileType.RHOMBUS) ? "R" : "O";
+                            moves.add(new Position(prefix + "_" + nr + "_" + nc));
+                        }
+                    }
+                }
+            }
+        }
+
+        // fallback if board is empty
+        if (moves.isEmpty()) {
+            for (int i = 0; i < Tile.NUM_ROWS; i++) {
+                for (int j = 0; j < Tile.NUM_COLS; j++) {
+                    if (game_board.isTileEmpty(i, j)) {
+                        Tile tile = game_board.getTile(i, j);
+                        String prefix = (tile.type == QuaxBoard.TileType.RHOMBUS) ? "R" : "O";
+                        moves.add(new Position(prefix + "_" + i + "_" + j));
+                    }
                 }
             }
         }

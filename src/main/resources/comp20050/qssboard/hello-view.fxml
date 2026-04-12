@@ -11,6 +11,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.layout.Pane?>
 <StackPane fx:id="root" alignment="CENTER" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp20050.qssboard.HelloController"> <!-- ChatGPT suggestion instead of AnchorPane -->
 
     <Group fx:id="boardWrapper">
@@ -360,7 +361,7 @@
             </DropShadow>
         </effect>
     </Button>
-
+    <Pane fx:id="overlayPane" mouseTransparent="true"/>
    <padding>
       <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
    </padding>

@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import kotlin.NotImplementedError;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +32,9 @@ public class HelloController {
     // colours of different players
     Color colorP1 = Color.BLACK;
     Color colorP2 = Color.WHITE;
+    Color colorShowStrategy = Color.GREEN;
+
+    private Polygon lastBestCell;
 
     @FXML
     protected Group ShapeLayout;
@@ -51,6 +54,9 @@ public class HelloController {
 
     @FXML
     protected Button activateShowStrategyButton;
+
+    @FXML
+    protected Pane overlayPane;
 
     int moves_made = 0;
     boolean gameOver = false;
@@ -119,7 +125,7 @@ public class HelloController {
             setInputEnabled(false); // lock UI
 
             PauseTransition pause = new PauseTransition(Duration.millis(1000));
-            pause.setOnFinished(e ->  {
+            pause.setOnFinished(e -> {
                 makeBotMove();
                 setInputEnabled(true); // unlock UI after bot moves
             });
@@ -148,6 +154,79 @@ public class HelloController {
 
     }
 
+    public Polygon drawStrategy(Bot bot) {
+        int index = 0;
+        double boardSplit = ShapeLayout.getBoundsInLocal().getWidth() / 2;
+
+        // So that we can display the text at the tip of the path
+        double lastX = 0;
+        double lastY = 0;
+        
+        Polygon returnPoly = null;
+
+        for (Bot.ScoredMove m : bot.getScoredMoves()) {
+            if (index == 0) {
+                Polygon bestMoveCell = (Polygon) ShapeLayout.lookup("#" + m.move.getRawPosition());
+                if (bestMoveCell != null) {
+                    bestMoveCell.setFill(colorShowStrategy);
+                    returnPoly = bestMoveCell;
+                }
+            }
+
+            for (int i = 0; i < m.path.size() - 1; i++) {
+                Position from = m.path.get(i);
+                Position to = m.path.get(i + 1);
+
+                Polygon fromCell = (Polygon) ShapeLayout.lookup("#" + from.getRawPosition());
+                Point2D fromPoint = fromCell.localToScene(
+                        fromCell.getBoundsInLocal().getCenterX(),
+                        fromCell.getBoundsInLocal().getCenterY()
+                );
+
+                double startX = overlayPane.sceneToLocal(fromPoint).getX();
+                double startY = overlayPane.sceneToLocal(fromPoint).getY();
+
+                Polygon toCell = (Polygon) ShapeLayout.lookup("#" + to.getRawPosition());
+                // Claude AI suggestion to convert the x-y coordinates to layer on the Pane
+                Point2D toPoint = toCell.localToScene(
+                        toCell.getBoundsInLocal().getCenterX(),
+                        toCell.getBoundsInLocal().getCenterY()
+                );
+
+                double endX = overlayPane.sceneToLocal(toPoint).getX();
+                double endY = overlayPane.sceneToLocal(toPoint).getY();
+
+                lastX = endX;
+                lastY = endY;
+
+                Arrow arrow = new Arrow();
+                arrow.setColor(Color.RED);
+                arrow.setThickness(3.0);
+
+                arrow.setStartX(startX);
+                arrow.setStartY(startY);
+                arrow.setEndX(endX);
+                arrow.setEndY(endY);
+
+                overlayPane.getChildren().add(arrow);
+                strategyVisuals.add(arrow);
+            }
+
+            index++;
+
+            Text weightText = new Text(String.valueOf(m.score));
+            weightText.setX(lastX + 5);
+            weightText.setY(lastY - 10);
+            weightText.setFill(Color.RED);
+            weightText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
+            strategyVisuals.add(weightText);
+            overlayPane.getChildren().add(weightText);
+        }
+
+        return returnPoly;
+    }
+
     public void makeBotMove() {
         if (gameOver) return;
 
@@ -164,52 +243,18 @@ public class HelloController {
             throw new IllegalArgumentException("Error making bot move");
         }
 
+        if (lastBestCell != null) {
+            lastBestCell.setFill(colorP2);
+            lastBestCell = null;
+        }
+
         // Clear the old values
-        for (javafx.scene.Node node :strategyVisuals) {
-            ShapeLayout.getChildren().remove(node);
+        for (Node node : strategyVisuals) {
+            overlayPane.getChildren().remove(node);
         }
         strategyVisuals.clear();
 
-        // Show all paths and their weights
-        if (HelloController.getShow()) {
-            int index = 0;
-            double boardSplit = ShapeLayout.getBoundsInLocal().getWidth() / 2;
-            for (Bot.ScoredMove m : bot.getScoredMoves()) {
-                Polygon toCell = (Polygon) ShapeLayout.lookup("#" + m.move.getRawPosition());
-                if (toCell == null) continue;
-
-                double startX = toCell.getBoundsInParent().getCenterX();
-                double startY = toCell.getBoundsInParent().getCenterY();
-
-                double endX;
-                if (startX > boardSplit) endX = startX + 300;
-                else endX = startX - 300;
-
-                double endY = startY + (index * 15);
-                index++;
-
-                Arrow arrow = new Arrow();
-                arrow.setColor(javafx.scene.paint.Color.RED);
-                arrow.setThickness(3.0);
-
-                arrow.setStartX(startX);
-                arrow.setStartY(startY);
-                arrow.setEndX(endX);
-                arrow.setEndY(endY);
-
-                javafx.scene.text.Text weightText = new javafx.scene.text.Text(String.valueOf(m.score));
-                weightText.setX(endX + (startX > boardSplit ? 5 : -30));
-                weightText.setY(startY - 10);
-                weightText.setFill(javafx.scene.paint.Color.RED);
-                weightText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-                ShapeLayout.getChildren().add(weightText);
-                ShapeLayout.getChildren().add(arrow);
-                // Clear the arrows on the next bot move
-                strategyVisuals.add(arrow);
-                strategyVisuals.add(weightText);
-            }
-        }
+        Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
 
         // check win using the player who just moved, before the turn switched
         if (state.checkWin(state.game_board.getColor(playerBeforeMove))) {
@@ -217,8 +262,15 @@ public class HelloController {
             winner = playerBeforeMove;
         }
 
-        Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
-        cell.setFill(colorP2);
+        // Show all paths and their weights
+        if (HelloController.getShow()) {
+            lastBestCell = drawStrategy(bot); // Function that draws the strategy
+        }
+
+        else {
+            cell.setFill(colorP2);
+        }
+
         moves_made++;
         if (moves_made == 1) {
             activatePieButton.setVisible(true);
@@ -273,6 +325,7 @@ public class HelloController {
         OctCell_turn.setMouseTransparent(true);
         Rhombus_turn.setMouseTransparent(true);
         activatePieButton.setVisible(false);
+        overlayPane.setMouseTransparent(true);
 
         // just to give initla white colour
         OctCell_turn.setFill(colorP1);

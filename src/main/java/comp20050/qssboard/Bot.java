@@ -6,21 +6,20 @@ import java.util.PriorityQueue;
 
 public class Bot {
     public GameState state;
-    private static final int INF = 1_000_000;
-
-    private int bestScore;
 
     public class ScoredMove {
         public Position move;
         public int score;
+        ArrayList<Position> path;
 
-        public ScoredMove(Position move, int score) {
+        public ScoredMove(Position move, int score, ArrayList<Position> path) {
             this.move = move;
             this.score = score;
+            this.path = path;
         }
     };
 
-    private static class Node {
+    static class Node {
         int row;
         int col;
         int dist;
@@ -41,12 +40,7 @@ public class Bot {
 
     public ArrayList<ScoredMove> getScoredMoves() {return scoredMoves;}
 
-    public Position getBestMove() { return bestMove; }
     public void setBestmove(Position bestMove) {this.bestMove = bestMove;}
-
-    // bot doesnt make move after player
-    // board representation can be off. getNeighbour->addValid
-    // account for activate pie button
 
     public Position makeMove() {
         ArrayList<Position> legalMoves = state.getLegalMoves();
@@ -64,7 +58,9 @@ public class Bot {
             applyMove(child, move);
 
             int eval = minmax(child, depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-            scoredMoves.add(new ScoredMove(move, eval));
+            int dist = Dijkstra.computeDistance(child, child.game_board.p2Color); // Slows the game down
+            ArrayList<Position> path = Dijkstra.computePath(child, child.game_board.p2Color);
+            scoredMoves.add(new ScoredMove(move, dist, path));
             if (eval > bestValue) {
                 bestValue = eval;
                 setBestmove(move);
@@ -72,7 +68,7 @@ public class Bot {
 
         }
 
-        scoredMoves.sort(Comparator.comparingInt(a -> a.score));
+        scoredMoves.sort(Comparator.comparingInt((Bot.ScoredMove a) -> a.score));
         scoredMoves = new ArrayList<>(scoredMoves.subList(0, Math.min(5, scoredMoves.size())));
 
         return bestMove;
@@ -85,8 +81,8 @@ public class Bot {
         if (simState.checkWin(botColor)) return 100000;
         if (simState.checkWin(playerColor)) return -100000;
 
-        int myDist = computeDistance(simState, botColor);
-        int oppDist = computeDistance(simState, playerColor);
+        int myDist = Dijkstra.computeDistance(simState, botColor);
+        int oppDist = Dijkstra.computeDistance(simState, playerColor);
 
         return oppDist - myDist;
     }
@@ -98,93 +94,6 @@ public class Bot {
 
         QuaxBoard.TileType tileType = simState.game_board.getTileType(row, col);
         simState.makeMove(move, tileType);
-    }
-
-    private int tileCost(GameState simState, int row, int col, QuaxBoard.TileOwner colour) {
-        QuaxBoard.TileOwner owner = simState.game_board.getTileOwner(row, col);
-
-        if (owner == colour) {
-            return 0;
-        }
-
-        if (simState.game_board.isTileEmpty(row, col)) {
-            return 1;
-        }
-
-        return INF;
-    }
-
-    // Dijkstra shortest path:
-    // own tile = cost 0
-    // empty tile = cost 1
-    // opponent tile = blocked
-    public int computeDistance(GameState simState, QuaxBoard.TileOwner colour) {
-        int rows = Tile.NUM_ROWS;
-        int cols = Tile.NUM_COLS;
-
-        int[][] dist = new int[rows][cols];
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                dist[i][j] = INF;
-            }
-        }
-
-        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(n -> n.dist));
-
-        // Seed starting side
-        if (colour == QuaxBoard.TileOwner.BLACK) {
-            // BLACK tries top -> bottom
-            for (int col = 0; col < cols; col++) {
-                int cost = tileCost(simState, 0, col, colour);
-                if (cost < INF) {
-                    dist[0][col] = cost;
-                    pq.add(new Node(0, col, cost));
-                }
-            }
-        } else {
-            // WHITE tries left -> right
-            for (int row = 0; row < rows; row++) {
-                int cost = tileCost(simState, row, 0, colour);
-                if (cost < INF) {
-                    dist[row][0] = cost;
-                    pq.add(new Node(row, 0, cost));
-                }
-            }
-        }
-
-        while (!pq.isEmpty()) {
-            Node cur = pq.poll();
-
-            if (cur.dist != dist[cur.row][cur.col]) {
-                continue; // stale entry
-            }
-
-            // Goal check
-            if (colour == QuaxBoard.TileOwner.BLACK && cur.row == rows - 1) {
-                return cur.dist;
-            }
-            if (colour == QuaxBoard.TileOwner.WHITE && cur.col == cols - 1) {
-                return cur.dist;
-            }
-
-            for (int[] n : simState.getNeighbours(cur.row, cur.col)) {
-                int nr = n[0];
-                int nc = n[1];
-
-                int stepCost = tileCost(simState, nr, nc, colour);
-                if (stepCost >= INF) continue;
-
-                int newDist = cur.dist + stepCost;
-
-                if (newDist < dist[nr][nc]) {
-                    dist[nr][nc] = newDist;
-                    pq.add(new Node(nr, nc, newDist));
-                }
-            }
-        }
-
-        return INF;
     }
 
     public int minmax(GameState simState, int depth, int alpha, int beta, boolean isMax) {
