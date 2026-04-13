@@ -200,8 +200,6 @@ public class HelloController {
                 lastY = endY;
 
                 Arrow arrow = new Arrow();
-                arrow.setColor(Color.RED);
-                arrow.setThickness(3.0);
 
                 arrow.setStartX(startX);
                 arrow.setStartY(startY);
@@ -238,14 +236,14 @@ public class HelloController {
         }
         String botMoveID = botMove.getRawPosition();
 
-        GameState.Player playerBeforeMove = state.getCurrentPlayer();
-        if (!state.makeMove(botMove, QuaxBoard.TileType.OCTAGON)) {
-            throw new IllegalArgumentException("Error making bot move");
-        }
-
         if (lastBestCell != null) {
             lastBestCell.setFill(colorP2);
             lastBestCell = null;
+        }
+
+        GameState.Player playerBeforeMove = state.getCurrentPlayer();
+        if (!state.makeMove(botMove, QuaxBoard.TileType.OCTAGON)) {
+            throw new IllegalArgumentException("Error making bot move");
         }
 
         // Clear the old values

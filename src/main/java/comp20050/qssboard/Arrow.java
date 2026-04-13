@@ -3,6 +3,7 @@ package comp20050.qssboard;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class Arrow extends Group {
@@ -13,6 +14,8 @@ public class Arrow extends Group {
 
     public Arrow() {
         this(new Line(), new Line(), new Line());
+        this.setColor(Color.RED);
+        this.setThickness(3.0);
     }
 
     private static final double arrowLength = 20;
