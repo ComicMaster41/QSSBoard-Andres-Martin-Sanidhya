@@ -87,7 +87,7 @@ public class Bot {
         scoredMoves.sort(Comparator.comparingInt((Bot.ScoredMove a) -> a.score));
         scoredMoves = new ArrayList<>(scoredMoves.subList(0, Math.min(5, scoredMoves.size())));
 
-        return bestMove;
+        return this.bestMove;
     }
 
     public boolean decideToPressPie() {

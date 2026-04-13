@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -43,6 +44,7 @@ public class HelloController {
     Color colorShowStrategy = Color.GREEN;
 
     private Polygon lastBestCell;
+    private Bot lastBot;
 
     Position moveMadeId;
     @FXML
@@ -168,16 +170,14 @@ public class HelloController {
     }
 
     public Polygon drawStrategy(Bot bot) {
+        System.out.println("Draw strategy called");
         int index = 0;
         double boardSplit = ShapeLayout.getBoundsInLocal().getWidth() / 2;
-
-        // So that we can display the text at the tip of the path
-        double lastX = 0;
-        double lastY = 0;
 
         Polygon returnPoly = null;
 
         for (Bot.ScoredMove m : bot.getScoredMoves()) {
+            // Fill best move (i.e. first element in SortedMoves) to green
             if (index == 0) {
                 Polygon bestMoveCell = (Polygon) ShapeLayout.lookup("#" + m.move.getRawPosition());
                 if (bestMoveCell != null) {
@@ -209,30 +209,46 @@ public class HelloController {
                 double endX = overlayPane.sceneToLocal(toPoint).getX();
                 double endY = overlayPane.sceneToLocal(toPoint).getY();
 
-                lastX = endX;
-                lastY = endY;
-
-                Arrow arrow = new Arrow();
-
-                arrow.setStartX(startX);
-                arrow.setStartY(startY);
-                arrow.setEndX(endX);
-                arrow.setEndY(endY);
-
-                overlayPane.getChildren().add(arrow);
-                strategyVisuals.add(arrow);
+                // Only put an arrowhead on the last segment; use a plain line for all others
+                if (i == m.path.size() - 2) {
+                    Arrow arrow = new Arrow();
+                    arrow.setStartX(startX);
+                    arrow.setStartY(startY);
+                    arrow.setEndX(endX);
+                    arrow.setEndY(endY);
+                    overlayPane.getChildren().add(arrow);
+                    strategyVisuals.add(arrow);
+                } else {
+                    Line segment = new Line(startX, startY, endX, endY);
+                    segment.setStroke(Color.RED);
+                    segment.setStrokeWidth(3.0);
+                    overlayPane.getChildren().add(segment);
+                    strategyVisuals.add(segment);
+                }
             }
 
             index++;
 
-            Text weightText = new Text(String.valueOf(m.score));
-            weightText.setX(lastX + 5);
-            weightText.setY(lastY - 10);
-            weightText.setFill(Color.RED);
-            weightText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+            // Anchor the label at the candidate move cell so each score appears at a unique position,
+            // avoiding overlap when multiple paths converge near the same goal edge.
+            Polygon moveCell = (Polygon) ShapeLayout.lookup("#" + m.move.getRawPosition());
+            if (moveCell != null) {
+                Point2D moveCellPoint = moveCell.localToScene(
+                        moveCell.getBoundsInLocal().getCenterX(),
+                        moveCell.getBoundsInLocal().getCenterY()
+                );
+                double textX = overlayPane.sceneToLocal(moveCellPoint).getX();
+                double textY = overlayPane.sceneToLocal(moveCellPoint).getY();
 
-            strategyVisuals.add(weightText);
-            overlayPane.getChildren().add(weightText);
+                Text weightText = new Text(String.valueOf(m.score));
+                weightText.setX(textX + 5);
+                weightText.setY(textY - 10);
+                weightText.setFill(Color.RED);
+                weightText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
+                strategyVisuals.add(weightText);
+                overlayPane.getChildren().add(weightText);
+            }
         }
 
         return returnPoly;
@@ -241,22 +257,25 @@ public class HelloController {
     public void makeBotMove() {
         if (gameOver) return;
         Bot bot = new Bot(state, moveMadeId, botSeat());
+        Position botMove = bot.makeMove();
+
+        if (botMove == null) {
+            return;
+        }
+
+        moveMadeId = botMove;
+
+        String botMoveID = botMove.getRawPosition();
+
         if (moves_made == 1) {
             boolean pressButton = bot.decideToPressPie();
             if (pressButton) {
                 handlePieButtonClick();
                 return;
             }
-
-        }
-        Position botMove = bot.makeMove();
-        moveMadeId = botMove;
-
-        if (botMove == null) {
-            return;
         }
 
-        if (lastBestCell != null) {
+        if (lastBestCell != null) { // To reset green tile -> white/black
             lastBestCell.setFill(colorP2);
             lastBestCell = null;
         }
@@ -283,6 +302,8 @@ public class HelloController {
             pause.setOnFinished(event -> {restartGame();});
             pause.play();
         }
+
+        lastBot = bot;
 
         // Show all paths and their weights
         if (HelloController.getShow()) {
@@ -391,6 +412,15 @@ public class HelloController {
     public void handleShowStrategyButtonClick() {
         Show = !Show;
         activateShowStrategyButton.setText(Show ? "Hide Strategy" : "Show Strategy");
+
+        if (Show && lastBot != null) {
+            lastBestCell = drawStrategy(lastBot);
+        } else {
+            for (Node node : strategyVisuals) {
+                overlayPane.getChildren().remove(node);
+            }
+            strategyVisuals.clear();
+        }
     }
 
     public void restartGame() {
