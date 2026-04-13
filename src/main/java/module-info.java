@@ -11,6 +11,7 @@ module comp20050.qssboard {
     requires java.desktop;
     requires annotations;
     requires javafx.graphics;
+    requires com.fasterxml.jackson.databind;
 
     opens comp20050.qssboard to javafx.fxml;
     exports comp20050.qssboard;

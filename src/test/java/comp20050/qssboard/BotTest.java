@@ -1,5 +1,6 @@
 package comp20050.qssboard;
 
+import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ class BotTest {
     @BeforeEach
     void setUp() {
         gameState = new GameState();
-        bot = new Bot(gameState);
+        bot = new Bot(gameState, null, GameState.Player.P1);
     }
 
 

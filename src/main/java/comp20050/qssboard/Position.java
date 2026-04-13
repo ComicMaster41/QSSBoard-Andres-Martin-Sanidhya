@@ -23,7 +23,9 @@ public class Position {
 
     public Position(String raw_position) {
         this.raw_position = raw_position;
+        position = extractPosition();
     }
+
 
     public ArrayList<Integer> extractPosition() {
         String[] pos_str = raw_position.split(regex);

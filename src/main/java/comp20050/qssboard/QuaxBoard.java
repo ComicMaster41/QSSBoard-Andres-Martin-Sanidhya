@@ -1,6 +1,5 @@
 package comp20050.qssboard;
 
-import java.util.ArrayList;
 
 public class QuaxBoard {
     public enum TileType {

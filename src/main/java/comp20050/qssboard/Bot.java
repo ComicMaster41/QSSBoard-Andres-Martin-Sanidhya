@@ -6,6 +6,13 @@ import java.util.PriorityQueue;
 
 public class Bot {
     public GameState state;
+    private Position lastMoveMadeId;
+    private final GameState.Player botPlayer;
+    private static final int INF = 1_000_000;
+
+    public Bot(GameState.Player botPlayer) {
+        this.botPlayer = botPlayer;
+    }
 
     public class ScoredMove {
         public Position move;
@@ -34,8 +41,14 @@ public class Bot {
     private ArrayList<ScoredMove> scoredMoves = new ArrayList<>();
     private Position bestMove;
 
-    public Bot(GameState state) {
+    public Bot(GameState state, Position lastMoveMadeId, GameState.Player botPlayer) {
         this.state = state;
+        this.lastMoveMadeId = lastMoveMadeId;
+        this.botPlayer = botPlayer;
+    }
+
+    private static GameState.Player opponent(GameState.Player p) {
+        return p == GameState.Player.P1 ? GameState.Player.P2 : GameState.Player.P1;
     }
 
     public ArrayList<ScoredMove> getScoredMoves() {return scoredMoves;}
@@ -45,15 +58,18 @@ public class Bot {
     public Position makeMove() {
         ArrayList<Position> legalMoves = state.getLegalMoves();
 
+
         if (legalMoves.isEmpty()) {
             return null;
         }
 
+        Position bestMove = null;
         int bestValue = Integer.MIN_VALUE;
         int depth = 2; // or 2, increasing depth means it looks ahead more
 
         scoredMoves.clear();
         for (Position move : legalMoves) {
+            // System.out.println(move.extractPosition());
             GameState child = state.copyState();
             applyMove(child, move);
 
@@ -74,9 +90,20 @@ public class Bot {
         return bestMove;
     }
 
+    public boolean decideToPressPie() {
+        int row = lastMoveMadeId.getRow();
+        int col = lastMoveMadeId.getCol();
+
+        // if the first move made by Black is anywhere on the edge of the board -> then bot should press the pie button
+        if (row == 0 || row == 10 || col == 0 || col == 20) {
+            return true;
+        }
+        return false;
+    }
+
     public int heuristic(GameState simState) {
-        QuaxBoard.TileOwner botColor = simState.game_board.p2Color;
-        QuaxBoard.TileOwner playerColor = simState.game_board.p1Color;
+        QuaxBoard.TileOwner botColor = simState.game_board.getColor(botPlayer);
+        QuaxBoard.TileOwner playerColor = simState.game_board.getColor(opponent(botPlayer));
 
         if (simState.checkWin(botColor)) return 100000;
         if (simState.checkWin(playerColor)) return -100000;
@@ -100,7 +127,6 @@ public class Bot {
         if (depth == 0 ) { // LATER: check terminal wins, || simState.getLegalMoves().isEmpty()
             return heuristic(simState);
         }
-
         ArrayList<Position> legalMoves = simState.getLegalMoves();
 
 
@@ -108,6 +134,7 @@ public class Bot {
             int bestValue = Integer.MIN_VALUE;
 
             for (Position move : legalMoves) {
+
                 GameState child = simState.copyState();
 
                 // Make sure that it's doing a deep copy and not a shallow copy. So we need to find what kind of copy it's doing
@@ -131,7 +158,6 @@ public class Bot {
             for (Position move : legalMoves) {
                 GameState child = simState.copyState();
                 applyMove(child, move);
-
                 int eval = minmax(child, depth - 1, alpha, beta, true);
                 bestValue = Math.min(bestValue, eval);
                 beta = Math.min(beta, bestValue);
