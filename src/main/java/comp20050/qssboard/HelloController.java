@@ -44,7 +44,6 @@ public class HelloController {
     Color colorShowStrategy = Color.GREEN;
 
     private Polygon lastBestCell;
-    private Bot lastBot;
 
     Position moveMadeId;
     @FXML
@@ -71,10 +70,14 @@ public class HelloController {
 
     int moves_made = 0;
     boolean gameOver = false;
-    static boolean Show = false;
+    static boolean Show = false; // QUESTION: WHY IS IT STATIC?
 
-    public static boolean getShow() {
-        return Show;
+    public boolean getShow() {
+        return this.Show;
+    }
+
+    public void setShow(boolean show) {
+        this.Show = show;
     }
 
     GameState.Player winner = null;
@@ -160,18 +163,10 @@ public class HelloController {
         activatePieButton.setMouseTransparent(!enabled);
     }
 
-    public void drawLegend() {
-        // anything green is best move
-        // anything red is bad move
-
-        // green tile is the move bot is going to make
-
-
-    }
 
     public Polygon drawStrategy(Bot bot) {
-        System.out.println("Draw strategy called");
         int index = 0;
+        System.out.println("Show strategy is being called");
         double boardSplit = ShapeLayout.getBoundsInLocal().getWidth() / 2;
 
         Polygon returnPoly = null;
@@ -257,8 +252,8 @@ public class HelloController {
     public void makeBotMove() {
         if (gameOver) return;
         Bot bot = new Bot(state, moveMadeId, botSeat());
-        Position botMove = bot.makeMove();
 
+        Position botMove = bot.makeMove();
         if (botMove == null) {
             return;
         }
@@ -267,9 +262,11 @@ public class HelloController {
 
         String botMoveID = botMove.getRawPosition();
 
+        // Bot can activate pie button
         if (moves_made == 1) {
             boolean pressButton = bot.decideToPressPie();
             if (pressButton) {
+                if (getShow()) lastBestCell = drawStrategy(bot); // added fix but not what we're looking for
                 handlePieButtonClick();
                 return;
             }
@@ -281,7 +278,7 @@ public class HelloController {
         }
 
         GameState.Player playerBeforeMove = state.getCurrentPlayer();
-        if (!state.makeMove(botMove, QuaxBoard.TileType.OCTAGON)) {
+        if (!state.makeMove(botMove, QuaxBoard.TileType.OCTAGON)) { // QUESTION: should this also check for rhombus?
             throw new IllegalArgumentException("Error making bot move");
         }
 
@@ -303,10 +300,9 @@ public class HelloController {
             pause.play();
         }
 
-        lastBot = bot;
-
         // Show all paths and their weights
-        if (HelloController.getShow()) {
+        System.out.println("getShow is: " + getShow());
+        if (getShow()) {
             lastBestCell = drawStrategy(bot); // Function that draws the strategy
         }
 
@@ -324,21 +320,6 @@ public class HelloController {
         updateTurnDisplay();
     }
 
-    @NotNull
-    private static Label getLabel(Bot.ScoredMove m, double startX, double startY) {
-        Label weightLabel = new Label(String.valueOf(m.score));
-        weightLabel.setLayoutX(startX + 500 + 10);
-        weightLabel.setLayoutY(startY - 10);
-        // FIX OFFSET AND FIGURE OUT WHY NUMBERS ARE NEGATIVE
-
-        // Highlight best move in green
-        if (m.score >= 0) {
-            weightLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold; -fx-font-size: 40px;");
-        } else {
-            weightLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold; -fx-font-size: 40px;");
-        }
-        return weightLabel;
-    }
 
     private void updateTurnDisplay() {
         GameState.Player current = state.getCurrentPlayer();
@@ -410,17 +391,8 @@ public class HelloController {
     }
     @FXML
     public void handleShowStrategyButtonClick() {
-        Show = !Show;
+        setShow(!Show); // Show = !Show;
         activateShowStrategyButton.setText(Show ? "Hide Strategy" : "Show Strategy");
-
-        if (Show && lastBot != null) {
-            lastBestCell = drawStrategy(lastBot);
-        } else {
-            for (Node node : strategyVisuals) {
-                overlayPane.getChildren().remove(node);
-            }
-            strategyVisuals.clear();
-        }
     }
 
     public void restartGame() {
