@@ -166,8 +166,7 @@ public class HelloController {
 
     public Polygon drawStrategy(Bot bot) {
         int index = 0;
-        System.out.println("Show strategy is being called");
-        double boardSplit = ShapeLayout.getBoundsInLocal().getWidth() / 2;
+        boolean botIsBlack = (botSeat() == GameState.Player.P1);
 
         Polygon returnPoly = null;
 
@@ -192,6 +191,23 @@ public class HelloController {
             for (int i = 0; i < m.path.size() - 1; i++) {
                 Position from = m.path.get(i);
                 Position to = m.path.get(i + 1);
+
+                // check if the bot is black or white to show arrow orientation
+                if (botIsBlack) {
+                    if (from.getRow() > to.getRow()) {
+                        Position temp = from;
+                        from = to;
+                        to = temp;
+                    }
+                }
+
+                else {
+                    if (from.getCol() > to.getCol()) {
+                        Position temp = from;
+                        from = to;
+                        to = temp;
+                    }
+                }
 
                 Polygon fromCell = (Polygon) ShapeLayout.lookup("#" + from.getRawPosition());
                 Point2D fromPoint = fromCell.localToScene(
@@ -272,7 +288,6 @@ public class HelloController {
         }
 
         moveMadeId = botMove;
-
         String botMoveID = botMove.getRawPosition();
 
         // Bot can activate pie button
@@ -288,6 +303,12 @@ public class HelloController {
 
         else activatePieButton.setVisible(false);
 
+
+        GameState.Player playerBeforeMove = state.getCurrentPlayer();
+        if (!state.makeMove(botMove, QuaxBoard.TileType.OCTAGON)) { // QUESTION: should this also check for rhombus?
+            throw new IllegalArgumentException("Error making bot move");
+        }
+
         if (lastBestCell != null) { // Reset the highlighted green tile to its proper color
             Position p = new Position(lastBestCell.getId());
             QuaxBoard.TileOwner owner = state.game_board.getTileOwner(p.getRow(), p.getCol());
@@ -299,11 +320,6 @@ public class HelloController {
             lastBestCell = null;
         }
 
-        GameState.Player playerBeforeMove = state.getCurrentPlayer();
-        if (!state.makeMove(botMove, QuaxBoard.TileType.OCTAGON)) { // QUESTION: should this also check for rhombus?
-            throw new IllegalArgumentException("Error making bot move");
-        }
-
         // Clear the old values
         for (Node node : strategyVisuals) {
             overlayPane.getChildren().remove(node);
@@ -311,11 +327,6 @@ public class HelloController {
         strategyVisuals.clear();
 
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
-
-        if (cell == lastBestCell) {
-            System.out.println("You clicke don the bots next tile");
-            return;
-        }
 
         // check win using the player who just moved, before the turn switched
         if (state.checkWin(state.game_board.getColor(playerBeforeMove))) {
@@ -328,13 +339,10 @@ public class HelloController {
         }
 
         // Show all paths and their weights
-        System.out.println("getShow is: " + getShow());
-        if (getShow()) {
-            lastBestCell = drawStrategy(bot); // Function that draws the strategy
-        }
+        paintCell(cell, playerBeforeMove);
 
-        else {
-            cell.setFill(colorP2);
+        if (getShow()) {
+            lastBestCell = drawStrategy(bot);
         }
 
         moves_made++;
@@ -393,22 +401,15 @@ public class HelloController {
 
     @FXML
     public void handlePieButtonClick() {
-        Tile[][] board = state.game_board.getStateBoard();
+        GameState.Player pieClaimant = state.getCurrentPlayer(); // whoever is pressing pie
+        GameState.Player otherPlayer = (pieClaimant == GameState.Player.P1)
+                ? GameState.Player.P2 : GameState.Player.P1;
 
-        // NEW VERSION:
-        // White clicks pie button
-        // The Black tile on board should become White
-        // It should then be Black's turn to play
-        // But, P1 is still Black, it just that White clicking pie button is White's turn
-
-        // colorP2 is White, and colorP1 is Black
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + moveMadeId.getRawPosition());
-        state.game_board.changeTileOwner(moveMadeId.getRow(), moveMadeId.getCol(), GameState.Player.P2);
-        GameState.Player playerBeforeMove = state.getCurrentPlayer();
-        paintCell(cell, playerBeforeMove);
-        state.current_player = GameState.Player.P1; // it is now Black's turn
-        updateTurnDisplay(); // notify that it is Black's turn
-
+        state.game_board.changeTileOwner(moveMadeId.getRow(), moveMadeId.getCol(), pieClaimant);
+        paintCell(cell, pieClaimant); // paint with the claimant's actual color
+        state.current_player = otherPlayer; // hand turn back to the other player
+        updateTurnDisplay();
         activatePieButton.setVisible(false);
     }
     @FXML
