@@ -14,7 +14,6 @@ public class Arrow extends Group {
 
     public Arrow() {
         this(new Line(), new Line(), new Line());
-        this.setColor(Color.RED);
         this.setThickness(3.0);
     }
 
@@ -23,6 +22,11 @@ public class Arrow extends Group {
 
     private Arrow(Line line, Line arrow1, Line arrow2) {
         super(line, arrow1, arrow2);
+
+        // This fixes
+        line.setMouseTransparent(true);
+        arrow1.setMouseTransparent(true);
+        arrow2.setMouseTransparent(true);
         this.line = line;
         this.arrow1 = arrow1;
         this.arrow2 = arrow2;

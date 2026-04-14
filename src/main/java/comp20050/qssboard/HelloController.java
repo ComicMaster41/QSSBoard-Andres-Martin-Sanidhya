@@ -172,12 +172,20 @@ public class HelloController {
         Polygon returnPoly = null;
 
         for (Bot.ScoredMove m : bot.getScoredMoves()) {
-            // Fill best move (i.e. first element in SortedMoves) to green
+            // Green is best move, red is any move
+            Color pathColor = (index == 0) ? Color.GREEN : Color.RED;
+
+            // For the best path, highlight the first empty tile the bot is heading towards
             if (index == 0) {
-                Polygon bestMoveCell = (Polygon) ShapeLayout.lookup("#" + m.move.getRawPosition());
-                if (bestMoveCell != null) {
-                    bestMoveCell.setFill(colorShowStrategy);
-                    returnPoly = bestMoveCell;
+                for (Position p : m.path) {
+                    if (state.game_board.isTileEmpty(p.getRow(), p.getCol())) {
+                        Polygon nextCell = (Polygon) ShapeLayout.lookup("#" + p.getRawPosition());
+                        if (nextCell != null) {
+                            nextCell.setFill(colorShowStrategy);
+                            returnPoly = nextCell;
+                        }
+                        break;
+                    }
                 }
             }
 
@@ -207,16 +215,21 @@ public class HelloController {
                 // Only put an arrowhead on the last segment; use a plain line for all others
                 if (i == m.path.size() - 2) {
                     Arrow arrow = new Arrow();
+                    arrow.setColor(pathColor);
                     arrow.setStartX(startX);
                     arrow.setStartY(startY);
                     arrow.setEndX(endX);
                     arrow.setEndY(endY);
+                    arrow.setMouseTransparent(true);
+                    arrow.getChildren().forEach(child ->
+                            child.setMouseTransparent(true));
                     overlayPane.getChildren().add(arrow);
                     strategyVisuals.add(arrow);
                 } else {
                     Line segment = new Line(startX, startY, endX, endY);
-                    segment.setStroke(Color.RED);
+                    segment.setStroke(pathColor);
                     segment.setStrokeWidth(3.0);
+                    segment.setMouseTransparent(true);
                     overlayPane.getChildren().add(segment);
                     strategyVisuals.add(segment);
                 }
@@ -224,8 +237,7 @@ public class HelloController {
 
             index++;
 
-            // Anchor the label at the candidate move cell so each score appears at a unique position,
-            // avoiding overlap when multiple paths converge near the same goal edge.
+            // Label at the candidate move cell so scores don't overlap
             Polygon moveCell = (Polygon) ShapeLayout.lookup("#" + m.move.getRawPosition());
             if (moveCell != null) {
                 Point2D moveCellPoint = moveCell.localToScene(
@@ -238,9 +250,10 @@ public class HelloController {
                 Text weightText = new Text(String.valueOf(m.score));
                 weightText.setX(textX + 5);
                 weightText.setY(textY - 10);
-                weightText.setFill(Color.RED);
+                weightText.setFill(pathColor);
                 weightText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
+                weightText.setMouseTransparent(true);
                 strategyVisuals.add(weightText);
                 overlayPane.getChildren().add(weightText);
             }
@@ -265,6 +278,7 @@ public class HelloController {
         // Bot can activate pie button
         if (moves_made == 1) {
             boolean pressButton = bot.decideToPressPie();
+            activatePieButton.setVisible(true);
             if (pressButton) {
                 if (getShow()) lastBestCell = drawStrategy(bot); // added fix but not what we're looking for
                 handlePieButtonClick();
@@ -272,8 +286,16 @@ public class HelloController {
             }
         }
 
-        if (lastBestCell != null) { // To reset green tile -> white/black
-            lastBestCell.setFill(colorP2);
+        else activatePieButton.setVisible(false);
+
+        if (lastBestCell != null) { // Reset the highlighted green tile to its proper color
+            Position p = new Position(lastBestCell.getId());
+            QuaxBoard.TileOwner owner = state.game_board.getTileOwner(p.getRow(), p.getCol());
+            if (owner == null) {
+                lastBestCell.setFill(Paint.valueOf(p.getCol() % 2 == 0 ? "#c98c07" : "#ffb91f"));
+            } else {
+                lastBestCell.setFill(owner == state.game_board.p1Color ? colorP1 : colorP2);
+            }
             lastBestCell = null;
         }
 
@@ -289,6 +311,11 @@ public class HelloController {
         strategyVisuals.clear();
 
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
+
+        if (cell == lastBestCell) {
+            System.out.println("You clicke don the bots next tile");
+            return;
+        }
 
         // check win using the player who just moved, before the turn switched
         if (state.checkWin(state.game_board.getColor(playerBeforeMove))) {
@@ -311,11 +338,6 @@ public class HelloController {
         }
 
         moves_made++;
-        if (moves_made == 1) {
-            activatePieButton.setVisible(true);
-        } else {
-            activatePieButton.setVisible(false);
-        }
 
         updateTurnDisplay();
     }
@@ -391,7 +413,11 @@ public class HelloController {
     }
     @FXML
     public void handleShowStrategyButtonClick() {
-        setShow(!Show); // Show = !Show;
+        if (getShow() == !Show) { // If we want to stop showing strategy,
+            overlayPane.setVisible(false);
+        }
+
+        setShow(!Show);
         activateShowStrategyButton.setText(Show ? "Hide Strategy" : "Show Strategy");
     }
 
