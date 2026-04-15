@@ -405,10 +405,27 @@ public class HelloController {
         GameState.Player otherPlayer = (pieClaimant == GameState.Player.P1)
                 ? GameState.Player.P2 : GameState.Player.P1;
 
-        Polygon cell = (Polygon) ShapeLayout.lookup("#" + moveMadeId.getRawPosition());
-        state.game_board.changeTileOwner(moveMadeId.getRow(), moveMadeId.getCol(), pieClaimant);
-        paintCell(cell, pieClaimant); // paint with the claimant's actual color
-        state.current_player = otherPlayer; // hand turn back to the other player
+        state.game_board.swapColors();
+
+        // Swap UI colors
+        Color temp = colorP1;
+        colorP1 = colorP2;
+        colorP2 = temp;
+
+        // Repaint all node
+        for (Node node : ShapeLayout.getChildren()) {
+            if (node instanceof Polygon) {
+                Position pos = new Position(node.getId());
+                QuaxBoard.TileOwner owner = state.game_board.getTileOwner(pos.getRow(), pos.getCol());
+                if (owner == QuaxBoard.TileOwner.BLACK) {
+                    ((Polygon) node).setFill(colorP1);
+                } else if (owner == QuaxBoard.TileOwner.WHITE) {
+                    ((Polygon) node).setFill(colorP2);
+                }
+            }
+        }
+
+        state.current_player = otherPlayer;
         updateTurnDisplay();
         activatePieButton.setVisible(false);
     }

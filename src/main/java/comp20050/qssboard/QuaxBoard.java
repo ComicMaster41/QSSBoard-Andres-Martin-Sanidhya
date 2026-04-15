@@ -38,6 +38,12 @@ public class QuaxBoard {
         else return p2Color;
     }
 
+    public void swapColors() {
+        TileOwner temp = p1Color;
+        p1Color = p2Color;
+        p2Color = temp;
+    }
+
     public boolean isMoveValid(int row, int col, TileType t) { // returns if the board position is empty
         if (t == null) return false;
         if (state_board[row][col] == null || state_board[row][col].owner == null) return true;
