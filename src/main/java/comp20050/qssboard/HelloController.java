@@ -164,7 +164,7 @@ public class HelloController {
     }
 
 
-    public Polygon drawStrategy(Bot bot) {
+    public Polygon drawStrategy(Bot bot, String botMoveID) {
         int index = 0;
         boolean botIsBlack = (botSeat() == GameState.Player.P1);
 
@@ -176,15 +176,12 @@ public class HelloController {
 
             // For the best path, highlight the first empty tile the bot is heading towards
             if (index == 0) {
-                for (Position p : m.path) {
-                    if (state.game_board.isTileEmpty(p.getRow(), p.getCol())) {
-                        Polygon nextCell = (Polygon) ShapeLayout.lookup("#" + p.getRawPosition());
-                        if (nextCell != null) {
-                            nextCell.setFill(colorShowStrategy);
-                            returnPoly = nextCell;
-                        }
-                        break;
-                    }
+                Position nextBotMove = m.move;
+                Polygon nextCell = (Polygon) ShapeLayout.lookup("#" + nextBotMove.getRawPosition());
+                if (nextCell != null && (botMoveID == null || !nextCell.getId().equals(botMoveID))) {
+                    nextCell.setFill(colorShowStrategy);
+                    strategyVisuals.add(nextCell);
+                    returnPoly = nextCell;
                 }
             }
 
@@ -281,52 +278,37 @@ public class HelloController {
     public void makeBotMove() {
         if (gameOver) return;
         Bot bot = new Bot(state, moveMadeId, botSeat());
+        if (moves_made == 1) {
+            boolean pressButton = bot.decideToPressPie();
+            if (pressButton) {
+                handlePieButtonClick();
+                return;
+            }
 
+        }
         Position botMove = bot.makeMove();
+        moveMadeId = botMove;
+
+        String botMoveID = botMove.getRawPosition();
         if (botMove == null) {
             return;
         }
 
-        moveMadeId = botMove;
-        String botMoveID = botMove.getRawPosition();
-
-        // Bot can activate pie button
-        if (moves_made == 1) {
-            boolean pressButton = bot.decideToPressPie();
-            activatePieButton.setVisible(true);
-            if (pressButton) {
-                if (getShow()) lastBestCell = drawStrategy(bot); // added fix but not what we're looking for
-                handlePieButtonClick();
-                return;
-            }
-        }
-
-        else activatePieButton.setVisible(false);
-
-
         GameState.Player playerBeforeMove = state.getCurrentPlayer();
-        if (!state.makeMove(botMove, QuaxBoard.TileType.OCTAGON)) { // QUESTION: should this also check for rhombus?
+        if (!state.makeMove(botMove, QuaxBoard.TileType.OCTAGON)) {
             throw new IllegalArgumentException("Error making bot move");
         }
 
-        if (lastBestCell != null) { // Reset the highlighted green tile to its proper color
-            Position p = new Position(lastBestCell.getId());
-            QuaxBoard.TileOwner owner = state.game_board.getTileOwner(p.getRow(), p.getCol());
-            if (owner == null) {
-                lastBestCell.setFill(Paint.valueOf(p.getCol() % 2 == 0 ? "#c98c07" : "#ffb91f"));
-            } else {
-                lastBestCell.setFill(owner == state.game_board.p1Color ? colorP1 : colorP2);
-            }
-            lastBestCell = null;
-        }
-
-        // Clear the old values
         for (Node node : strategyVisuals) {
-            overlayPane.getChildren().remove(node);
+            if (node instanceof Polygon) {
+                Position p = new Position(node.getId());
+                int col = p.getCol();
+                ((Polygon) node).setFill(Paint.valueOf(col % 2 == 0 ? "#c98c07" : "#ffb91f"));
+            }
+
+            else overlayPane.getChildren().remove(node);
         }
         strategyVisuals.clear();
-
-        Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
 
         // check win using the player who just moved, before the turn switched
         if (state.checkWin(state.game_board.getColor(playerBeforeMove))) {
@@ -338,14 +320,18 @@ public class HelloController {
             pause.play();
         }
 
-        // Show all paths and their weights
-        paintCell(cell, playerBeforeMove);
-
         if (getShow()) {
-            lastBestCell = drawStrategy(bot);
+            lastBestCell = drawStrategy(bot, botMoveID);
         }
 
+        Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
+        paintCell(cell, playerBeforeMove);
         moves_made++;
+        if (moves_made == 1) {
+            activatePieButton.setVisible(true);
+        } else {
+            activatePieButton.setVisible(false);
+        }
 
         updateTurnDisplay();
     }
@@ -401,34 +387,16 @@ public class HelloController {
 
     @FXML
     public void handlePieButtonClick() {
-        GameState.Player pieClaimant = state.getCurrentPlayer(); // whoever is pressing pie
-        GameState.Player otherPlayer = (pieClaimant == GameState.Player.P1)
-                ? GameState.Player.P2 : GameState.Player.P1;
+        Polygon cell = (Polygon) ShapeLayout.lookup("#" + moveMadeId.getRawPosition());
+        state.game_board.changeTileOwner(moveMadeId.getRow(), moveMadeId.getCol(), GameState.Player.P2);
+        GameState.Player playerBeforeMove = state.getCurrentPlayer();
+        paintCell(cell, playerBeforeMove);
+        state.current_player = GameState.Player.P1; // it is now Black's turn
+        updateTurnDisplay(); // notify that it is Black's turn
 
-        state.game_board.swapColors();
-
-        // Swap UI colors
-        Color temp = colorP1;
-        colorP1 = colorP2;
-        colorP2 = temp;
-
-        // Repaint all node
-        for (Node node : ShapeLayout.getChildren()) {
-            if (node instanceof Polygon) {
-                Position pos = new Position(node.getId());
-                QuaxBoard.TileOwner owner = state.game_board.getTileOwner(pos.getRow(), pos.getCol());
-                if (owner == QuaxBoard.TileOwner.BLACK) {
-                    ((Polygon) node).setFill(colorP1);
-                } else if (owner == QuaxBoard.TileOwner.WHITE) {
-                    ((Polygon) node).setFill(colorP2);
-                }
-            }
-        }
-
-        state.current_player = otherPlayer;
-        updateTurnDisplay();
         activatePieButton.setVisible(false);
     }
+
     @FXML
     public void handleShowStrategyButtonClick() {
         if (getShow() == !Show) { // If we want to stop showing strategy,

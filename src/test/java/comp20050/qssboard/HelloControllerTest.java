@@ -302,7 +302,7 @@ class HelloControllerTest {
         Bot bot = new Bot(controller.state, null, GameState.Player.P2);
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 0, "O_0_0", "O_1_0"));
 
-        Polygon result = controller.drawStrategy(bot);
+        Polygon result = controller.drawStrategy(bot, null);
 
         assertNull(result, "Should return null when no empty tile exists in the best path");
     }
@@ -365,7 +365,7 @@ class HelloControllerTest {
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 1, "O_0_0", "O_1_0"));
         bot.getScoredMoves().add(makeScoredMove(bot, "O_2_0", 2, "O_2_0", "O_3_0"));
 
-        controller.drawStrategy(bot);
+        controller.drawStrategy(bot, null); // FIX
 
         List<Text> texts = getTexts();
         assertEquals(2, texts.size());
