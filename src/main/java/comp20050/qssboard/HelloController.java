@@ -160,108 +160,169 @@ public class HelloController {
     }
 
     public Polygon drawStrategy(Bot bot) {
-        int index = 0;
-
         Polygon returnPoly = null;
 
-        System.out.println("=== drawStrategy called ===");
-        System.out.println("moveMadeId: " + (moveMadeId != null ? moveMadeId.getRawPosition() : "NULL"));
-        System.out.println("scoredMoves count: " + bot.getScoredMoves().size());
+        if (moveMadeId == null) return null; // nothing to anchor arrows to yet
 
-        for (Bot.ScoredMove m : bot.getScoredMoves()) {
+        QuaxBoard.TileOwner botColor = state.game_board.getColor(botSeat());
+        boolean horizontalPaths = (botColor == QuaxBoard.TileOwner.WHITE);
 
-            System.out.println("--- checking move: " + m.move.getRawPosition() + " score: " + m.score);
-            System.out.println("    path: " + m.path.stream()
-                    .map(Position::getRawPosition)
-                    .collect(java.util.stream.Collectors.joining(" -> ")));
+        double rightMarginX = computeRightMarginX();
+        double topMarginY   = computeTopMarginY();
 
-            // Slice path from the candidate move forward
-            ArrayList<Position> pathFromMove = new ArrayList<>();
-            boolean found = false;
-            for (Position p : m.path) {
-                if (found) pathFromMove.add(p);
-                if (p.getRawPosition().equals(m.move.getRawPosition())) {
-                    found = true;
-                    pathFromMove.add(p);
-                }
-            }
+        Point2D originCenter = cellCenterInOverlay(moveMadeId);
+        if (originCenter == null) return null;
 
-            // Fall back to full path if candidate move not found
-            if (!found) continue;
+        ArrayList<Bot.ScoredMove> moves = bot.getScoredMoves();
 
-            System.out.println("    pathFromMove size: " + pathFromMove.size());
+        // Iterate worst -> best so the best move renders on top (drawn last)
+        for (int index = moves.size() - 1; index >= 0; index--) {
+            Bot.ScoredMove m = moves.get(index);
+            if (m.move == null) continue;
 
-            Color pathColor = (index == 0) ? Color.GREEN : Color.RED;
+            boolean isBest = (index == 0);
+            Color pathColor = isBest ? Color.GREEN : Color.RED;
 
-
-
-            if (pathFromMove.size() >= 2) {
-                Position from = pathFromMove.get(0);
-                Position to = pathFromMove.get(pathFromMove.size() - 1);
-
-                if (!from.getRawPosition().equals(m.move.getRawPosition())) { // i don't understand what this does and it may be wrong
-                    Position temp = from; from = to; to = temp;
-                }
-
-                System.out.println("from: " + from.getRawPosition() + " col: " + from.getCol());
-                System.out.println("to: " + to.getRawPosition() + " col: " + to.getCol());
-
-                Polygon fromCell = (Polygon) ShapeLayout.lookup("#" + from.getRawPosition());
-                Point2D fromPoint = fromCell.localToScene(
-                        fromCell.getBoundsInLocal().getCenterX(),
-                        fromCell.getBoundsInLocal().getCenterY()
-                );
-                double startX = overlayPane.sceneToLocal(fromPoint).getX();
-                double startY = overlayPane.sceneToLocal(fromPoint).getY();
-
-                Polygon toCell = (Polygon) ShapeLayout.lookup("#" + to.getRawPosition());
-                Point2D toPoint = toCell.localToScene(
-                        toCell.getBoundsInLocal().getCenterX(),
-                        toCell.getBoundsInLocal().getCenterY()
-                );
-                double endX = overlayPane.sceneToLocal(toPoint).getX();
-                double endY = overlayPane.sceneToLocal(toPoint).getY();
-
-                Arrow arrow = new Arrow();
-                arrow.setColor(pathColor);
-                arrow.setStartX(startX);
-                arrow.setStartY(startY);
-                arrow.setEndX(endX);
-                arrow.setEndY(endY);
-                arrow.setMouseTransparent(true);
-                arrow.getChildren().forEach(child -> child.setMouseTransparent(true));
-                overlayPane.getChildren().add(arrow);
-                strategyVisuals.add(arrow);
-
-                // Stagger weight labels vertically by index to avoid overlap
-                Text weightText = new Text(String.valueOf(m.score));
-                weightText.setX(endX + 8);
-                weightText.setY(endY - 8 - (index * 18));
-                weightText.setFill(pathColor);
-                weightText.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-                weightText.setMouseTransparent(true);
-                strategyVisuals.add(weightText);
-                overlayPane.getChildren().add(weightText);
-            }
-
-            // Highlight the best candidate move cell in green
-            if (index == 0) {
+            // The best move is the tile the bot just played (== moveMadeId).
+            // Paint it green, skip the self-arrow, and record it for later cleanup.
+            if (isBest) {
                 Polygon bestCell = (Polygon) ShapeLayout.lookup("#" + m.move.getRawPosition());
                 if (bestCell != null) {
                     bestCell.setFill(colorShowStrategy);
                     returnPoly = bestCell;
                 }
+                // Still draw the weight label for the best move, anchored to its own tile
+                Point2D bestCenter = cellCenterInOverlay(m.move);
+                if (bestCenter != null) {
+                    drawWeightWithConnector(bestCenter, m.score, pathColor,
+                            horizontalPaths, rightMarginX, topMarginY);
+                }
+                continue;
             }
 
-            index++;
+            // Non-best candidates: short arrow from moveMadeId -> candidate tile
+            Point2D toCenter = cellCenterInOverlay(m.move);
+            if (toCenter == null) continue;
+
+            Arrow arrow = new Arrow();
+            arrow.setColor(pathColor);
+            arrow.setStartX(originCenter.getX());
+            arrow.setStartY(originCenter.getY());
+            arrow.setEndX(toCenter.getX());
+            arrow.setEndY(toCenter.getY());
+            arrow.setMouseTransparent(true);
+            arrow.getChildren().forEach(c -> c.setMouseTransparent(true));
+            overlayPane.getChildren().add(arrow);
+            strategyVisuals.add(arrow);
+
+            drawWeightWithConnector(toCenter, m.score, pathColor,
+                    horizontalPaths, rightMarginX, topMarginY);
         }
 
         return returnPoly;
     }
 
+    /**
+     * Draws a thin connector line from the arrow endpoint out to the margin,
+     * and places the weight number at the margin end of the line.
+     * Matches the reference image's layout.
+     */
+    private void drawWeightWithConnector(Point2D endpoint, int score, Color color,
+                                         boolean horizontalPaths,
+                                         double rightMarginX, double topMarginY) {
+        double labelX, labelY;
+        double lineEndX, lineEndY;
+
+        if (horizontalPaths) {
+            // White bot: connector runs horizontally out to the right margin
+            lineEndX = rightMarginX;
+            lineEndY = endpoint.getY();
+            labelX   = rightMarginX + 6;
+            labelY   = endpoint.getY() + 5;
+        } else {
+            // Black bot: connector runs vertically up to the top margin
+            lineEndX = endpoint.getX();
+            lineEndY = topMarginY;
+            labelX   = endpoint.getX() - 5;
+            labelY   = topMarginY - 6;
+        }
+
+        Line connector = new Line(endpoint.getX(), endpoint.getY(), lineEndX, lineEndY);
+        connector.setStroke(color);
+        connector.setStrokeWidth(1.5);
+        connector.setMouseTransparent(true);
+        overlayPane.getChildren().add(connector);
+        strategyVisuals.add(connector);
+
+        Text weightText = new Text(String.valueOf(score));
+        weightText.setX(labelX);
+        weightText.setY(labelY);
+        weightText.setFill(color);
+        weightText.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        weightText.setMouseTransparent(true);
+        overlayPane.getChildren().add(weightText);
+        strategyVisuals.add(weightText);
+    }
+
+    private Point2D cellCenterInOverlay(Position p) {
+        Polygon cell = (Polygon) ShapeLayout.lookup("#" + p.getRawPosition());
+        if (cell == null) return null;
+        Point2D scene = cell.localToScene(
+                cell.getBoundsInLocal().getCenterX(),
+                cell.getBoundsInLocal().getCenterY()
+        );
+        return overlayPane.sceneToLocal(scene);
+    }
+
+    private double computeRightMarginX() {
+        double maxX = 0;
+        for (Node node : ShapeLayout.getChildren()) {
+            if (node instanceof Polygon) {
+                Polygon p = (Polygon) node;
+                Point2D scene = p.localToScene(
+                        p.getBoundsInLocal().getMaxX(),
+                        p.getBoundsInLocal().getCenterY()
+                );
+                double x = overlayPane.sceneToLocal(scene).getX();
+                if (x > maxX) maxX = x;
+            }
+        }
+        return maxX + 20; // padding past the board
+    }
+
+    private double computeTopMarginY() {
+        double minY = Double.MAX_VALUE;
+        for (Node node : ShapeLayout.getChildren()) {
+            if (node instanceof Polygon) {
+                Polygon p = (Polygon) node;
+                Point2D scene = p.localToScene(
+                        p.getBoundsInLocal().getCenterX(),
+                        p.getBoundsInLocal().getMinY()
+                );
+                double y = overlayPane.sceneToLocal(scene).getY();
+                if (y < minY) minY = y;
+            }
+        }
+        return minY - 10;
+    }
+
     public void makeBotMove() {
         if (gameOver) return;
         Bot bot = new Bot(state, moveMadeId, botSeat());
+
+        // Bot can activate pie button
+        if (moves_made == 1) {
+            boolean pressButton = bot.decideToPressPie();
+            activatePieButton.setVisible(true);
+            if (pressButton) {
+                handlePieButtonClick();
+                if (getShow()) {
+                    lastBestCell = drawStrategy(bot);
+                }
+                return;
+            }
+        }
+
 
         Position botMove = bot.makeMove();
         if (botMove == null) {
@@ -271,23 +332,7 @@ public class HelloController {
         moveMadeId = botMove;
         String botMoveID = botMove.getRawPosition();
 
-        // Bot can activate pie button
-        if (moves_made == 1) {
-            boolean pressButton = bot.decideToPressPie();
-            activatePieButton.setVisible(true);
-            if (pressButton) {
-                handlePieButtonClick();
-                if (getShow()) {
-                    PauseTransition layoutWait = new PauseTransition(Duration.millis(100));
-                    Bot finalBot = bot;
-                    layoutWait.setOnFinished(ev -> lastBestCell = drawStrategy(finalBot));
-                    layoutWait.play();
-                }
-                return;
-            }
-        }
-
-        else activatePieButton.setVisible(false);
+        activatePieButton.setVisible(false);
 
 
         GameState.Player playerBeforeMove = state.getCurrentPlayer();
@@ -330,8 +375,8 @@ public class HelloController {
         // In makeBotMove(), replace the drawStrategy call at the bottom:
         if (getShow()) {
             PauseTransition layoutWait = new PauseTransition(Duration.millis(100));
-            Bot finalBot = bot;
-            layoutWait.setOnFinished(ev -> lastBestCell = drawStrategy(finalBot));
+            Bot pieBot = bot;
+            layoutWait.setOnFinished(ev -> lastBestCell = drawStrategy(pieBot));
             layoutWait.play();
         }
 
@@ -391,41 +436,22 @@ public class HelloController {
 
     @FXML
     public void handlePieButtonClick() {
-        GameState.Player pieClaimant = state.getCurrentPlayer(); // whoever is pressing pie
-        GameState.Player otherPlayer = (pieClaimant == GameState.Player.P1)
-                ? GameState.Player.P2 : GameState.Player.P1;
 
-        state.game_board.swapColors();
 
-        // Swap UI colors
-        Color temp = colorP1;
-        colorP1 = colorP2;
-        colorP2 = temp;
+        Polygon cell = (Polygon) ShapeLayout.lookup("#" + moveMadeId.getRawPosition());
+        state.game_board.changeTileOwner(moveMadeId.getRow(), moveMadeId.getCol(), GameState.Player.P2);
+        GameState.Player playerBeforeMove = state.getCurrentPlayer();
+        paintCell(cell, playerBeforeMove);
+        state.current_player = GameState.Player.P1; // it is now Black's turn
+        updateTurnDisplay(); // notify that it is Black's turn
 
-        // Repaint all node
-        for (Node node : ShapeLayout.getChildren()) {
-            if (node instanceof Polygon) {
-                Position pos = new Position(node.getId());
-                QuaxBoard.TileOwner owner = state.game_board.getTileOwner(pos.getRow(), pos.getCol());
-                if (owner == QuaxBoard.TileOwner.BLACK) {
-                    ((Polygon) node).setFill(colorP1);
-                } else if (owner == QuaxBoard.TileOwner.WHITE) {
-                    ((Polygon) node).setFill(colorP2);
-                }
-            }
-        }
-
-        state.current_player = otherPlayer;
-        updateTurnDisplay();
         activatePieButton.setVisible(false);
+
     }
     @FXML
     public void handleShowStrategyButtonClick() {
-        if (getShow() == !Show) { // If we want to stop showing strategy,
-            overlayPane.setVisible(false);
-        }
-
         setShow(!Show);
+        overlayPane.setVisible(Show);
         activateShowStrategyButton.setText(Show ? "Hide Strategy" : "Show Strategy");
     }
 
@@ -439,12 +465,13 @@ public class HelloController {
         moves_made = 0;
         gameOver = false;
         Show = false;
+        activateShowStrategyButton.setText("Show Strategy");
+        overlayPane.setVisible(true);
         winner = null;
         state.current_player = GameState.Player.P1;
         moveMadeId = null;
         resetCellColours();
         initialize();
-        System.out.println("restart game");
     }
 
     public void resetCellColours() {

@@ -17,12 +17,10 @@ public class Bot {
     public class ScoredMove {
         public Position move;
         public int score;
-        ArrayList<Position> path;
 
-        public ScoredMove(Position move, int score, ArrayList<Position> path) {
+        public ScoredMove(Position move, int score) {
             this.move = move;
             this.score = score;
-            this.path = path;
         }
     };
 
@@ -75,8 +73,7 @@ public class Bot {
 
             int eval = minmax(child, depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
             int dist = Dijkstra.computeDistance(child,  child.game_board.getColor(botPlayer)); // Slows the game down
-            ArrayList<Position> path = Dijkstra.computePath(child, child.game_board.getColor(botPlayer));
-            scoredMoves.add(new ScoredMove(move, dist, path));
+            scoredMoves.add(new ScoredMove(move, dist));
             if (eval > bestValue) {
                 bestValue = eval;
                 setBestmove(move);
