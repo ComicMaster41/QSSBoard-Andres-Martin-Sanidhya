@@ -74,8 +74,8 @@ public class Bot {
             applyMove(child, move);
 
             int eval = minmax(child, depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-            int dist = Dijkstra.computeDistance(child, child.game_board.p2Color); // Slows the game down
-            ArrayList<Position> path = Dijkstra.computePath(child, child.game_board.p2Color);
+            int dist = Dijkstra.computeDistance(child,  child.game_board.getColor(botPlayer)); // Slows the game down
+            ArrayList<Position> path = Dijkstra.computePath(child, child.game_board.getColor(botPlayer));
             scoredMoves.add(new ScoredMove(move, dist, path));
             if (eval > bestValue) {
                 bestValue = eval;

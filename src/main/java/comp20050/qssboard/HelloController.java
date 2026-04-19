@@ -1,7 +1,3 @@
-/**
- * Sample Skeleton for 'hello-view.fxml' Controller Class
- */
-
 package comp20050.qssboard;
 
 import java.util.ArrayList;
@@ -60,7 +56,7 @@ public class HelloController {
 
     // Create button variable
     @FXML
-    protected Button activatePieButton; // Bug with bot where you can make a second choice...
+    protected Button activatePieButton;
 
     @FXML
     protected Button activateShowStrategyButton;
@@ -70,7 +66,7 @@ public class HelloController {
 
     int moves_made = 0;
     boolean gameOver = false;
-    static boolean Show = false; // QUESTION: WHY IS IT STATIC?
+    static boolean Show = false;
 
     public boolean getShow() {
         return this.Show;
@@ -163,116 +159,101 @@ public class HelloController {
         activatePieButton.setMouseTransparent(!enabled);
     }
 
-
     public Polygon drawStrategy(Bot bot) {
         int index = 0;
-        boolean botIsBlack = (botSeat() == GameState.Player.P1);
 
         Polygon returnPoly = null;
 
-        for (Bot.ScoredMove m : bot.getScoredMoves()) {
-            // Green is best move, red is any move
-            Color pathColor = (index == 0) ? Color.GREEN : Color.RED;
+        System.out.println("=== drawStrategy called ===");
+        System.out.println("moveMadeId: " + (moveMadeId != null ? moveMadeId.getRawPosition() : "NULL"));
+        System.out.println("scoredMoves count: " + bot.getScoredMoves().size());
 
-            // For the best path, highlight the first empty tile the bot is heading towards
-            if (index == 0) {
-                for (Position p : m.path) {
-                    if (state.game_board.isTileEmpty(p.getRow(), p.getCol())) {
-                        Polygon nextCell = (Polygon) ShapeLayout.lookup("#" + p.getRawPosition());
-                        if (nextCell != null) {
-                            nextCell.setFill(colorShowStrategy);
-                            returnPoly = nextCell;
-                        }
-                        break;
-                    }
+        for (Bot.ScoredMove m : bot.getScoredMoves()) {
+
+            System.out.println("--- checking move: " + m.move.getRawPosition() + " score: " + m.score);
+            System.out.println("    path: " + m.path.stream()
+                    .map(Position::getRawPosition)
+                    .collect(java.util.stream.Collectors.joining(" -> ")));
+
+            // Slice path from the candidate move forward
+            ArrayList<Position> pathFromMove = new ArrayList<>();
+            boolean found = false;
+            for (Position p : m.path) {
+                if (found) pathFromMove.add(p);
+                if (p.getRawPosition().equals(m.move.getRawPosition())) {
+                    found = true;
+                    pathFromMove.add(p);
                 }
             }
 
-            for (int i = 0; i < m.path.size() - 1; i++) {
-                Position from = m.path.get(i);
-                Position to = m.path.get(i + 1);
+            // Fall back to full path if candidate move not found
+            if (!found) continue;
 
-                // check if the bot is black or white to show arrow orientation
-                if (botIsBlack) {
-                    if (from.getRow() > to.getRow()) {
-                        Position temp = from;
-                        from = to;
-                        to = temp;
-                    }
+            System.out.println("    pathFromMove size: " + pathFromMove.size());
+
+            Color pathColor = (index == 0) ? Color.GREEN : Color.RED;
+
+
+
+            if (pathFromMove.size() >= 2) {
+                Position from = pathFromMove.get(0);
+                Position to = pathFromMove.get(pathFromMove.size() - 1);
+
+                if (!from.getRawPosition().equals(m.move.getRawPosition())) { // i don't understand what this does and it may be wrong
+                    Position temp = from; from = to; to = temp;
                 }
 
-                else {
-                    if (from.getCol() > to.getCol()) {
-                        Position temp = from;
-                        from = to;
-                        to = temp;
-                    }
-                }
+                System.out.println("from: " + from.getRawPosition() + " col: " + from.getCol());
+                System.out.println("to: " + to.getRawPosition() + " col: " + to.getCol());
 
                 Polygon fromCell = (Polygon) ShapeLayout.lookup("#" + from.getRawPosition());
                 Point2D fromPoint = fromCell.localToScene(
                         fromCell.getBoundsInLocal().getCenterX(),
                         fromCell.getBoundsInLocal().getCenterY()
                 );
-
                 double startX = overlayPane.sceneToLocal(fromPoint).getX();
                 double startY = overlayPane.sceneToLocal(fromPoint).getY();
 
                 Polygon toCell = (Polygon) ShapeLayout.lookup("#" + to.getRawPosition());
-                // Claude AI suggestion to convert the x-y coordinates to layer on the Pane
                 Point2D toPoint = toCell.localToScene(
                         toCell.getBoundsInLocal().getCenterX(),
                         toCell.getBoundsInLocal().getCenterY()
                 );
-
                 double endX = overlayPane.sceneToLocal(toPoint).getX();
                 double endY = overlayPane.sceneToLocal(toPoint).getY();
 
-                // Only put an arrowhead on the last segment; use a plain line for all others
-                if (i == m.path.size() - 2) {
-                    Arrow arrow = new Arrow();
-                    arrow.setColor(pathColor);
-                    arrow.setStartX(startX);
-                    arrow.setStartY(startY);
-                    arrow.setEndX(endX);
-                    arrow.setEndY(endY);
-                    arrow.setMouseTransparent(true);
-                    arrow.getChildren().forEach(child ->
-                            child.setMouseTransparent(true));
-                    overlayPane.getChildren().add(arrow);
-                    strategyVisuals.add(arrow);
-                } else {
-                    Line segment = new Line(startX, startY, endX, endY);
-                    segment.setStroke(pathColor);
-                    segment.setStrokeWidth(3.0);
-                    segment.setMouseTransparent(true);
-                    overlayPane.getChildren().add(segment);
-                    strategyVisuals.add(segment);
-                }
-            }
+                Arrow arrow = new Arrow();
+                arrow.setColor(pathColor);
+                arrow.setStartX(startX);
+                arrow.setStartY(startY);
+                arrow.setEndX(endX);
+                arrow.setEndY(endY);
+                arrow.setMouseTransparent(true);
+                arrow.getChildren().forEach(child -> child.setMouseTransparent(true));
+                overlayPane.getChildren().add(arrow);
+                strategyVisuals.add(arrow);
 
-            index++;
-
-            // Label at the candidate move cell so scores don't overlap
-            Polygon moveCell = (Polygon) ShapeLayout.lookup("#" + m.move.getRawPosition());
-            if (moveCell != null) {
-                Point2D moveCellPoint = moveCell.localToScene(
-                        moveCell.getBoundsInLocal().getCenterX(),
-                        moveCell.getBoundsInLocal().getCenterY()
-                );
-                double textX = overlayPane.sceneToLocal(moveCellPoint).getX();
-                double textY = overlayPane.sceneToLocal(moveCellPoint).getY();
-
+                // Stagger weight labels vertically by index to avoid overlap
                 Text weightText = new Text(String.valueOf(m.score));
-                weightText.setX(textX + 5);
-                weightText.setY(textY - 10);
+                weightText.setX(endX + 8);
+                weightText.setY(endY - 8 - (index * 18));
                 weightText.setFill(pathColor);
-                weightText.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
+                weightText.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
                 weightText.setMouseTransparent(true);
                 strategyVisuals.add(weightText);
                 overlayPane.getChildren().add(weightText);
             }
+
+            // Highlight the best candidate move cell in green
+            if (index == 0) {
+                Polygon bestCell = (Polygon) ShapeLayout.lookup("#" + m.move.getRawPosition());
+                if (bestCell != null) {
+                    bestCell.setFill(colorShowStrategy);
+                    returnPoly = bestCell;
+                }
+            }
+
+            index++;
         }
 
         return returnPoly;
@@ -295,8 +276,13 @@ public class HelloController {
             boolean pressButton = bot.decideToPressPie();
             activatePieButton.setVisible(true);
             if (pressButton) {
-                if (getShow()) lastBestCell = drawStrategy(bot); // added fix but not what we're looking for
                 handlePieButtonClick();
+                if (getShow()) {
+                    PauseTransition layoutWait = new PauseTransition(Duration.millis(100));
+                    Bot finalBot = bot;
+                    layoutWait.setOnFinished(ev -> lastBestCell = drawStrategy(finalBot));
+                    layoutWait.play();
+                }
                 return;
             }
         }
@@ -341,8 +327,12 @@ public class HelloController {
         // Show all paths and their weights
         paintCell(cell, playerBeforeMove);
 
+        // In makeBotMove(), replace the drawStrategy call at the bottom:
         if (getShow()) {
-            lastBestCell = drawStrategy(bot);
+            PauseTransition layoutWait = new PauseTransition(Duration.millis(100));
+            Bot finalBot = bot;
+            layoutWait.setOnFinished(ev -> lastBestCell = drawStrategy(finalBot));
+            layoutWait.play();
         }
 
         moves_made++;
