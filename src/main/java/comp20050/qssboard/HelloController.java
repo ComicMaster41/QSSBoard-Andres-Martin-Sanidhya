@@ -10,6 +10,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
@@ -63,6 +64,7 @@ public class HelloController {
 
     @FXML
     protected Pane overlayPane;
+
 
     int moves_made = 0;
     boolean gameOver = false;
@@ -147,6 +149,25 @@ public class HelloController {
         }
     }
 
+    @FXML
+    public void handleDebugSwap() { // DEBUG
+        if (moves_made > 0) {
+            return;
+        }
+
+        botHasWhiteStones = !botHasWhiteStones;
+
+        if (state.getCurrentPlayer() == botSeat()) {
+            setInputEnabled(false);
+            PauseTransition pause = new PauseTransition(Duration.millis(500));
+            pause.setOnFinished(e -> {
+                makeBotMove();
+                setInputEnabled(true);
+            });
+            pause.play();
+        }
+    }
+
     private void setInputEnabled(boolean enabled) {
         inputEnabled = enabled;
         // Disable all clickable cells
@@ -162,7 +183,7 @@ public class HelloController {
     public Polygon drawStrategy(Bot bot) {
         Polygon returnPoly = null;
 
-        if (moveMadeId == null) return null; // nothing to anchor arrows to yet
+        if (moveMadeId == null) return null;
 
         QuaxBoard.TileOwner botColor = state.game_board.getColor(botSeat());
         boolean horizontalPaths = (botColor == QuaxBoard.TileOwner.WHITE);
@@ -174,80 +195,89 @@ public class HelloController {
         if (originCenter == null) return null;
 
         ArrayList<Bot.ScoredMove> moves = bot.getScoredMoves();
+        double spacing = 12.0;
 
-        // Iterate worst -> best so the best move renders on top (drawn last)
+        // Pass 1: count how many candidates share each track (column for black-bot, row for white-bot)
+        java.util.Map<Integer, Integer> trackCount = new java.util.HashMap<>();
+        for (Bot.ScoredMove m : moves) {
+            if (m.move == null) continue;
+            int track = horizontalPaths ? m.move.getRow() : m.move.getCol();
+            trackCount.merge(track, 1, Integer::sum);
+        }
+
+        // Pass 2: render, assigning each candidate an index within its track group
+        java.util.Map<Integer, Integer> trackIndex = new java.util.HashMap<>();
+
         for (int index = moves.size() - 1; index >= 0; index--) {
             Bot.ScoredMove m = moves.get(index);
             if (m.move == null) continue;
 
+            System.out.println("[DIAG-SCORES] index=" + index
+                    + " move=" + m.move.getRawPosition()
+                    + " score=" + m.score);
+
+            int track = horizontalPaths ? m.move.getRow() : m.move.getCol();
+            int groupSize = trackCount.get(track);
+            int posInGroup = trackIndex.merge(track, 1, Integer::sum) - 1; // 0-based
+
+            // Symmetric spread around 0: singleton -> 0, pair -> ±spacing/2, triple -> -s, 0, +s
+            double lateralOffset = (posInGroup - (groupSize - 1) / 2.0) * spacing;
+
             boolean isBest = (index == 0);
             Color pathColor = isBest ? Color.GREEN : Color.RED;
 
-            // The best move is the tile the bot just played (== moveMadeId).
-            // Paint it green, skip the self-arrow, and record it for later cleanup.
             if (isBest) {
                 Polygon bestCell = (Polygon) ShapeLayout.lookup("#" + m.move.getRawPosition());
                 if (bestCell != null) {
                     bestCell.setFill(colorShowStrategy);
+                    bestCell.setMouseTransparent(true);
                     returnPoly = bestCell;
                 }
-                // Still draw the weight label for the best move, anchored to its own tile
                 Point2D bestCenter = cellCenterInOverlay(m.move);
                 if (bestCenter != null) {
                     drawWeightWithConnector(bestCenter, m.score, pathColor,
-                            horizontalPaths, rightMarginX, topMarginY);
+                            horizontalPaths, rightMarginX, topMarginY, lateralOffset);
                 }
                 continue;
             }
 
-            // Non-best candidates: short arrow from moveMadeId -> candidate tile
             Point2D toCenter = cellCenterInOverlay(m.move);
             if (toCenter == null) continue;
 
-            Arrow arrow = new Arrow();
-            arrow.setColor(pathColor);
-            arrow.setStartX(originCenter.getX());
-            arrow.setStartY(originCenter.getY());
-            arrow.setEndX(toCenter.getX());
-            arrow.setEndY(toCenter.getY());
-            arrow.setMouseTransparent(true);
-            arrow.getChildren().forEach(c -> c.setMouseTransparent(true));
-            overlayPane.getChildren().add(arrow);
-            strategyVisuals.add(arrow);
-
             drawWeightWithConnector(toCenter, m.score, pathColor,
-                    horizontalPaths, rightMarginX, topMarginY);
+                    horizontalPaths, rightMarginX, topMarginY, lateralOffset);
         }
 
         return returnPoly;
     }
 
-    /**
-     * Draws a thin connector line from the arrow endpoint out to the margin,
-     * and places the weight number at the margin end of the line.
-     * Matches the reference image's layout.
-     */
     private void drawWeightWithConnector(Point2D endpoint, int score, Color color,
                                          boolean horizontalPaths,
-                                         double rightMarginX, double topMarginY) {
+                                         double rightMarginX, double topMarginY,
+                                         double lateralOffset) {
         double labelX, labelY;
+        double lineStartX, lineStartY;
         double lineEndX, lineEndY;
 
         if (horizontalPaths) {
-            // White bot: connector runs horizontally out to the right margin
-            lineEndX = rightMarginX;
-            lineEndY = endpoint.getY();
-            labelX   = rightMarginX + 6;
-            labelY   = endpoint.getY() + 5;
+            // White bot: connector runs horizontally, offset vertically
+            lineStartX = endpoint.getX();
+            lineStartY = endpoint.getY() + lateralOffset;
+            lineEndX   = rightMarginX;
+            lineEndY   = endpoint.getY() + lateralOffset;
+            labelX     = rightMarginX + 6;
+            labelY     = endpoint.getY() + lateralOffset + 5;
         } else {
-            // Black bot: connector runs vertically up to the top margin
-            lineEndX = endpoint.getX();
-            lineEndY = topMarginY;
-            labelX   = endpoint.getX() - 5;
-            labelY   = topMarginY - 6;
+            // Black bot: connector runs vertically, offset horizontally
+            lineStartX = endpoint.getX() + lateralOffset;
+            lineStartY = endpoint.getY();
+            lineEndX   = endpoint.getX() + lateralOffset;
+            lineEndY   = topMarginY;
+            labelX     = endpoint.getX() + lateralOffset;
+            labelY     = topMarginY - 15;
         }
 
-        Line connector = new Line(endpoint.getX(), endpoint.getY(), lineEndX, lineEndY);
+        Line connector = new Line(lineStartX, lineStartY, lineEndX, lineEndY);
         connector.setStroke(color);
         connector.setStrokeWidth(1.5);
         connector.setMouseTransparent(true);
@@ -255,10 +285,11 @@ public class HelloController {
         strategyVisuals.add(connector);
 
         Text weightText = new Text(String.valueOf(score));
-        weightText.setX(labelX);
-        weightText.setY(labelY);
-        weightText.setFill(color);
         weightText.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        weightText.setFill(color);
+        double textWidth = weightText.getLayoutBounds().getWidth();
+        weightText.setX(labelX - textWidth / 2);
+        weightText.setY(labelY);
         weightText.setMouseTransparent(true);
         overlayPane.getChildren().add(weightText);
         strategyVisuals.add(weightText);
@@ -303,7 +334,7 @@ public class HelloController {
                 if (y < minY) minY = y;
             }
         }
-        return minY - 10;
+        return minY - 40;  // was -10; enough room above the column letters
     }
 
     public void makeBotMove() {
@@ -348,6 +379,7 @@ public class HelloController {
             } else {
                 lastBestCell.setFill(owner == state.game_board.p1Color ? colorP1 : colorP2);
             }
+
             lastBestCell = null;
         }
 
@@ -431,6 +463,22 @@ public class HelloController {
             });
             pause.play();
         }
+
+        if (ShapeLayout.getScene() != null) {
+            attachDebugKeyHandler(ShapeLayout.getScene());
+        } else {
+            ShapeLayout.sceneProperty().addListener((obs, oldScene, newScene) -> {
+                if (newScene != null) attachDebugKeyHandler(newScene);
+            });
+        }
+    }
+
+    private void attachDebugKeyHandler(javafx.scene.Scene scene) {
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.S && moves_made == 0) {
+                handleDebugSwap();
+            }
+        });
     }
 
 
