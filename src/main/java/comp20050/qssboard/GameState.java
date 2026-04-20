@@ -22,6 +22,7 @@ public class GameState {
         this.game_board = game_board; // QUESTION: wouldn't it be better to put this in quaxboard?
         this.current_player = current_player; // BUG SUGGESTION: changing Player.p1 to currentplayer
     }
+
     public boolean makeMove(Position pos, QuaxBoard.TileType tileType) { // isMoveValid is called here
         pos.extractPosition();
         int row = pos.getRow();

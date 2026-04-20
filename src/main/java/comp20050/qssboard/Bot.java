@@ -67,7 +67,6 @@ public class Bot {
 
         scoredMoves.clear();
         for (Position move : legalMoves) {
-            // System.out.println(move.extractPosition());
             GameState child = state.copyState();
             applyMove(child, move);
 
