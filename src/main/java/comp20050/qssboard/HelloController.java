@@ -53,7 +53,23 @@ public class HelloController {
     protected Polygon Rhombus_turn;
 
     @FXML
+    protected Polygon green_oct;
+
+    @FXML
     protected Label turnLabel;
+
+    @FXML
+    protected Label showLabel;
+
+    @FXML
+    protected Label showLabel1;
+
+    @FXML
+    protected Label showLabel2;
+    @FXML
+    protected Line line1;
+    @FXML
+    protected Line line2;
 
     // Create button variable
     @FXML
@@ -447,11 +463,17 @@ public class HelloController {
         Rhombus_turn.setMouseTransparent(true);
         activatePieButton.setVisible(false);
         overlayPane.setMouseTransparent(true);
-
+        green_oct.setOnMouseClicked(null);
+        green_oct.setVisible(false);
         // just to give initla white colour
         OctCell_turn.setFill(colorP1);
         Rhombus_turn.setFill(colorP1);
         turnLabel.setText("Black to play");
+        showLabel.setVisible(false);
+        showLabel1.setVisible(false);
+        showLabel2.setVisible(false);
+        line1.setVisible(false);
+        line2.setVisible(false);
 
         if (state.getCurrentPlayer() == botSeat()) {
             setInputEnabled(false); // lock UI
@@ -501,7 +523,26 @@ public class HelloController {
         setShow(!Show);
         overlayPane.setVisible(Show);
         activateShowStrategyButton.setText(Show ? "Hide Strategy" : "Show Strategy");
+        if (Show){
+            green_oct.setVisible(true);
+            showLabel.setVisible(true);
+            showLabel1.setVisible(true);
+            showLabel2.setVisible(true);
+            line1.setVisible(true);
+            line2.setVisible(true);
+
+        }
+        else{
+            green_oct.setVisible(false);
+            showLabel.setVisible(false);
+            showLabel1.setVisible(false);
+            showLabel2.setVisible(false);
+            line1.setVisible(false);
+            line2.setVisible(false);
+        }
+
     }
+
 
     public void restartGame() {
         // reinitialise all variables
