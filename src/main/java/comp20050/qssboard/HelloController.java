@@ -147,13 +147,8 @@ public class HelloController {
         }
 
         moves_made++;
-        if (moves_made == 1) {
-            activatePieButton.setVisible(true);
-        } else {
-            activatePieButton.setVisible(false);
-        }
-
         updateTurnDisplay();
+        refreshPieButtonVisibility();
 
         if (state.getCurrentPlayer() == botSeat()) {
             setInputEnabled(false); // lock UI
@@ -162,25 +157,6 @@ public class HelloController {
             pause.setOnFinished(e -> {
                 makeBotMove();
                 setInputEnabled(true); // unlock UI after bot moves
-            });
-            pause.play();
-        }
-    }
-
-    @FXML
-    public void handleDebugSwap() { // DEBUG
-        if (moves_made > 0) {
-            return;
-        }
-
-        botHasWhiteStones = !botHasWhiteStones;
-
-        if (state.getCurrentPlayer() == botSeat()) {
-            setInputEnabled(false);
-            PauseTransition pause = new PauseTransition(Duration.millis(500));
-            pause.setOnFinished(e -> {
-                makeBotMove();
-                setInputEnabled(true);
             });
             pause.play();
         }
@@ -355,8 +331,8 @@ public class HelloController {
         if (gameOver) return;
         Bot bot = new Bot(state, moveMadeId, botSeat());
 
-        // Bot can activate pie button
-        if (moves_made == 1) {
+        // Pie is only for White (P2) after Black's opening; do not treat P1's first reply as a pie turn.
+        if (moves_made == 1 && state.getCurrentPlayer() == GameState.Player.P2) {
             boolean pressButton = bot.decideToPressPie();
             activatePieButton.setVisible(true);
             if (pressButton) {
@@ -427,6 +403,13 @@ public class HelloController {
         moves_made++;
 
         updateTurnDisplay();
+        refreshPieButtonVisibility();
+    }
+
+    /** Pie is offered to White (P2) once Black's (P1's) opening stone is on the board. */
+    private void refreshPieButtonVisibility() {
+        activatePieButton.setVisible(
+                moves_made == 1 && state.getCurrentPlayer() == GameState.Player.P2);
     }
 
 
@@ -483,21 +466,6 @@ public class HelloController {
             pause.play();
         }
 
-        if (ShapeLayout.getScene() != null) {
-            attachDebugKeyHandler(ShapeLayout.getScene());
-        } else {
-            ShapeLayout.sceneProperty().addListener((obs, oldScene, newScene) -> {
-                if (newScene != null) attachDebugKeyHandler(newScene);
-            });
-        }
-    }
-
-    private void attachDebugKeyHandler(javafx.scene.Scene scene) {
-        scene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.S && moves_made == 0) {
-                handleDebugSwap();
-            }
-        });
     }
 
 
@@ -507,13 +475,21 @@ public class HelloController {
 
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + moveMadeId.getRawPosition());
         state.game_board.changeTileOwner(moveMadeId.getRow(), moveMadeId.getCol(), GameState.Player.P2);
-        GameState.Player playerBeforeMove = state.getCurrentPlayer();
-        paintCell(cell, playerBeforeMove);
-        state.current_player = GameState.Player.P1; // it is now Black's turn
-        updateTurnDisplay(); // notify that it is Black's turn
+        paintCell(cell, GameState.Player.P2);
+        state.current_player = GameState.Player.P1; // Black to play (opening stone is now White's)
+        updateTurnDisplay();
+        refreshPieButtonVisibility();
 
-        activatePieButton.setVisible(false);
-
+        // if it's bot turn after white presses pie button, then make bot move
+        if (state.getCurrentPlayer() == botSeat()) {
+            setInputEnabled(false);
+            PauseTransition pause = new PauseTransition(Duration.millis(1000));
+            pause.setOnFinished(e -> {
+                makeBotMove();
+                setInputEnabled(true);
+            });
+            pause.play();
+        }
     }
     @FXML
     public void handleShowStrategyButtonClick() {

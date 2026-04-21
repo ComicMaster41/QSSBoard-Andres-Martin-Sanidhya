@@ -61,11 +61,11 @@ public class Bot {
             return null;
         }
 
-        Position bestMove = null;
         int bestValue = Integer.MIN_VALUE;
         int depth = 2; // or 2, increasing depth means it looks ahead more
 
         scoredMoves.clear();
+        setBestmove(null);
         for (Position move : legalMoves) {
             GameState child = state.copyState();
             applyMove(child, move);
@@ -73,7 +73,8 @@ public class Bot {
             int eval = minmax(child, depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
             int dist = Dijkstra.computeDistance(child,  child.game_board.getColor(botPlayer)); // Slows the game down
             scoredMoves.add(new ScoredMove(move, dist));
-            if (eval > bestValue) {
+            // Use strict > only after we have a candidate, or MIN_VALUE eval never replaces MIN_VALUE start.
+            if (this.bestMove == null || eval > bestValue) {
                 bestValue = eval;
                 setBestmove(move);
             }
@@ -90,11 +91,10 @@ public class Bot {
         int row = lastMoveMadeId.getRow();
         int col = lastMoveMadeId.getCol();
 
-        // if the first move made by Black is anywhere on the edge of the board -> then bot should press the pie button
-        if (row == 0 || row == 10 || col == 0 || col == 20) {
-            return true;
+        if (row == 0 || row == 10 || col == 0 || col == 20 || col % 2 != 0) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     public int heuristic(GameState simState) {
@@ -124,7 +124,9 @@ public class Bot {
             return heuristic(simState);
         }
         ArrayList<Position> legalMoves = simState.getLegalMoves();
-
+        if (legalMoves.isEmpty()) {
+            return heuristic(simState);
+        }
 
         if (isMax) {
             int bestValue = Integer.MIN_VALUE;
