@@ -23,6 +23,9 @@ public class GameState {
         this.current_player = current_player; // BUG SUGGESTION: changing Player.p1 to currentplayer
     }
 
+    // naming conventions on week seven
+    // functions longer than 30 lines are going to be penalized
+
     public boolean makeMove(Position pos, QuaxBoard.TileType tileType) { // isMoveValid is called here
         pos.extractPosition();
         int row = pos.getRow();

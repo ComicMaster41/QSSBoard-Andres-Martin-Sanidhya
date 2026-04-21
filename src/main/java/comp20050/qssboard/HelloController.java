@@ -228,10 +228,6 @@ public class HelloController {
             Bot.ScoredMove m = moves.get(index);
             if (m.move == null) continue;
 
-            System.out.println("[DIAG-SCORES] index=" + index
-                    + " move=" + m.move.getRawPosition()
-                    + " score=" + m.score);
-
             int track = horizontalPaths ? m.move.getRow() : m.move.getCol();
             int groupSize = trackCount.get(track);
             int posInGroup = trackIndex.merge(track, 1, Integer::sum) - 1; // 0-based
@@ -350,7 +346,7 @@ public class HelloController {
                 if (y < minY) minY = y;
             }
         }
-        return minY - 40;  // was -10; enough room above the column letters
+        return minY - 40;
     }
 
     public void makeBotMove() {
@@ -417,10 +413,8 @@ public class HelloController {
             pause.play();
         }
 
-        // Show all paths and their weights
         paintCell(cell, playerBeforeMove);
 
-        // In makeBotMove(), replace the drawStrategy call at the bottom:
         if (getShow()) {
             PauseTransition layoutWait = new PauseTransition(Duration.millis(100));
             Bot pieBot = bot;
@@ -545,7 +539,6 @@ public class HelloController {
 
 
     public void restartGame() {
-        // reinitialise all variables
         botHasWhiteStones = !botHasWhiteStones;
         state = new GameState();
         inputEnabled = true;
