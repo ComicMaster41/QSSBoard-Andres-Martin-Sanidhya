@@ -366,6 +366,7 @@
         <Label fx:id="showLabel" layoutX="1020" layoutY="750" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Chosen Cell" />
         <Label fx:id="showLabel1" layoutX="1020" layoutY="640" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Main bot path " />
         <Label fx:id="showLabel2" layoutX="1020" layoutY="660" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Alternate bot path" />
+        <Label fx:id="showLabel3" layoutX="1020" layoutY="800" maxWidth="300" wrapText="true" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333333; " text="Bot uses minmax agorithm to search 2 deep and then uses dijastras algorithm to find shortest winning path" />
         <Polygon fx:id="green_oct" fill="#008000" layoutX="780" layoutY="680" onMouseClicked="#getCellID" points="157.1,76.3,157.1,123.7,123.7,157.1,76.3,157.1,42.9,123.7,42.9,76.3,76.3,42.9,123.7,42.9" scaleX="0.75" scaleY="0.75" scaleZ="0.75" stroke="BLACK" />
         <Line fx:id="line1" startX="800" startY="680" endX="900" endY="680" stroke="RED" strokeWidth="2.0" />
         <Line fx:id="line2" startX="800" startY="660" endX="900" endY="660" stroke="GREEN" strokeWidth="2.0" />

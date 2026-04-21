@@ -67,6 +67,8 @@ public class HelloController {
     @FXML
     protected Label showLabel2;
     @FXML
+    protected Label showLabel3;
+    @FXML
     protected Line line1;
     @FXML
     protected Line line2;
@@ -466,6 +468,7 @@ public class HelloController {
         showLabel.setVisible(false);
         showLabel1.setVisible(false);
         showLabel2.setVisible(false);
+        showLabel3.setVisible(false);
         line1.setVisible(false);
         line2.setVisible(false);
 
@@ -522,6 +525,7 @@ public class HelloController {
             showLabel.setVisible(true);
             showLabel1.setVisible(true);
             showLabel2.setVisible(true);
+            showLabel3.setVisible(true);
             line1.setVisible(true);
             line2.setVisible(true);
 
@@ -531,6 +535,7 @@ public class HelloController {
             showLabel.setVisible(false);
             showLabel1.setVisible(false);
             showLabel2.setVisible(false);
+            showLabel3.setVisible(false);
             line1.setVisible(false);
             line2.setVisible(false);
         }
