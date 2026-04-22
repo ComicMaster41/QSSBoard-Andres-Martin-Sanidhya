@@ -17,9 +17,10 @@ class GroupPaneTest {
 
     @BeforeAll
     static void initJfx() {
-        // Initialize JavaFX Toolkit for testing
-        if (!Platform.isFxApplicationThread()) {
-            new Thread(() -> Platform.runLater(() -> {})).start();
+        try {
+            Platform.startup(() -> {});
+        } catch (IllegalStateException e) {
+            // JavaFX already initialized
         }
     }
 
@@ -34,7 +35,12 @@ class GroupPaneTest {
         assertNotNull(groupPane);
     }
 
-
+    @Test
+    void getShapeLayoutReturnsPane() {
+        Pane shapeLayout = groupPane.getShapeLayout();
+        assertNotNull(shapeLayout);
+        assertTrue(shapeLayout instanceof Pane);
+    }
 
     @Test
     void buildBoardInitializesBoard() {
