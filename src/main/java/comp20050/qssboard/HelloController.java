@@ -367,7 +367,7 @@ public class HelloController {
             if (owner == null) {
                 lastBestCell.setFill(Paint.valueOf(p.getCol() % 2 == 0 ? "#c98c07" : "#ffb91f"));
             } else {
-                lastBestCell.setFill(owner == state.game_board.p1Color ? colorP1 : colorP2);
+                lastBestCell.setFill(owner == state.game_board.getColor(colorP1) ? colorP1 : colorP2);
             }
 
             lastBestCell = null;
