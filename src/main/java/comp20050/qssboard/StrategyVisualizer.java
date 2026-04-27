@@ -76,21 +76,13 @@ public class StrategyVisualizer {
         double lateralOffset = (positionInGroup - (groupSize - 1) / 2.0) * CONNECTOR_SPACING;
 
         Color color = isBest ? bestMoveColor : otherMoveColor;
-        Polygon highlightedCell = isBest ? highlightBestCell(move) : null;
+        // removed: Polygon highlightedCell = isBest ? highlightBestCell(move) : null;
 
         Point2D cellCenter = cellCenterInOverlay(move.getMove());
         if (cellCenter != null) {
             drawWeightWithConnector(cellCenter, move.getScore(), color, horizontalPaths, lateralOffset);
         }
-        return highlightedCell;
-    }
-
-    private Polygon highlightBestCell(Bot.ScoredMove move) {
-        Polygon cell = (Polygon) shapeLayout.lookup("#" + move.getMove().getRawPosition());
-        if (cell == null) return null;
-        cell.setFill(bestMoveColor);
-        cell.setMouseTransparent(true);
-        return cell;
+        return null; // we don't paint cells anymore
     }
 
     private void drawWeightWithConnector(Point2D endpoint, int score, Color color,

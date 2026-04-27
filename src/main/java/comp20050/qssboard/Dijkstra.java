@@ -38,9 +38,51 @@ public class Dijkstra {
 
     private static void seedStartingEdge(SearchContext ctx) {
         if (ctx.colour == QuaxBoard.TileOwner.BLACK) {
-            for (int col = 0; col < Tile.NUM_COLS; col++) seedTile(ctx, 0, col);
+            for (int col = 0; col < Tile.NUM_COLS; col += 2) {
+                seedTile(ctx, 0, col);
+            }
+            // Flood fill BLACK's connected component from row 0
+            floodFillOwnedTiles(ctx, true);
         } else {
-            for (int row = 0; row < Tile.NUM_ROWS; row++) seedTile(ctx, row, 0);
+            for (int row = 0; row < Tile.NUM_ROWS; row++) {
+                seedTile(ctx, row, 0);
+            }
+            // Flood fill WHITE's connected component from col 0
+            floodFillOwnedTiles(ctx, false);
+        }
+    }
+
+    private static void floodFillOwnedTiles(SearchContext ctx, boolean isBlack) {
+        // Keep expanding through owned tiles at cost 0
+        // using a simple BFS through the already-seeded queue entries
+        PriorityQueue<Bot.Node> tempQueue = new PriorityQueue<>(
+                Comparator.comparingInt(Bot.Node::getDist));
+
+        // Find all already-seeded tiles that are owned
+        for (int row = 0; row < Tile.NUM_ROWS; row++) {
+            for (int col = 0; col < Tile.NUM_COLS; col++) {
+                if (ctx.distance[row][col] == 0) {
+                    tempQueue.add(new Bot.Node(row, col, 0));
+                }
+            }
+        }
+
+        // Expand through connected owned tiles
+        while (!tempQueue.isEmpty()) {
+            Bot.Node current = tempQueue.poll();
+            for (int[] neighbour : ctx.state.getNeighbours(
+                    current.getRow(), current.getCol())) {
+                int nr = neighbour[0];
+                int nc = neighbour[1];
+                if (ctx.distance[nr][nc] == 0) continue; // already seeded
+                QuaxBoard.TileOwner owner =
+                        ctx.state.getGameBoard().getTileOwner(nr, nc);
+                if (owner == ctx.colour) {
+                    ctx.distance[nr][nc] = 0;
+                    ctx.queue.add(new Bot.Node(nr, nc, 0));
+                    tempQueue.add(new Bot.Node(nr, nc, 0));
+                }
+            }
         }
     }
 

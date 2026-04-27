@@ -6,7 +6,7 @@ import java.util.Comparator;
 public class Bot {
     private static final int WIN_SCORE = 1_000_000;
     private static final int LOSS_SCORE = -1_000_000;
-    private static final int SEARCH_DEPTH = 2;
+    private static final int SEARCH_DEPTH = 3;
     private static final int TOP_MOVES_TO_KEEP = 5;
 
     private final GameState.Player botPlayer;
@@ -72,12 +72,14 @@ public class Bot {
 
         for (Position move : legalMoves) {
             int eval = evaluateMove(move);
+            System.out.println("Move: " + move + " eval: " + eval);
             if (bestMove == null || eval > bestValue) {
                 bestValue = eval;
                 bestMove = move;
             }
         }
 
+        System.out.println("CHOSEN: " + bestMove + " with value: " + bestValue);
         keepTopScoredMoves();
         return bestMove;
     }
@@ -119,7 +121,25 @@ public class Bot {
 
         int myDistance = Dijkstra.computeDistance(simState, botColor);
         int opponentDistance = Dijkstra.computeDistance(simState, opponentColor);
-        return opponentDistance - myDistance;
+
+        // Count how many of my octagons are actually CONNECTED via rhombuses
+        int connectionBonus = countConnectedPairs(simState, botColor) * 5;
+
+        return opponentDistance - myDistance + connectionBonus;
+    }
+
+    private int countConnectedPairs(GameState simState, QuaxBoard.TileOwner colour) {
+        int count = 0;
+        QuaxBoard board = simState.getGameBoard();
+        for (int row = 0; row < Tile.NUM_ROWS; row++) {
+            for (int col = 1; col < Tile.NUM_COLS; col += 2) {
+                // For each rhombus, check if it's owned and bridges same-color octagons
+                if (board.getTileOwner(row, col) == colour) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     private void applyMove(GameState simState, Position move) {

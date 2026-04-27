@@ -37,7 +37,8 @@ public class HelloController {
 
     private GameState.Player winner = null;
     private Position moveMadeId;
-    private Polygon lastBestCell;
+    private Polygon botLastPlacedCell;
+    private GameState.Player botLastPlacedPlayer;
     private StrategyVisualizer strategyVisualizer;
 
     @FXML protected Group ShapeLayout;
@@ -102,7 +103,7 @@ public class HelloController {
             activatePieButton.setVisible(true);
             if (bot.decideToPressPie()) {
                 handlePieButtonClick();
-                if (show) lastBestCell = renderStrategy(bot);
+                if (show) botLastPlacedCell = renderStrategy(bot);
                 return;
             }
         }
@@ -123,13 +124,22 @@ public class HelloController {
             throw new IllegalStateException("Bot produced an illegal move: " + botMove.getRawPosition());
         }
 
-        restoreLastBestCell();
         strategyVisualizer.clear();
 
+        // Repaint the previously-green bot cell back to bot's actual color
+        if (botLastPlacedCell != null) {
+            paintCell(botLastPlacedCell, playerBeforeMove);
+        }
+
+
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMove.getRawPosition());
-        paintCell(cell, playerBeforeMove);
+        cell.setFill(bestMoveColor);
+        botLastPlacedCell = cell;
+        botLastPlacedPlayer = playerBeforeMove;
+
 
         if (didPlayerWin(playerBeforeMove)) {
+            paintCell(cell, botLastPlacedPlayer); // restore actual color before showing winner
             handleGameOver(playerBeforeMove);
             return;
         }
@@ -170,8 +180,10 @@ public class HelloController {
         show = false;
         winner = null;
         moveMadeId = null;
+        botLastPlacedCell = null; // add this
         activateShowStrategyButton.setText("Show Strategy");
         overlayPane.setVisible(true);
+        botLastPlacedPlayer = null;
         resetCellColours();
         initialize();
     }
@@ -188,7 +200,7 @@ public class HelloController {
 
     private void scheduleStrategyRender(Bot bot) {
         PauseTransition pause = new PauseTransition(Duration.millis(LAYOUT_SETTLE_DELAY_MS));
-        pause.setOnFinished(event -> lastBestCell = renderStrategy(bot));
+        pause.setOnFinished(event -> renderStrategy(bot));
         pause.play();
     }
 
@@ -218,19 +230,6 @@ public class HelloController {
 
     private void refreshPieButtonVisibility() {
         activatePieButton.setVisible(shouldOfferPie());
-    }
-
-    private void restoreLastBestCell() {
-        if (lastBestCell == null) return;
-        Position pos = new Position(lastBestCell.getId());
-        QuaxBoard.TileOwner owner = state.getGameBoard().getTileOwner(pos.getRow(), pos.getCol());
-        if (owner == null) {
-            String hex = pos.getCol() % 2 == 0 ? OCTAGON_CELL_HEX : RHOMBUS_CELL_HEX;
-            lastBestCell.setFill(Paint.valueOf(hex));
-        } else {
-            lastBestCell.setFill(owner == state.getGameBoard().getColor(GameState.Player.P1) ? colorP1 : colorP2);
-        }
-        lastBestCell = null;
     }
 
     private void setInputEnabled(boolean enabled) {
