@@ -33,6 +33,10 @@ public class GameState {
         return gameBoard;
     }
 
+    public void setCurrentPlayer(GameState.Player player) {
+        this.currentPlayer = player;
+    }
+
     public boolean makeMove(Position pos, QuaxBoard.TileType tileType) {
         pos.extractPosition();
         int row = pos.getRow();
