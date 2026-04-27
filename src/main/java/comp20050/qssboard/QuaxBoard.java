@@ -63,9 +63,6 @@ public class QuaxBoard {
 
 
     public QuaxBoard copyBoard() {
-        // This is going to copy the entire board. Maybe that is good for some scenarios, but for optomization purposes, that can be a lot to consider
-        // Question: is it necessary to copy the entire board, and if it isn't whats an alternative to still consider different states?
-        // Maybe we can see from a certain chunk if there's black
         QuaxBoard cpyBoard = new QuaxBoard();
 
         for (int row = 0; row < Tile.NUM_ROWS; row++) {
@@ -81,10 +78,8 @@ public class QuaxBoard {
     }
 
     public void makeMove(int row, int col, GameState.Player current_player, TileType t) {
-        Tile tile = new Tile(t); // this sets TileType
-        // state_board[row][col] = tile;
+        Tile tile = new Tile(t);
         state_board[row][col].owner = getColor(current_player);
-       //  System.out.println("Row " + row + " Col " + col + " is of type " + state_board[row][col].type + " and belongs to " + state_board[row][col].owner);
     }
 
     public Tile[][] getStateBoard() {
