@@ -38,17 +38,13 @@ public class Dijkstra {
 
     private static void seedStartingEdge(SearchContext ctx) {
         if (ctx.colour == QuaxBoard.TileOwner.BLACK) {
-            for (int col = 0; col < Tile.NUM_COLS; col += 2) {
+            for (int col = 0; col < Tile.NUM_COLS; col++){
                 seedTile(ctx, 0, col);
             }
-            // Flood fill BLACK's connected component from row 0
-            floodFillOwnedTiles(ctx, true);
         } else {
             for (int row = 0; row < Tile.NUM_ROWS; row++) {
                 seedTile(ctx, row, 0);
             }
-            // Flood fill WHITE's connected component from col 0
-            floodFillOwnedTiles(ctx, false);
         }
     }
 
