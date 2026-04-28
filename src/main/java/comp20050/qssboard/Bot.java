@@ -57,12 +57,10 @@ public class Bot {
         ArrayList<Position> legalMoves = state.getLegalMoves();
 
 
-        if (legalMoves.isEmpty()) {
-            return null;
-        }
+        if (legalMoves.isEmpty()) return null;
 
         int bestValue = Integer.MIN_VALUE;
-        int depth = 2; // or 2, increasing depth means it looks ahead more
+        int depth = 2;
 
         scoredMoves.clear();
         setBestmove(null);
@@ -71,14 +69,12 @@ public class Bot {
             applyMove(child, move);
 
             int eval = minmax(child, depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-            int dist = Dijkstra.computeDistance(child,  child.game_board.getColor(botPlayer)); // Slows the game down
+            int dist = Dijkstra.computeDistance(child,  child.game_board.getColor(botPlayer));
             scoredMoves.add(new ScoredMove(move, dist));
-            // Use strict > only after we have a candidate, or MIN_VALUE eval never replaces MIN_VALUE start.
             if (this.bestMove == null || eval > bestValue) {
                 bestValue = eval;
                 setBestmove(move);
             }
-
         }
 
         scoredMoves.sort(Comparator.comparingInt((Bot.ScoredMove a) -> a.score));
