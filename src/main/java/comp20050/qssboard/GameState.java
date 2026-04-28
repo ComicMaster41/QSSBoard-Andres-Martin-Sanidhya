@@ -17,10 +17,9 @@ public class GameState {
         this.current_player = Player.P1;
     }
 
-    // QUESTION: Why do we have two constructors?
     public GameState(QuaxBoard game_board, Player current_player) {
-        this.game_board = game_board; // QUESTION: wouldn't it be better to put this in quaxboard?
-        this.current_player = current_player; // BUG SUGGESTION: changing Player.p1 to currentplayer
+        this.game_board = game_board;
+        this.current_player = current_player;
     }
 
     // naming conventions on week seven
