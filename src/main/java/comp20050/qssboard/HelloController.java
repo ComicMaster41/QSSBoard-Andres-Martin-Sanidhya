@@ -25,23 +25,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class HelloController {
 
-    // Functions from backend - logic for handling the player
     GameState state = new GameState();
 
-    /**
-     * If true, the bot plays white (P2) this game; if false, black (P1).
-     * Flips each time a game ends and {@link #restartGame()} runs, so the bot alternates colours every round.
-     */
     private boolean botHasWhiteStones = true;
 
     boolean inputEnabled = true;
-    // colours of different players
     Color colorP1 = Color.BLACK;
     Color colorP2 = Color.WHITE;
     Color colorShowStrategy = Color.GREEN;
 
     private Polygon lastBestCell;
-    private Position hintMove; // the move the bot would make next, shown as green hint
+    private Position hintMove;
 
     Position moveMadeId;
     @FXML
@@ -74,7 +68,6 @@ public class HelloController {
     @FXML
     protected Line line2;
 
-    // Create button variable
     @FXML
     protected Button activatePieButton;
 
@@ -106,7 +99,6 @@ public class HelloController {
         return botHasWhiteStones ? GameState.Player.P2 : GameState.Player.P1;
     }
 
-    // AI-Gen suggestion so that we can test this functionality
     QuaxBoard.TileType getTileTypeFromId(String id) {
         if (id.charAt(0) == 'R') {
             return QuaxBoard.TileType.RHOMBUS;
@@ -122,9 +114,9 @@ public class HelloController {
 
     @FXML
     void handleCellSelection(Polygon cell) {
-        if (gameOver || !inputEnabled) return; // block clicks during bot move
+        if (gameOver || !inputEnabled) return;
 
-        clearHint(); // always clear the green hint before processing any move
+        clearHint();
 
         Position pos = new Position(cell.getId());
         moveMadeId = pos;
@@ -138,7 +130,6 @@ public class HelloController {
 
         paintCell(cell, playerBeforeMove);
 
-        // check win using the player who just moved, before the turn switched
         if (state.checkWin(state.getGameBoard().getColor(playerBeforeMove))) {
             gameOver = true;
             winner = playerBeforeMove;
@@ -159,7 +150,7 @@ public class HelloController {
             PauseTransition pause = new PauseTransition(Duration.millis(1000));
             pause.setOnFinished(e -> {
                 makeBotMove();
-                setInputEnabled(true); // unlock UI after bot moves
+                setInputEnabled(true);
             });
             pause.play();
         }
@@ -167,27 +158,25 @@ public class HelloController {
 
     private void setInputEnabled(boolean enabled) {
         inputEnabled = enabled;
-        // Disable all clickable cells
+
         for (Node node : ShapeLayout.getChildren()) {
             if (node instanceof Polygon) {
                 node.setMouseTransparent(!enabled);
             }
         }
-        // Disable pie button too
+
         activatePieButton.setMouseTransparent(!enabled);
     }
 
-    /** Computes what the bot would do next and stores it as hintMove. Shows it green if Show is on. */
     private void computeAndShowHint() {
         Bot hintBot = new Bot(state, moveMadeId, botSeat());
         Position nextMove = hintBot.chooseMove();
         hintMove = nextMove;
         if (getShow() && hintMove != null) {
-            showHint();
+            lastBestCell = drawStrategy(hintBot);
         }
     }
 
-    /** Colours the hintMove tile green and stores it in lastBestCell. */
     private void showHint() {
         if (hintMove == null) return;
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + hintMove.getRawPosition());
@@ -196,7 +185,6 @@ public class HelloController {
         lastBestCell = cell;
     }
 
-    /** Clears the green hint tile back to its correct colour and removes strategy visuals. */
     private void clearHint() {
         if (lastBestCell != null) {
             Position p = new Position(lastBestCell.getId());
@@ -212,7 +200,6 @@ public class HelloController {
         clearStrategyVisuals();
     }
 
-    /** Removes connector lines and score labels from the overlay pane. */
     private void clearStrategyVisuals() {
         for (Node node : strategyVisuals) {
             overlayPane.getChildren().remove(node);
@@ -237,7 +224,6 @@ public class HelloController {
         ArrayList<Bot.ScoredMove> moves = bot.getScoredMoves();
         double spacing = 12.0;
 
-        // Pass 1: count how many candidates share each track (column for black-bot, row for white-bot)
         java.util.Map<Integer, Integer> trackCount = new java.util.HashMap<>();
         for (Bot.ScoredMove m : moves) {
             if (m.getMove() == null) continue;
@@ -245,7 +231,6 @@ public class HelloController {
             trackCount.merge(track, 1, Integer::sum);
         }
 
-        // Pass 2: render, assigning each candidate an index within its track group
         java.util.Map<Integer, Integer> trackIndex = new java.util.HashMap<>();
 
         for (int index = moves.size() - 1; index >= 0; index--) {
@@ -353,7 +338,7 @@ public class HelloController {
                 if (x > maxX) maxX = x;
             }
         }
-        return maxX + 20; // padding past the board
+        return maxX + 20;
     }
 
     private double computeTopMarginY() {
@@ -376,7 +361,6 @@ public class HelloController {
         if (gameOver) return;
         Bot bot = new Bot(state, moveMadeId, botSeat());
 
-        // Pie is only for White (P2) after Black's opening; do not treat P1's first reply as a pie turn.
         if (moves_made == 1 && state.getCurrentPlayer() == GameState.Player.P2) {
             boolean pressButton = bot.decideToPressPie();
             activatePieButton.setVisible(true);
@@ -400,14 +384,11 @@ public class HelloController {
             throw new IllegalArgumentException("Error making bot move");
         }
 
-        // Clear any leftover strategy visuals from previous turn
         clearStrategyVisuals();
 
-        // Paint bot's move as bot's actual colour immediately — no green
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
         paintCell(cell, playerBeforeMove);
 
-        // Check win
         if (state.checkWin(state.getGameBoard().getColor(playerBeforeMove))) {
             gameOver = true;
             winner = playerBeforeMove;
@@ -422,11 +403,9 @@ public class HelloController {
         updateTurnDisplay();
         refreshPieButtonVisibility();
 
-        // It's now the player's turn — compute and show the hint
         computeAndShowHint();
     }
 
-    /** Pie is offered to White (P2) once Black's (P1's) opening stone is on the board. */
     private void refreshPieButtonVisibility() {
         activatePieButton.setVisible(
                 moves_made == 1 && state.getCurrentPlayer() == GameState.Player.P2);
@@ -454,7 +433,7 @@ public class HelloController {
         }
     }
 
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    @FXML
     void initialize() {
         OctCell_turn.setOnMouseClicked(null);
         Rhombus_turn.setOnMouseClicked(null);
@@ -464,7 +443,6 @@ public class HelloController {
         overlayPane.setMouseTransparent(true);
         green_oct.setOnMouseClicked(null);
         green_oct.setVisible(false);
-        // just to give initla white colour
         OctCell_turn.setFill(colorP1);
         Rhombus_turn.setFill(colorP1);
         turnLabel.setText("Black to play");
@@ -476,16 +454,15 @@ public class HelloController {
         line2.setVisible(false);
 
         if (state.getCurrentPlayer() == botSeat()) {
-            setInputEnabled(false); // lock UI
+            setInputEnabled(false);
 
             PauseTransition pause = new PauseTransition(Duration.millis(1000));
             pause.setOnFinished(e ->  {
                 makeBotMove();
-                setInputEnabled(true); // unlock UI after bot moves
+                setInputEnabled(true);
             });
             pause.play();
         }
-
     }
 
 
@@ -496,11 +473,10 @@ public class HelloController {
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + moveMadeId.getRawPosition());
         state.getGameBoard().changeTileOwner(moveMadeId.getRow(), moveMadeId.getCol(), GameState.Player.P2);
         paintCell(cell, GameState.Player.P2);
-        state.setCurrentPlayer(GameState.Player.P1); // Black to play (opening stone is now White's)
+        state.setCurrentPlayer(GameState.Player.P1);
         updateTurnDisplay();
         refreshPieButtonVisibility();
 
-        // if it's bot turn after white presses pie button, then make bot move
         if (state.getCurrentPlayer() == botSeat()) {
             setInputEnabled(false);
             PauseTransition pause = new PauseTransition(Duration.millis(1000));
@@ -524,7 +500,6 @@ public class HelloController {
             showLabel3.setVisible(true);
             line1.setVisible(true);
             line2.setVisible(true);
-            // Show hint immediately if it's the player's turn and hint is ready
             if (hintMove != null && state.getCurrentPlayer() != botSeat()) {
                 showHint();
             }

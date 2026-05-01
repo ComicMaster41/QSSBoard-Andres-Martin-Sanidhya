@@ -122,9 +122,7 @@ class LauncherTest {
     @Test
     void mainMethodThrowsNoCheckedExceptions() throws NoSuchMethodException {
         java.lang.reflect.Method mainMethod = Launcher.class.getMethod("main", String[].class);
-        // JavaFX launch method throws checked exceptions
         Class<?>[] exceptionTypes = mainMethod.getExceptionTypes();
-        // Method signature should handle potential exceptions
         assertNotNull(exceptionTypes);
     }
 }

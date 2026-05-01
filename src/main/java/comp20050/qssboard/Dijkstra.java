@@ -5,10 +5,7 @@ import java.util.PriorityQueue;
 
 public class Dijkstra {
     private static final int INF = 1_000_000;
-    // Dijkstra shortest path:
-    // own tile = cost 0
-    // empty tile = cost 1
-    // opponent tile = blocked
+
     public static int computeDistance(GameState simState, QuaxBoard.TileOwner colour) {
         int rows = Tile.NUM_ROWS;
         int cols = Tile.NUM_COLS;
