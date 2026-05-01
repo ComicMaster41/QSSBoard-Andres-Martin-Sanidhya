@@ -74,7 +74,7 @@ class HelloControllerTest {
 
     private Bot.ScoredMove makeScoredMove(Bot bot, String moveId, int score) {
         Position move = new Position(moveId);
-        return bot.new ScoredMove(move, score);
+        return new Bot.ScoredMove(move, score);
     }
 
     private List<Line> getLines() {
@@ -150,7 +150,7 @@ class HelloControllerTest {
     // ── Win condition tests ───────────────────────────────────────────────────
 
     void placeTile(int row, int col, QuaxBoard.TileOwner owner) {
-        state.game_board.getTile(row, col).setOwner(owner);
+        state.getGameBoard().getTile(row, col).setOwner(owner);
     }
 
     @Test

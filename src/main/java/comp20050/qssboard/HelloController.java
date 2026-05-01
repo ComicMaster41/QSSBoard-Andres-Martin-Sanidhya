@@ -239,9 +239,8 @@ public class HelloController {
 
             int track = horizontalPaths ? m.getMove().getRow() : m.getMove().getCol();
             int groupSize = trackCount.get(track);
-            int posInGroup = trackIndex.merge(track, 1, Integer::sum) - 1; // 0-based
+            int posInGroup = trackIndex.merge(track, 1, Integer::sum) - 1;
 
-            // Symmetric spread around 0: singleton -> 0, pair -> ±spacing/2, triple -> -s, 0, +s
             double lateralOffset = (posInGroup - (groupSize - 1) / 2.0) * spacing;
 
             boolean isBest = (index == 0);
@@ -555,4 +554,6 @@ public class HelloController {
     public void paintCell(Polygon cell, GameState.Player player) {
         cell.setFill(player == GameState.Player.P1 ? colorP1 : colorP2);
     }
+
+
 }

@@ -60,8 +60,11 @@ public class Bot {
 
     public void setBestmove(Position bestMove) { this.bestMove = bestMove; }
 
-    // Called by HelloController as bot.chooseMove()
     public Position chooseMove() {
+        if (state == null) {
+            throw new IllegalStateException("Bot cannot choose a move: game state is null.");
+        }
+
         ArrayList<Position> legalMoves = state.getLegalMoves();
 
         if (legalMoves.isEmpty()) return null;

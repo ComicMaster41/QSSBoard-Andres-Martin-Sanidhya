@@ -22,13 +22,12 @@ class GameIntegrationTest {
         botP2 = new Bot(GameState.Player.P2);
     }
 
-    // Helper: make a move from the legal moves list
     private boolean makeLegalMove(GameState state) {
         ArrayList<Position> moves = state.getLegalMoves();
         if (moves.isEmpty()) return false;
         Position move = moves.get(0);
         move.extractPosition();
-        QuaxBoard.TileType tileType = state.game_board.getTileType(move.getRow(), move.getCol());
+        QuaxBoard.TileType tileType = state.getGameBoard().getTileType(move.getRow(), move.getCol());
         return state.makeMove(move, tileType);
     }
 
@@ -82,11 +81,11 @@ class GameIntegrationTest {
                 Bot currentBot = (gameState.getCurrentPlayer() == GameState.Player.P1) ? botP1 : botP2;
                 currentBot.state = gameState;
 
-                Position move = currentBot.makeMove();
+                Position move = currentBot.chooseMove();
                 assertNotNull(move);
 
                 move.extractPosition();
-                QuaxBoard.TileType tileType = gameState.game_board.getTileType(move.getRow(), move.getCol());
+                QuaxBoard.TileType tileType = gameState.getGameBoard().getTileType(move.getRow(), move.getCol());
                 assertTrue(gameState.makeMove(move, tileType));
             }
         }
@@ -95,13 +94,13 @@ class GameIntegrationTest {
         @DisplayName("Bot scores moves correctly")
         void botScoresMovesCorrectly() {
             botP1.state = gameState;
-            botP1.makeMove();
+            botP1.chooseMove();
 
             ArrayList<Bot.ScoredMove> scoredMoves = botP1.getScoredMoves();
             assertFalse(scoredMoves.isEmpty());
 
             for (int i = 0; i < scoredMoves.size() - 1; i++) {
-                assertTrue(scoredMoves.get(i).score <= scoredMoves.get(i + 1).score);
+                assertTrue(scoredMoves.get(i).getScore() <= scoredMoves.get(i + 1).getScore());
             }
         }
 
@@ -109,7 +108,7 @@ class GameIntegrationTest {
         @DisplayName("Bot makes at most 5 top moves")
         void botKeepsTop5Moves() {
             botP1.state = gameState;
-            botP1.makeMove();
+            botP1.chooseMove();
 
             ArrayList<Bot.ScoredMove> scoredMoves = botP1.getScoredMoves();
             assertTrue(scoredMoves.size() <= 5);
@@ -155,7 +154,7 @@ class GameIntegrationTest {
             ArrayList<Position> moves = gameState.getLegalMoves();
             Position firstMove = moves.get(0);
             firstMove.extractPosition();
-            QuaxBoard.TileType tileType = gameState.game_board.getTileType(firstMove.getRow(), firstMove.getCol());
+            QuaxBoard.TileType tileType = gameState.getGameBoard().getTileType(firstMove.getRow(), firstMove.getCol());
             gameState.makeMove(firstMove, tileType);
 
             ArrayList<Position> nextMoves = gameState.getLegalMoves();
@@ -165,14 +164,14 @@ class GameIntegrationTest {
         @Test
         @DisplayName("Dijkstra distance improves with strategic play")
         void dijkstraDistanceImprovesStrategically() {
-            QuaxBoard.TileOwner p1Color = gameState.game_board.getColor(GameState.Player.P1);
+            QuaxBoard.TileOwner p1Color = gameState.getGameBoard().getColor(GameState.Player.P1);
 
             int distBefore = Dijkstra.computeDistance(gameState, p1Color);
 
             botP1.state = gameState;
-            Position move = botP1.makeMove();
+            Position move = botP1.chooseMove();
             move.extractPosition();
-            QuaxBoard.TileType tileType = gameState.game_board.getTileType(move.getRow(), move.getCol());
+            QuaxBoard.TileType tileType = gameState.getGameBoard().getTileType(move.getRow(), move.getCol());
             gameState.makeMove(move, tileType);
 
             int distAfter = Dijkstra.computeDistance(gameState, p1Color);
@@ -196,7 +195,7 @@ class GameIntegrationTest {
             Bot testBot = new Bot(GameState.Player.P1);
             testBot.state = null;
 
-            assertThrows(Exception.class, testBot::makeMove);
+            assertThrows(Exception.class, testBot::chooseMove);
         }
 
         @Test
@@ -228,8 +227,8 @@ class GameIntegrationTest {
         @Test
         @DisplayName("Dijkstra integrates with game state correctly")
         void dijkstraIntegrationWithGameState() {
-            QuaxBoard.TileOwner blackColor = gameState.game_board.getColor(GameState.Player.P1);
-            QuaxBoard.TileOwner whiteColor = gameState.game_board.getColor(GameState.Player.P2);
+            QuaxBoard.TileOwner blackColor = gameState.getGameBoard().getColor(GameState.Player.P1);
+            QuaxBoard.TileOwner whiteColor = gameState.getGameBoard().getColor(GameState.Player.P2);
 
             assertTrue(Dijkstra.computeDistance(gameState, blackColor) >= 0);
             assertTrue(Dijkstra.computeDistance(gameState, whiteColor) >= 0);
@@ -240,8 +239,8 @@ class GameIntegrationTest {
         @Test
         @DisplayName("Both players have valid distance metrics")
         void bothPlayersHaveValidMetrics() {
-            QuaxBoard.TileOwner p1Color = gameState.game_board.getColor(GameState.Player.P1);
-            QuaxBoard.TileOwner p2Color = gameState.game_board.getColor(GameState.Player.P2);
+            QuaxBoard.TileOwner p1Color = gameState.getGameBoard().getColor(GameState.Player.P1);
+            QuaxBoard.TileOwner p2Color = gameState.getGameBoard().getColor(GameState.Player.P2);
 
             int p1Dist = Dijkstra.computeDistance(gameState, p1Color);
             int p2Dist = Dijkstra.computeDistance(gameState, p2Color);
@@ -255,9 +254,58 @@ class GameIntegrationTest {
         int count = 0;
         for (int r = 0; r < Tile.NUM_ROWS; r++) {
             for (int c = 0; c < Tile.NUM_COLS; c++) {
-                if (gameState.game_board.isTileEmpty(r, c)) count++;
+                if (gameState.getGameBoard().isTileEmpty(r, c)) count++;
             }
         }
         return count;
+    }
+
+    @Test
+    void copyStateIsDeepCopy() {
+        GameState copy = gameState.copyState();
+        makeLegalMove(gameState);
+
+        assertNotEquals(gameState.getCurrentPlayer(), copy.getCurrentPlayer());
+    }
+
+    @Test
+    void invalidMoveDoesNotChangeBoard() {
+        ArrayList<Position> moves = gameState.getLegalMoves();
+        Position validMove = moves.get(0);
+        validMove.extractPosition();
+        QuaxBoard.TileType tileType = gameState.getGameBoard().getTileType(validMove.getRow(), validMove.getCol());
+
+        gameState.makeMove(validMove, tileType);
+        int emptyAfterFirst = countEmptyTiles();
+
+        gameState.makeMove(validMove, tileType);
+        int emptyAfterSecond = countEmptyTiles();
+
+        assertEquals(emptyAfterFirst, emptyAfterSecond);
+    }
+
+    @Test
+    void botDoesNotMutateGameState() {
+        botP1.state = gameState;
+        GameState.Player playerBefore = gameState.getCurrentPlayer();
+        int emptyBefore = countEmptyTiles();
+
+        botP1.chooseMove();
+
+        assertEquals(playerBefore, gameState.getCurrentPlayer());
+        assertEquals(emptyBefore, countEmptyTiles());
+    }
+
+    @Test
+    void positionThrowsOnInvalidFormat() {
+        assertThrows(IllegalArgumentException.class, () -> new Position("INVALID"));
+        assertThrows(IllegalArgumentException.class, () -> new Position("X_0_0"));
+    }
+
+    @Test
+    void botThrowsOnNullState() {
+        Bot testBot = new Bot(GameState.Player.P1);
+        testBot.state = null;
+        assertThrows(IllegalStateException.class, testBot::chooseMove);
     }
 }

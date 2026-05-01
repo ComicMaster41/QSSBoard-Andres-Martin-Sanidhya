@@ -20,9 +20,7 @@ public class Dijkstra {
 
         PriorityQueue<Bot.Node> pq = new PriorityQueue<>(Comparator.comparingInt(Bot.Node::getDist));
 
-        // Seed starting side
         if (colour == QuaxBoard.TileOwner.BLACK) {
-            // BLACK tries top -> bottom
             for (int col = 0; col < cols; col++) {
                 int cost = tileCost(simState, 0, col, colour);
                 if (cost < INF) {
@@ -31,7 +29,6 @@ public class Dijkstra {
                 }
             }
         } else {
-            // WHITE tries left -> right
             for (int row = 0; row < rows; row++) {
                 int cost = tileCost(simState, row, 0, colour);
                 if (cost < INF) {
@@ -45,7 +42,7 @@ public class Dijkstra {
             Bot.Node cur = pq.poll();
 
             if (cur.getDist() != dist[cur.getRow()][cur.getCol()]) {
-                continue; // stale entry
+                continue;
             }
 
             for (int[] n : simState.getNeighbours(cur.getRow(), cur.getCol())) {
