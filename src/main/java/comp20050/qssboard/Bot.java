@@ -2,27 +2,16 @@ package comp20050.qssboard;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.PriorityQueue;
 
 public class Bot {
-    private static final int WIN_SCORE = 1_000_000;
-    private static final int LOSS_SCORE = -1_000_000;
-    private static final int SEARCH_DEPTH = 3;
-    private static final int TOP_MOVES_TO_KEEP = 5;
-
-    private final GameState.Player botPlayer;
-    private GameState state;
+    public GameState state;
     private Position lastMoveMadeId;
-    private ArrayList<ScoredMove> scoredMoves = new ArrayList<>();
-    private Position bestMove;
+    private final GameState.Player botPlayer;
+    private static final int INF = 1_000_000;
 
     public Bot(GameState.Player botPlayer) {
         this.botPlayer = botPlayer;
-    }
-
-    public Bot(GameState state, Position lastMoveMadeId, GameState.Player botPlayer) {
-        this(botPlayer);
-        this.state = state;
-        this.lastMoveMadeId = lastMoveMadeId;
     }
 
     public static class ScoredMove {
@@ -39,9 +28,9 @@ public class Bot {
     }
 
     static class Node {
-        private final int row;
-        private final int col;
-        private final int dist;
+        final int row;
+        final int col;
+        final int dist;
 
         Node(int row, int col, int dist) {
             this.row = row;
@@ -54,136 +43,123 @@ public class Bot {
         public int getDist() { return dist; }
     }
 
-    private static GameState.Player opponent(GameState.Player player) {
-        return player == GameState.Player.P1 ? GameState.Player.P2 : GameState.Player.P1;
+    private ArrayList<ScoredMove> scoredMoves = new ArrayList<>();
+    private Position bestMove;
+
+    public Bot(GameState state, Position lastMoveMadeId, GameState.Player botPlayer) {
+        this.state = state;
+        this.lastMoveMadeId = lastMoveMadeId;
+        this.botPlayer = botPlayer;
     }
 
-    public ArrayList<ScoredMove> getScoredMoves() {
-        return scoredMoves;
+    private static GameState.Player opponent(GameState.Player p) {
+        return p == GameState.Player.P1 ? GameState.Player.P2 : GameState.Player.P1;
     }
 
+    public ArrayList<ScoredMove> getScoredMoves() { return scoredMoves; }
+
+    public void setBestmove(Position bestMove) { this.bestMove = bestMove; }
+
+    // Called by HelloController as bot.chooseMove()
     public Position chooseMove() {
         ArrayList<Position> legalMoves = state.getLegalMoves();
+
         if (legalMoves.isEmpty()) return null;
 
-        scoredMoves.clear();
-        bestMove = null;
         int bestValue = Integer.MIN_VALUE;
+        int depth = 2;
 
+        scoredMoves.clear();
+        setBestmove(null);
         for (Position move : legalMoves) {
-            int eval = evaluateMove(move);
-            System.out.println("Move: " + move + " eval: " + eval);
-            if (bestMove == null || eval > bestValue) {
+            GameState child = state.copyState();
+            applyMove(child, move);
+
+            int eval = minmax(child, depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+            int dist = Dijkstra.computeDistance(child, child.getGameBoard().getColor(botPlayer));
+            scoredMoves.add(new ScoredMove(move, dist));
+            if (this.bestMove == null || eval > bestValue) {
                 bestValue = eval;
-                bestMove = move;
+                setBestmove(move);
             }
         }
 
-        System.out.println("CHOSEN: " + bestMove + " with value: " + bestValue);
-        keepTopScoredMoves();
-        return bestMove;
-    }
-
-    private int evaluateMove(Position move) {
-        GameState child = state.copyState();
-        applyMove(child, move);
-        int eval = negamax(child, SEARCH_DEPTH - 1, -WIN_SCORE, WIN_SCORE, -1);
-        int distance = Dijkstra.computeDistance(child, child.getGameBoard().getColor(botPlayer));
-        scoredMoves.add(new ScoredMove(move, distance));
-        return eval;
-    }
-
-    private void keepTopScoredMoves() {
         scoredMoves.sort(Comparator.comparingInt(ScoredMove::getScore));
-        int keep = Math.min(TOP_MOVES_TO_KEEP, scoredMoves.size());
-        scoredMoves = new ArrayList<>(scoredMoves.subList(0, keep));
+        scoredMoves = new ArrayList<>(scoredMoves.subList(0, Math.min(5, scoredMoves.size())));
+
+        return this.bestMove;
     }
 
     public boolean decideToPressPie() {
         int row = lastMoveMadeId.getRow();
         int col = lastMoveMadeId.getCol();
-        return !isLastMoveOnEdgeOrRhombus(row, col);
+
+        if (row == 0 || row == 10 || col == 0 || col == 20 || col % 2 != 0) {
+            return false;
+        }
+        return true;
     }
 
-    private boolean isLastMoveOnEdgeOrRhombus(int row, int col) {
-        boolean onTopOrBottomEdge = row == 0 || row == Tile.NUM_ROWS - 1;
-        boolean onLeftOrRightEdge = col == 0 || col == Tile.NUM_COLS - 1;
-        boolean onRhombusColumn = col % 2 != 0;
-        return onTopOrBottomEdge || onLeftOrRightEdge || onRhombusColumn;
-    }
-
-    private int heuristic(GameState simState) {
+    public int heuristic(GameState simState) {
         QuaxBoard.TileOwner botColor = simState.getGameBoard().getColor(botPlayer);
-        QuaxBoard.TileOwner opponentColor = simState.getGameBoard().getColor(opponent(botPlayer));
+        QuaxBoard.TileOwner playerColor = simState.getGameBoard().getColor(opponent(botPlayer));
 
-        if (simState.checkWin(botColor)) return WIN_SCORE;
-        if (simState.checkWin(opponentColor)) return LOSS_SCORE;
+        if (simState.checkWin(botColor)) return 100000;
+        if (simState.checkWin(playerColor)) return -100000;
 
-        int myDistance = Dijkstra.computeDistance(simState, botColor);
-        int opponentDistance = Dijkstra.computeDistance(simState, opponentColor);
+        int myDist = Dijkstra.computeDistance(simState, botColor);
+        int oppDist = Dijkstra.computeDistance(simState, playerColor);
 
-        int connectionBonus = countConnectedPairs(simState, botColor) * 5;
-
-        return opponentDistance - myDistance + connectionBonus;
+        return oppDist - myDist;
     }
 
-    private int countConnectedPairs(GameState simState, QuaxBoard.TileOwner colour) {
-        int count = 0;
-        QuaxBoard board = simState.getGameBoard();
-        for (int row = 0; row < Tile.NUM_ROWS; row++) {
-            for (int col = 1; col < Tile.NUM_COLS; col += 2) {
-                if (board.getTileOwner(row, col) == colour) {
-                    // check both adjacent octagons
-                    if (isConnectedBridge(board, row, col, colour)) {
-                        count++;
-                    }
-                }
-            }
-        }
-        return count;
-    }
-
-    private boolean isConnectedBridge(QuaxBoard board, int row, int col, QuaxBoard.TileOwner colour) {
-        int[][] neighbors = {
-                {row, col - 1}, {row, col + 1}
-        };
-
-        int connected = 0;
-        for (int[] n : neighbors) {
-            if (board.getTileOwner(n[0], n[1]) == colour) {
-                connected++;
-            }
-        }
-        return connected == 2;
-    }
-
-    private void applyMove(GameState simState, Position move) {
+    public void applyMove(GameState simState, Position move) {
         move.extractPosition();
         int row = move.getRow();
         int col = move.getCol();
+
         QuaxBoard.TileType tileType = simState.getGameBoard().getTileType(row, col);
         simState.makeMove(move, tileType);
     }
 
-    private int negamax(GameState simState, int depth, int alpha, int beta, int colorSign) {
-        if (depth == 0) return colorSign * heuristic(simState);
-
-        ArrayList<Position> legalMoves = simState.getLegalMoves();
-        if (legalMoves.isEmpty()) return colorSign * heuristic(simState);
-
-        int bestValue = -WIN_SCORE;
-        for (Position move : legalMoves) {
-            int eval = -negamaxChild(simState, move, depth, alpha, beta, colorSign);
-            bestValue = Math.max(bestValue, eval);
-            alpha = Math.max(alpha, bestValue);
-            if (alpha >= beta) break;
+    public int minmax(GameState simState, int depth, int alpha, int beta, boolean isMax) {
+        if (depth == 0) {
+            return heuristic(simState);
         }
-        return bestValue;
-    }
+        ArrayList<Position> legalMoves = simState.getLegalMoves();
+        if (legalMoves.isEmpty()) {
+            return heuristic(simState);
+        }
 
-    private int negamaxChild(GameState simState, Position move, int depth, int alpha, int beta, int colorSign) {
-        GameState child = simState.copyState();
-        applyMove(child, move);
-        return negamax(child, depth - 1, -beta, -alpha, -colorSign);
+        if (isMax) {
+            int bestValue = Integer.MIN_VALUE;
+
+            for (Position move : legalMoves) {
+                GameState child = simState.copyState();
+                applyMove(child, move);
+
+                int eval = minmax(child, depth - 1, alpha, beta, false);
+                bestValue = Math.max(bestValue, eval);
+                alpha = Math.max(alpha, bestValue);
+
+                if (beta <= alpha) break;
+            }
+
+            return bestValue;
+        } else {
+            int bestValue = Integer.MAX_VALUE;
+
+            for (Position move : legalMoves) {
+                GameState child = simState.copyState();
+                applyMove(child, move);
+                int eval = minmax(child, depth - 1, alpha, beta, true);
+                bestValue = Math.min(bestValue, eval);
+                beta = Math.min(beta, bestValue);
+
+                if (beta <= alpha) break;
+            }
+
+            return bestValue;
+        }
     }
 }

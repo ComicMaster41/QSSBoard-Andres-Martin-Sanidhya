@@ -1,134 +1,93 @@
 package comp20050.qssboard;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
 public class Dijkstra {
     private static final int INF = 1_000_000;
-    private static final int OWN_TILE_COST = 0;
-    private static final int EMPTY_TILE_COST = 1;
-    private static final int BLOCKED = INF;
-
-    private static class SearchContext {
-        final GameState state;
-        final QuaxBoard.TileOwner colour;
-        final int[][] distance;
-        final PriorityQueue<Bot.Node> queue;
-
-        SearchContext(GameState state, QuaxBoard.TileOwner colour) {
-            this.state = state;
-            this.colour = colour;
-            this.distance = initialiseDistanceGrid();
-            this.queue = new PriorityQueue<>(Comparator.comparingInt(Bot.Node::getDist));
-        }
-    }
-
+    // Dijkstra shortest path:
+    // own tile = cost 0
+    // empty tile = cost 1
+    // opponent tile = blocked
     public static int computeDistance(GameState simState, QuaxBoard.TileOwner colour) {
-        SearchContext ctx = new SearchContext(simState, colour);
-        seedStartingEdge(ctx);
-        return runDijkstra(ctx);
-    }
+        int rows = Tile.NUM_ROWS;
+        int cols = Tile.NUM_COLS;
 
-    private static int[][] initialiseDistanceGrid() {
-        int[][] distance = new int[Tile.NUM_ROWS][Tile.NUM_COLS];
-        for (int[] row : distance) Arrays.fill(row, INF);
-        return distance;
-    }
+        int[][] dist = new int[rows][cols];
 
-    private static void seedStartingEdge(SearchContext ctx) {
-        if (ctx.colour == QuaxBoard.TileOwner.BLACK) {
-            for (int col = 0; col < Tile.NUM_COLS; col++){
-                seedTile(ctx, 0, col);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                dist[i][j] = INF;
+            }
+        }
+
+        PriorityQueue<Bot.Node> pq = new PriorityQueue<>(Comparator.comparingInt(Bot.Node::getDist));
+
+        // Seed starting side
+        if (colour == QuaxBoard.TileOwner.BLACK) {
+            // BLACK tries top -> bottom
+            for (int col = 0; col < cols; col++) {
+                int cost = tileCost(simState, 0, col, colour);
+                if (cost < INF) {
+                    dist[0][col] = cost;
+                    pq.add(new Bot.Node(0, col, cost));
+                }
             }
         } else {
-            for (int row = 0; row < Tile.NUM_ROWS; row++) {
-                seedTile(ctx, row, 0);
-            }
-        }
-    }
-
-    private static void floodFillOwnedTiles(SearchContext ctx, boolean isBlack) {
-        // Keep expanding through owned tiles at cost 0
-        // using a simple BFS through the already-seeded queue entries
-        PriorityQueue<Bot.Node> tempQueue = new PriorityQueue<>(
-                Comparator.comparingInt(Bot.Node::getDist));
-
-        // Find all already-seeded tiles that are owned
-        for (int row = 0; row < Tile.NUM_ROWS; row++) {
-            for (int col = 0; col < Tile.NUM_COLS; col++) {
-                if (ctx.distance[row][col] == 0) {
-                    tempQueue.add(new Bot.Node(row, col, 0));
+            // WHITE tries left -> right
+            for (int row = 0; row < rows; row++) {
+                int cost = tileCost(simState, row, 0, colour);
+                if (cost < INF) {
+                    dist[row][0] = cost;
+                    pq.add(new Bot.Node(row, 0, cost));
                 }
             }
         }
 
-        // Expand through connected owned tiles
-        while (!tempQueue.isEmpty()) {
-            Bot.Node current = tempQueue.poll();
-            for (int[] neighbour : ctx.state.getNeighbours(
-                    current.getRow(), current.getCol())) {
-                int nr = neighbour[0];
-                int nc = neighbour[1];
-                if (ctx.distance[nr][nc] == 0) continue; // already seeded
-                QuaxBoard.TileOwner owner =
-                        ctx.state.getGameBoard().getTileOwner(nr, nc);
-                if (owner == ctx.colour) {
-                    ctx.distance[nr][nc] = 0;
-                    ctx.queue.add(new Bot.Node(nr, nc, 0));
-                    tempQueue.add(new Bot.Node(nr, nc, 0));
+        while (!pq.isEmpty()) {
+            Bot.Node cur = pq.poll();
+
+            if (cur.getDist() != dist[cur.getRow()][cur.getCol()]) {
+                continue; // stale entry
+            }
+
+            for (int[] n : simState.getNeighbours(cur.getRow(), cur.getCol())) {
+                int nr = n[0];
+                int nc = n[1];
+
+                int stepCost = tileCost(simState, nr, nc, colour);
+                if (stepCost >= INF) continue;
+
+                int newDist = cur.getDist() + stepCost;
+
+                if (newDist < dist[nr][nc]) {
+                    dist[nr][nc] = newDist;
+                    pq.add(new Bot.Node(nr, nc, newDist));
                 }
             }
-        }
-    }
 
-    private static void seedTile(SearchContext ctx, int row, int col) {
-        int cost = tileCost(ctx, row, col);
-        if (cost >= BLOCKED) return;
-        ctx.distance[row][col] = cost;
-        ctx.queue.add(new Bot.Node(row, col, cost));
-    }
-
-    private static int runDijkstra(SearchContext ctx) {
-        while (!ctx.queue.isEmpty()) {
-            Bot.Node current = ctx.queue.poll();
-            if (isStaleEntry(ctx, current)) continue;
-            if (hasReachedGoalEdge(ctx, current)) return current.getDist();
-            relaxNeighbours(ctx, current);
+            if (colour == QuaxBoard.TileOwner.BLACK && cur.getRow() == rows - 1) {
+                return cur.getDist();
+            }
+            if (colour == QuaxBoard.TileOwner.WHITE && cur.getCol() == cols - 1) {
+                return cur.getDist();
+            }
         }
+
         return INF;
     }
 
-    private static boolean isStaleEntry(SearchContext ctx, Bot.Node current) {
-        return current.getDist() != ctx.distance[current.getRow()][current.getCol()];
-    }
+    private static int tileCost(GameState simState, int row, int col, QuaxBoard.TileOwner colour) {
+        QuaxBoard.TileOwner owner = simState.getGameBoard().getTileOwner(row, col);
 
-    private static boolean hasReachedGoalEdge(SearchContext ctx, Bot.Node current) {
-        if (ctx.colour == QuaxBoard.TileOwner.BLACK) return current.getRow() == Tile.NUM_ROWS - 1;
-        return current.getCol() == Tile.NUM_COLS - 1;
-    }
-
-    private static void relaxNeighbours(SearchContext ctx, Bot.Node current) {
-        for (int[] neighbour : ctx.state.getNeighbours(current.getRow(), current.getCol())) {
-            relaxNeighbour(ctx, current, neighbour[0], neighbour[1]);
+        if (owner == colour) {
+            return 0;
         }
-    }
 
-    private static void relaxNeighbour(SearchContext ctx, Bot.Node current, int row, int col) {
-        int stepCost = tileCost(ctx, row, col);
-        if (stepCost >= BLOCKED) return;
+        if (simState.getGameBoard().isTileEmpty(row, col)) {
+            return 1;
+        }
 
-        int newDistance = current.getDist() + stepCost;
-        if (newDistance >= ctx.distance[row][col]) return;
-
-        ctx.distance[row][col] = newDistance;
-        ctx.queue.add(new Bot.Node(row, col, newDistance));
-    }
-
-    private static int tileCost(SearchContext ctx, int row, int col) {
-        QuaxBoard.TileOwner owner = ctx.state.getGameBoard().getTileOwner(row, col);
-        if (owner == ctx.colour) return OWN_TILE_COST;
-        if (ctx.state.getGameBoard().isTileEmpty(row, col)) return EMPTY_TILE_COST;
-        return BLOCKED;
+        return INF;
     }
 }

@@ -2,108 +2,387 @@ package comp20050.qssboard;
 
 import java.util.ArrayList;
 
+
 import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
+import javafx.scene.paint.Color;
+import javafx.scene.control.Label;
+import org.jetbrains.annotations.NotNull;
+
 
 public class HelloController {
-    private static final double BOT_THINK_DELAY_MS = 1000;
-    private static final double POST_GAME_PAUSE_MS = 2000;
-    private static final double LAYOUT_SETTLE_DELAY_MS = 100;
-    private static final String OCTAGON_CELL_HEX = "#c98c07";
-    private static final String RHOMBUS_CELL_HEX = "#ffb91f";
 
-    private GameState state = new GameState();
+    // Functions from backend - logic for handling the player
+    GameState state = new GameState();
+
+    /**
+     * If true, the bot plays white (P2) this game; if false, black (P1).
+     * Flips each time a game ends and {@link #restartGame()} runs, so the bot alternates colours every round.
+     */
     private boolean botHasWhiteStones = true;
-    private boolean inputEnabled = true;
-    private boolean show = false;
-    private boolean gameOver = false;
-    private int movesMade = 0;
 
-    private final Color colorP1 = Color.BLACK;
-    private final Color colorP2 = Color.WHITE;
-    private final Color bestMoveColor = Color.GREEN;
-    private final Color otherMoveColor = Color.RED;
+    boolean inputEnabled = true;
+    // colours of different players
+    Color colorP1 = Color.BLACK;
+    Color colorP2 = Color.WHITE;
+    Color colorShowStrategy = Color.GREEN;
 
-    private GameState.Player winner = null;
-    private Position moveMadeId;
-    private Polygon botLastPlacedCell;
-    private GameState.Player botLastPlacedPlayer;
-    private StrategyVisualizer strategyVisualizer;
+    private Polygon lastBestCell;
+    private Position hintMove; // the move the bot would make next, shown as green hint
 
-    @FXML protected Group ShapeLayout;
-    @FXML protected Polygon OctCell_turn;
-    @FXML protected Polygon Rhombus_turn;
-    @FXML protected Polygon green_oct;
-    @FXML protected Label turnLabel;
-    @FXML protected Label showLabel;
-    @FXML protected Label showLabel1;
-    @FXML protected Label showLabel2;
-    @FXML protected Label showLabel3;
-    @FXML protected Line line1;
-    @FXML protected Line line2;
-    @FXML protected Button activatePieButton;
-    @FXML protected Button activateShowStrategyButton;
-    @FXML protected Pane overlayPane;
+    Position moveMadeId;
+    @FXML
+    protected Group ShapeLayout;
+
+    @FXML // fx:id="OctCell_r0_c0"
+    protected Polygon OctCell_turn;
+
+    @FXML // fx:id="OctCell_r0_c0"
+    protected Polygon Rhombus_turn;
 
     @FXML
-    void initialize() {
-        strategyVisualizer = new StrategyVisualizer(overlayPane, ShapeLayout, bestMoveColor, otherMoveColor);
-        configureNonInteractiveCells();
-        hideStrategyLabels();
-        resetTurnDisplay();
-        if (state.getCurrentPlayer() == botSeat()) scheduleBotMove();
+    protected Polygon green_oct;
+
+    @FXML
+    protected Label turnLabel;
+
+    @FXML
+    protected Label showLabel;
+
+    @FXML
+    protected Label showLabel1;
+
+    @FXML
+    protected Label showLabel2;
+    @FXML
+    protected Label showLabel3;
+    @FXML
+    protected Line line1;
+    @FXML
+    protected Line line2;
+
+    // Create button variable
+    @FXML
+    protected Button activatePieButton;
+
+    @FXML
+    protected Button activateShowStrategyButton;
+
+    @FXML
+    protected Pane overlayPane;
+
+
+    int moves_made = 0;
+    boolean gameOver = false;
+    static boolean Show = false;
+
+    public boolean getShow() {
+        return this.Show;
+    }
+
+    public void setShow(boolean show) {
+        this.Show = show;
+    }
+
+    GameState.Player winner = null;
+
+    private final ArrayList<Node> strategyVisuals = new ArrayList<>();
+
+
+    private GameState.Player botSeat() {
+        return botHasWhiteStones ? GameState.Player.P2 : GameState.Player.P1;
+    }
+
+    // AI-Gen suggestion so that we can test this functionality
+    QuaxBoard.TileType getTileTypeFromId(String id) {
+        if (id.charAt(0) == 'R') {
+            return QuaxBoard.TileType.RHOMBUS;
+        }
+        return QuaxBoard.TileType.OCTAGON;
     }
 
     @FXML
     void getCellID(MouseEvent event) {
-        handleCellSelection((Polygon) event.getSource());
+        Polygon cell = (Polygon) event.getSource();
+        handleCellSelection(cell);
     }
 
     @FXML
     void handleCellSelection(Polygon cell) {
-        if (gameOver || !inputEnabled) return;
+        if (gameOver || !inputEnabled) return; // block clicks during bot move
+
+        clearHint(); // always clear the green hint before processing any move
 
         Position pos = new Position(cell.getId());
         moveMadeId = pos;
-        QuaxBoard.TileType tileType = tileTypeFromId(cell.getId());
+        QuaxBoard.TileType tile_type = getTileTypeFromId(cell.getId());
 
         GameState.Player playerBeforeMove = state.getCurrentPlayer();
-        if (!state.makeMove(pos, tileType)) return;
-
-        paintCell(cell, playerBeforeMove);
-
-        if (didPlayerWin(playerBeforeMove)) {
-            handleGameOver(playerBeforeMove);
+        boolean success = state.makeMove(pos, tile_type);
+        if (!success) {
             return;
         }
 
-        movesMade++;
+        paintCell(cell, playerBeforeMove);
+
+        // check win using the player who just moved, before the turn switched
+        if (state.checkWin(state.getGameBoard().getColor(playerBeforeMove))) {
+            gameOver = true;
+            winner = playerBeforeMove;
+            updateTurnDisplay();
+            PauseTransition pause = new PauseTransition(Duration.millis(2000));
+            pause.setOnFinished(event -> {restartGame();});
+            pause.play();
+            return;
+        }
+
+        moves_made++;
         updateTurnDisplay();
         refreshPieButtonVisibility();
 
-        if (state.getCurrentPlayer() == botSeat()) scheduleBotMove();
+        if (state.getCurrentPlayer() == botSeat()) {
+            setInputEnabled(false); // lock UI
+
+            PauseTransition pause = new PauseTransition(Duration.millis(1000));
+            pause.setOnFinished(e -> {
+                makeBotMove();
+                setInputEnabled(true); // unlock UI after bot moves
+            });
+            pause.play();
+        }
+    }
+
+    private void setInputEnabled(boolean enabled) {
+        inputEnabled = enabled;
+        // Disable all clickable cells
+        for (Node node : ShapeLayout.getChildren()) {
+            if (node instanceof Polygon) {
+                node.setMouseTransparent(!enabled);
+            }
+        }
+        // Disable pie button too
+        activatePieButton.setMouseTransparent(!enabled);
+    }
+
+    /** Computes what the bot would do next and stores it as hintMove. Shows it green if Show is on. */
+    private void computeAndShowHint() {
+        Bot hintBot = new Bot(state, moveMadeId, botSeat());
+        Position nextMove = hintBot.chooseMove();
+        hintMove = nextMove;
+        if (getShow() && hintMove != null) {
+            showHint();
+        }
+    }
+
+    /** Colours the hintMove tile green and stores it in lastBestCell. */
+    private void showHint() {
+        if (hintMove == null) return;
+        Polygon cell = (Polygon) ShapeLayout.lookup("#" + hintMove.getRawPosition());
+        if (cell == null) return;
+        cell.setFill(colorShowStrategy);
+        lastBestCell = cell;
+    }
+
+    /** Clears the green hint tile back to its correct colour and removes strategy visuals. */
+    private void clearHint() {
+        if (lastBestCell != null) {
+            Position p = new Position(lastBestCell.getId());
+            QuaxBoard.TileOwner owner = state.getGameBoard().getTileOwner(p.getRow(), p.getCol());
+            if (owner == null) {
+                lastBestCell.setFill(Paint.valueOf(p.getCol() % 2 == 0 ? "#c98c07" : "#ffb91f"));
+            } else {
+                lastBestCell.setFill(owner == state.getGameBoard().getColor(GameState.Player.P1) ? colorP1 : colorP2);
+            }
+            lastBestCell = null;
+        }
+        hintMove = null;
+        clearStrategyVisuals();
+    }
+
+    /** Removes connector lines and score labels from the overlay pane. */
+    private void clearStrategyVisuals() {
+        for (Node node : strategyVisuals) {
+            overlayPane.getChildren().remove(node);
+        }
+        strategyVisuals.clear();
+    }
+
+    public Polygon drawStrategy(Bot bot) {
+        Polygon returnPoly = null;
+
+        if (moveMadeId == null) return null;
+
+        QuaxBoard.TileOwner botColor = state.getGameBoard().getColor(botSeat());
+        boolean horizontalPaths = (botColor == QuaxBoard.TileOwner.WHITE);
+
+        double rightMarginX = computeRightMarginX();
+        double topMarginY   = computeTopMarginY();
+
+        Point2D originCenter = cellCenterInOverlay(moveMadeId);
+        if (originCenter == null) return null;
+
+        ArrayList<Bot.ScoredMove> moves = bot.getScoredMoves();
+        double spacing = 12.0;
+
+        // Pass 1: count how many candidates share each track (column for black-bot, row for white-bot)
+        java.util.Map<Integer, Integer> trackCount = new java.util.HashMap<>();
+        for (Bot.ScoredMove m : moves) {
+            if (m.getMove() == null) continue;
+            int track = horizontalPaths ? m.getMove().getRow() : m.getMove().getCol();
+            trackCount.merge(track, 1, Integer::sum);
+        }
+
+        // Pass 2: render, assigning each candidate an index within its track group
+        java.util.Map<Integer, Integer> trackIndex = new java.util.HashMap<>();
+
+        for (int index = moves.size() - 1; index >= 0; index--) {
+            Bot.ScoredMove m = moves.get(index);
+            if (m.getMove() == null) continue;
+
+            int track = horizontalPaths ? m.getMove().getRow() : m.getMove().getCol();
+            int groupSize = trackCount.get(track);
+            int posInGroup = trackIndex.merge(track, 1, Integer::sum) - 1; // 0-based
+
+            // Symmetric spread around 0: singleton -> 0, pair -> ±spacing/2, triple -> -s, 0, +s
+            double lateralOffset = (posInGroup - (groupSize - 1) / 2.0) * spacing;
+
+            boolean isBest = (index == 0);
+            Color pathColor = isBest ? Color.GREEN : Color.RED;
+
+            if (isBest) {
+                Polygon bestCell = (Polygon) ShapeLayout.lookup("#" + m.getMove().getRawPosition());
+                if (bestCell != null) {
+                    bestCell.setFill(colorShowStrategy);
+                    returnPoly = bestCell;
+                }
+                Point2D bestCenter = cellCenterInOverlay(m.getMove());
+                if (bestCenter != null) {
+                    drawWeightWithConnector(bestCenter, m.getScore(), pathColor,
+                            horizontalPaths, rightMarginX, topMarginY, lateralOffset);
+                }
+                continue;
+            }
+
+            Point2D toCenter = cellCenterInOverlay(m.getMove());
+            if (toCenter == null) continue;
+
+            drawWeightWithConnector(toCenter, m.getScore(), pathColor,
+                    horizontalPaths, rightMarginX, topMarginY, lateralOffset);
+        }
+
+        return returnPoly;
+    }
+
+    private void drawWeightWithConnector(Point2D endpoint, int score, Color color,
+                                         boolean horizontalPaths,
+                                         double rightMarginX, double topMarginY,
+                                         double lateralOffset) {
+        double labelX, labelY;
+        double lineStartX, lineStartY;
+        double lineEndX, lineEndY;
+
+        if (horizontalPaths) {
+            // White bot: connector runs horizontally, offset vertically
+            lineStartX = endpoint.getX();
+            lineStartY = endpoint.getY() + lateralOffset;
+            lineEndX   = rightMarginX;
+            lineEndY   = endpoint.getY() + lateralOffset;
+            labelX     = rightMarginX + 6;
+            labelY     = endpoint.getY() + lateralOffset + 5;
+        } else {
+            // Black bot: connector runs vertically, offset horizontally
+            lineStartX = endpoint.getX() + lateralOffset;
+            lineStartY = endpoint.getY();
+            lineEndX   = endpoint.getX() + lateralOffset;
+            lineEndY   = topMarginY;
+            labelX     = endpoint.getX() + lateralOffset;
+            labelY     = topMarginY - 15;
+        }
+
+        Line connector = new Line(lineStartX, lineStartY, lineEndX, lineEndY);
+        connector.setStroke(color);
+        connector.setStrokeWidth(1.5);
+        connector.setMouseTransparent(true);
+        overlayPane.getChildren().add(connector);
+        strategyVisuals.add(connector);
+
+        Text weightText = new Text(String.valueOf(score));
+        weightText.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        weightText.setFill(color);
+        double textWidth = weightText.getLayoutBounds().getWidth();
+        weightText.setX(labelX - textWidth / 2);
+        weightText.setY(labelY);
+        weightText.setMouseTransparent(true);
+        overlayPane.getChildren().add(weightText);
+        strategyVisuals.add(weightText);
+    }
+
+    private Point2D cellCenterInOverlay(Position p) {
+        Polygon cell = (Polygon) ShapeLayout.lookup("#" + p.getRawPosition());
+        if (cell == null) return null;
+        Point2D scene = cell.localToScene(
+                cell.getBoundsInLocal().getCenterX(),
+                cell.getBoundsInLocal().getCenterY()
+        );
+        return overlayPane.sceneToLocal(scene);
+    }
+
+    private double computeRightMarginX() {
+        double maxX = 0;
+        for (Node node : ShapeLayout.getChildren()) {
+            if (node instanceof Polygon) {
+                Polygon p = (Polygon) node;
+                Point2D scene = p.localToScene(
+                        p.getBoundsInLocal().getMaxX(),
+                        p.getBoundsInLocal().getCenterY()
+                );
+                double x = overlayPane.sceneToLocal(scene).getX();
+                if (x > maxX) maxX = x;
+            }
+        }
+        return maxX + 20; // padding past the board
+    }
+
+    private double computeTopMarginY() {
+        double minY = Double.MAX_VALUE;
+        for (Node node : ShapeLayout.getChildren()) {
+            if (node instanceof Polygon) {
+                Polygon p = (Polygon) node;
+                Point2D scene = p.localToScene(
+                        p.getBoundsInLocal().getCenterX(),
+                        p.getBoundsInLocal().getMinY()
+                );
+                double y = overlayPane.sceneToLocal(scene).getY();
+                if (y < minY) minY = y;
+            }
+        }
+        return minY - 40;
     }
 
     public void makeBotMove() {
         if (gameOver) return;
         Bot bot = new Bot(state, moveMadeId, botSeat());
 
-        if (shouldOfferPie()) {
+        // Pie is only for White (P2) after Black's opening; do not treat P1's first reply as a pie turn.
+        if (moves_made == 1 && state.getCurrentPlayer() == GameState.Player.P2) {
+            boolean pressButton = bot.decideToPressPie();
             activatePieButton.setVisible(true);
-            if (bot.decideToPressPie()) {
+            if (pressButton) {
                 handlePieButtonClick();
-                if (show) botLastPlacedCell = renderStrategy(bot);
+                computeAndShowHint();
                 return;
             }
         }
@@ -111,210 +390,194 @@ public class HelloController {
         Position botMove = bot.chooseMove();
         if (botMove == null) return;
 
-        applyBotMoveToBoard(bot, botMove);
-    }
-
-    private void applyBotMoveToBoard(Bot bot, Position botMove) {
         moveMadeId = botMove;
+        String botMoveID = botMove.getRawPosition();
         activatePieButton.setVisible(false);
 
         GameState.Player playerBeforeMove = state.getCurrentPlayer();
-        QuaxBoard.TileType tileType = tileTypeFromId(botMove.getRawPosition());
-        if (!state.makeMove(botMove, tileType)) {
-            throw new IllegalStateException("Bot produced an illegal move: " + botMove.getRawPosition());
+        QuaxBoard.TileType botTileType = getTileTypeFromId(botMove.getRawPosition());
+        if (!state.makeMove(botMove, botTileType)) {
+            throw new IllegalArgumentException("Error making bot move");
         }
 
-        strategyVisualizer.clear();
+        // Clear any leftover strategy visuals from previous turn
+        clearStrategyVisuals();
 
-        // Repaint the previously-green bot cell back to bot's actual color
-        if (botLastPlacedCell != null) {
-            paintCell(botLastPlacedCell, playerBeforeMove);
-        }
+        // Paint bot's move as bot's actual colour immediately — no green
+        Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMoveID);
+        paintCell(cell, playerBeforeMove);
 
-
-        Polygon cell = (Polygon) ShapeLayout.lookup("#" + botMove.getRawPosition());
-        cell.setFill(bestMoveColor);
-        botLastPlacedCell = cell;
-        botLastPlacedPlayer = playerBeforeMove;
-
-
-        if (didPlayerWin(playerBeforeMove)) {
-            paintCell(cell, botLastPlacedPlayer); // restore actual color before showing winner
-            handleGameOver(playerBeforeMove);
+        // Check win
+        if (state.checkWin(state.getGameBoard().getColor(playerBeforeMove))) {
+            gameOver = true;
+            winner = playerBeforeMove;
+            updateTurnDisplay();
+            PauseTransition pause = new PauseTransition(Duration.millis(2000));
+            pause.setOnFinished(event -> restartGame());
+            pause.play();
             return;
         }
 
-        if (show) scheduleStrategyRender(bot);
-
-        movesMade++;
+        moves_made++;
         updateTurnDisplay();
         refreshPieButtonVisibility();
+
+        // It's now the player's turn — compute and show the hint
+        computeAndShowHint();
     }
+
+    /** Pie is offered to White (P2) once Black's (P1's) opening stone is on the board. */
+    private void refreshPieButtonVisibility() {
+        activatePieButton.setVisible(
+                moves_made == 1 && state.getCurrentPlayer() == GameState.Player.P2);
+    }
+
+
+    private void updateTurnDisplay() {
+        GameState.Player current = state.getCurrentPlayer();
+
+        if (!gameOver) {
+            if (current == GameState.Player.P1) {
+                OctCell_turn.setFill(colorP1);
+                Rhombus_turn.setFill(colorP1);
+                turnLabel.setText((colorP1 == Color.BLACK ? "Black" : "White") + " to play");
+            } else if (current == GameState.Player.P2) {
+                OctCell_turn.setFill(colorP2);
+                Rhombus_turn.setFill(colorP2);
+                turnLabel.setText((colorP2 == Color.BLACK ? "Black" : "White") + " to play");
+            }
+        } else {
+            Color winnerColor = (winner == GameState.Player.P1) ? colorP1 : colorP2;
+            OctCell_turn.setFill(winnerColor);
+            Rhombus_turn.setFill(winnerColor);
+            turnLabel.setText((winnerColor == Color.BLACK ? "Black" : "White") + " is the winner");
+        }
+    }
+
+    @FXML // This method is called by the FXMLLoader when initialization is complete
+    void initialize() {
+        OctCell_turn.setOnMouseClicked(null);
+        Rhombus_turn.setOnMouseClicked(null);
+        OctCell_turn.setMouseTransparent(true);
+        Rhombus_turn.setMouseTransparent(true);
+        activatePieButton.setVisible(false);
+        overlayPane.setMouseTransparent(true);
+        green_oct.setOnMouseClicked(null);
+        green_oct.setVisible(false);
+        // just to give initla white colour
+        OctCell_turn.setFill(colorP1);
+        Rhombus_turn.setFill(colorP1);
+        turnLabel.setText("Black to play");
+        showLabel.setVisible(false);
+        showLabel1.setVisible(false);
+        showLabel2.setVisible(false);
+        showLabel3.setVisible(false);
+        line1.setVisible(false);
+        line2.setVisible(false);
+
+        if (state.getCurrentPlayer() == botSeat()) {
+            setInputEnabled(false); // lock UI
+
+            PauseTransition pause = new PauseTransition(Duration.millis(1000));
+            pause.setOnFinished(e ->  {
+                makeBotMove();
+                setInputEnabled(true); // unlock UI after bot moves
+            });
+            pause.play();
+        }
+
+    }
+
 
     @FXML
     public void handlePieButtonClick() {
+
+
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + moveMadeId.getRawPosition());
         state.getGameBoard().changeTileOwner(moveMadeId.getRow(), moveMadeId.getCol(), GameState.Player.P2);
         paintCell(cell, GameState.Player.P2);
-        state.setCurrentPlayer(GameState.Player.P1);
+        state.setCurrentPlayer(GameState.Player.P1); // Black to play (opening stone is now White's)
         updateTurnDisplay();
         refreshPieButtonVisibility();
 
-        if (state.getCurrentPlayer() == botSeat()) scheduleBotMove();
+        // if it's bot turn after white presses pie button, then make bot move
+        if (state.getCurrentPlayer() == botSeat()) {
+            setInputEnabled(false);
+            PauseTransition pause = new PauseTransition(Duration.millis(1000));
+            pause.setOnFinished(e -> {
+                makeBotMove();
+                setInputEnabled(true);
+            });
+            pause.play();
+        }
     }
-
     @FXML
     public void handleShowStrategyButtonClick() {
-        show = !show;
-        overlayPane.setVisible(show);
-        activateShowStrategyButton.setText(show ? "Hide Strategy" : "Show Strategy");
-        setStrategyLabelsVisible(show);
+        setShow(!Show);
+        overlayPane.setVisible(Show);
+        activateShowStrategyButton.setText(Show ? "Hide Strategy" : "Show Strategy");
+        if (Show) {
+            green_oct.setVisible(true);
+            showLabel.setVisible(true);
+            showLabel1.setVisible(true);
+            showLabel2.setVisible(true);
+            showLabel3.setVisible(true);
+            line1.setVisible(true);
+            line2.setVisible(true);
+            // Show hint immediately if it's the player's turn and hint is ready
+            if (hintMove != null && state.getCurrentPlayer() != botSeat()) {
+                showHint();
+            }
+        } else {
+            green_oct.setVisible(false);
+            showLabel.setVisible(false);
+            showLabel1.setVisible(false);
+            showLabel2.setVisible(false);
+            showLabel3.setVisible(false);
+            line1.setVisible(false);
+            line2.setVisible(false);
+            clearHint();
+        }
     }
+
 
     public void restartGame() {
         botHasWhiteStones = !botHasWhiteStones;
         state = new GameState();
         inputEnabled = true;
-        movesMade = 0;
+        colorP1 = Color.BLACK;
+        colorP2 = Color.WHITE;
+        moves_made = 0;
         gameOver = false;
-        show = false;
-        winner = null;
-        moveMadeId = null;
-        botLastPlacedCell = null; // add this
+        Show = false;
         activateShowStrategyButton.setText("Show Strategy");
         overlayPane.setVisible(true);
-        botLastPlacedPlayer = null;
+        winner = null;
+        state.setCurrentPlayer(GameState.Player.P1);
+        moveMadeId = null;
+        lastBestCell = null;
+        hintMove = null;
         resetCellColours();
         initialize();
     }
 
-    private void scheduleBotMove() {
-        setInputEnabled(false);
-        PauseTransition pause = new PauseTransition(Duration.millis(BOT_THINK_DELAY_MS));
-        pause.setOnFinished(event -> {
-            makeBotMove();
-            setInputEnabled(true);
-        });
-        pause.play();
-    }
-
-    private void scheduleStrategyRender(Bot bot) {
-        PauseTransition pause = new PauseTransition(Duration.millis(LAYOUT_SETTLE_DELAY_MS));
-        pause.setOnFinished(event -> renderStrategy(bot));
-        pause.play();
-    }
-
-    private Polygon renderStrategy(Bot bot) {
-        if (moveMadeId == null) return null;
-        QuaxBoard.TileOwner botColor = state.getGameBoard().getColor(botSeat());
-        boolean horizontalPaths = botColor == QuaxBoard.TileOwner.WHITE;
-        return strategyVisualizer.render(bot.getScoredMoves(), horizontalPaths);
-    }
-
-    private void handleGameOver(GameState.Player victor) {
-        gameOver = true;
-        winner = victor;
-        updateTurnDisplay();
-        PauseTransition pause = new PauseTransition(Duration.millis(POST_GAME_PAUSE_MS));
-        pause.setOnFinished(event -> restartGame());
-        pause.play();
-    }
-
-    private boolean didPlayerWin(GameState.Player player) {
-        return state.checkWin(state.getGameBoard().getColor(player));
-    }
-
-    private boolean shouldOfferPie() {
-        return movesMade == 1 && state.getCurrentPlayer() == GameState.Player.P2;
-    }
-
-    private void refreshPieButtonVisibility() {
-        activatePieButton.setVisible(shouldOfferPie());
-    }
-
-    private void setInputEnabled(boolean enabled) {
-        inputEnabled = enabled;
-        for (Node node : ShapeLayout.getChildren()) {
-            if (node instanceof Polygon) node.setMouseTransparent(!enabled);
-        }
-        activatePieButton.setMouseTransparent(!enabled);
-    }
-
-    private void updateTurnDisplay() {
-        if (gameOver) {
-            displayWinner();
-        } else {
-            displayCurrentPlayerTurn();
-        }
-    }
-
-    private void displayWinner() {
-        Color winnerColor = winner == GameState.Player.P1 ? colorP1 : colorP2;
-        OctCell_turn.setFill(winnerColor);
-        Rhombus_turn.setFill(winnerColor);
-        turnLabel.setText(colorName(winnerColor) + " is the winner");
-    }
-
-    private void displayCurrentPlayerTurn() {
-        Color playerColor = state.getCurrentPlayer() == GameState.Player.P1 ? colorP1 : colorP2;
-        OctCell_turn.setFill(playerColor);
-        Rhombus_turn.setFill(playerColor);
-        turnLabel.setText(colorName(playerColor) + " to play");
-    }
-
-    private String colorName(Color color) {
-        return color == Color.BLACK ? "Black" : "White";
-    }
-
-    private void configureNonInteractiveCells() {
-        OctCell_turn.setOnMouseClicked(null);
-        Rhombus_turn.setOnMouseClicked(null);
-        OctCell_turn.setMouseTransparent(true);
-        Rhombus_turn.setMouseTransparent(true);
-        green_oct.setOnMouseClicked(null);
-        green_oct.setVisible(false);
-        activatePieButton.setVisible(false);
-        overlayPane.setMouseTransparent(true);
-    }
-
-    private void resetTurnDisplay() {
-        OctCell_turn.setFill(colorP1);
-        Rhombus_turn.setFill(colorP1);
-        turnLabel.setText("Black to play");
-    }
-
-    private void hideStrategyLabels() {
-        setStrategyLabelsVisible(false);
-    }
-
-    private void setStrategyLabelsVisible(boolean visible) {
-        showLabel.setVisible(visible);
-        showLabel1.setVisible(visible);
-        showLabel2.setVisible(visible);
-        showLabel3.setVisible(visible);
-        line1.setVisible(visible);
-        line2.setVisible(visible);
-        green_oct.setVisible(visible);
-    }
-
     public void resetCellColours() {
+        int col;
         for (Node node : ShapeLayout.getChildren()) {
-            if (!(node instanceof Polygon polygon)) continue;
-            Position pos = new Position(node.getId());
-            String hex = pos.getCol() % 2 == 0 ? OCTAGON_CELL_HEX : RHOMBUS_CELL_HEX;
-            polygon.setFill(Paint.valueOf(hex));
+            if (node instanceof Polygon) {
+                Position pos = new Position(node.getId());
+                col = pos.getCol();
+                if (col % 2 == 0) {
+                    ((Polygon) node).setFill(Paint.valueOf("#c98c07"));
+                }
+                else {
+                    ((Polygon) node).setFill(Paint.valueOf("#ffb91f"));
+                }
+            }
         }
     }
 
     public void paintCell(Polygon cell, GameState.Player player) {
         cell.setFill(player == GameState.Player.P1 ? colorP1 : colorP2);
-    }
-
-    private GameState.Player botSeat() {
-        return botHasWhiteStones ? GameState.Player.P2 : GameState.Player.P1;
-    }
-
-    private QuaxBoard.TileType tileTypeFromId(String id) {
-        return id.charAt(0) == 'R' ? QuaxBoard.TileType.RHOMBUS : QuaxBoard.TileType.OCTAGON;
     }
 }
