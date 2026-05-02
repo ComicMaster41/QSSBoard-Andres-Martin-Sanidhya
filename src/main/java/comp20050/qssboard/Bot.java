@@ -2,13 +2,11 @@ package comp20050.qssboard;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.PriorityQueue;
 
 public class Bot {
     public GameState state;
     private Position lastMoveMadeId;
     private final GameState.Player botPlayer;
-    private static final int INF = 1_000_000;
 
     public Bot(GameState.Player botPlayer) {
         this.botPlayer = botPlayer;
@@ -58,9 +56,7 @@ public class Bot {
 
     public ArrayList<ScoredMove> getScoredMoves() { return scoredMoves; }
 
-    public void setBestmove(Position bestMove) { this.bestMove = bestMove; }
-
-    // Called by HelloController as bot.chooseMove()
+    public void setBestMove(Position bestMove) { this.bestMove = bestMove; }
     public Position chooseMove() {
         ArrayList<Position> legalMoves = state.getLegalMoves();
 
@@ -70,17 +66,16 @@ public class Bot {
         int depth = 2;
 
         scoredMoves.clear();
-        setBestmove(null);
+        setBestMove(null);
         for (Position move : legalMoves) {
             GameState child = state.copyState();
             applyMove(child, move);
 
             int eval = minmax(child, depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-            int dist = Dijkstra.computeDistance(child, child.getGameBoard().getColor(botPlayer));
-            scoredMoves.add(new ScoredMove(move, dist));
+            scoredMoves.add(new ScoredMove(move, eval)); // use eval
             if (this.bestMove == null || eval > bestValue) {
                 bestValue = eval;
-                setBestmove(move);
+                setBestMove(move);
             }
         }
 
@@ -93,11 +88,7 @@ public class Bot {
     public boolean decideToPressPie() {
         int row = lastMoveMadeId.getRow();
         int col = lastMoveMadeId.getCol();
-
-        if (row == 0 || row == 10 || col == 0 || col == 20 || col % 2 != 0) {
-            return false;
-        }
-        return true;
+        return row != 0 && row != 10 && col != 0 && col != 20 && col % 2 == 0;
     }
 
     public int heuristic(GameState simState) {
@@ -131,35 +122,40 @@ public class Bot {
             return heuristic(simState);
         }
 
-        if (isMax) {
-            int bestValue = Integer.MIN_VALUE;
+        return isMax ? maximize(simState, depth, alpha, beta) : minimize(simState, depth, alpha, beta);
+    }
 
-            for (Position move : legalMoves) {
-                GameState child = simState.copyState();
-                applyMove(child, move);
+    private int maximize(GameState simState, int depth, int alpha, int beta) {
+        int bestValue = Integer.MIN_VALUE;
 
-                int eval = minmax(child, depth - 1, alpha, beta, false);
-                bestValue = Math.max(bestValue, eval);
-                alpha = Math.max(alpha, bestValue);
+        for (Position move : simState.getLegalMoves()) {
+            GameState child = simState.copyState();
+            applyMove(child, move);
 
-                if (beta <= alpha) break;
-            }
+            int eval = minmax(child, depth - 1, alpha, beta, false);
+            bestValue = Math.max(bestValue, eval);
+            alpha = Math.max(alpha, bestValue);
 
-            return bestValue;
-        } else {
-            int bestValue = Integer.MAX_VALUE;
-
-            for (Position move : legalMoves) {
-                GameState child = simState.copyState();
-                applyMove(child, move);
-                int eval = minmax(child, depth - 1, alpha, beta, true);
-                bestValue = Math.min(bestValue, eval);
-                beta = Math.min(beta, bestValue);
-
-                if (beta <= alpha) break;
-            }
-
-            return bestValue;
+            if (beta <= alpha) break;
         }
+
+        return bestValue;
+    }
+
+    private int minimize(GameState simState, int depth, int alpha, int beta) {
+        int bestValue = Integer.MAX_VALUE;
+
+        for (Position move : simState.getLegalMoves()) {
+            GameState child = simState.copyState();
+            applyMove(child, move);
+
+            int eval = minmax(child, depth - 1, alpha, beta, true);
+            bestValue = Math.min(bestValue, eval);
+            beta = Math.min(beta, bestValue);
+
+            if (beta <= alpha) break;
+        }
+
+        return bestValue;
     }
 }

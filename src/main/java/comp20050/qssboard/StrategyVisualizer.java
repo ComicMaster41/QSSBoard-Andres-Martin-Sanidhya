@@ -1,5 +1,7 @@
 package comp20050.qssboard;
 
+import java.util.ArrayList;
+
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -9,187 +11,221 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 public class StrategyVisualizer {
-    private static final double CONNECTOR_SPACING = 12.0;
-    private static final double RIGHT_MARGIN_PADDING = 20.0;
-    private static final double TOP_MARGIN_PADDING = 40.0;
-    private static final double LABEL_OFFSET_FROM_RIGHT_MARGIN = 6.0;
-    private static final double LABEL_BASELINE_OFFSET = 5.0;
-    private static final double LABEL_DROP_FROM_TOP = 15.0;
-    private static final double CONNECTOR_STROKE_WIDTH = 1.5;
-    private static final String LABEL_STYLE = "-fx-font-size: 14px; -fx-font-weight: bold;";
 
     private final Pane overlayPane;
     private final Group shapeLayout;
-    private final Color bestMoveColor;
-    private final Color otherMoveColor;
-    private final ArrayList<Node> visuals = new ArrayList<>();
+    private final java.util.function.Supplier<GameState.Player> botSeatSupplier;
 
-    public StrategyVisualizer(Pane overlayPane, Group shapeLayout, Color bestMoveColor, Color otherMoveColor) {
+    private Polygon lastBestCell;
+    private Position hintMove;
+
+    private final Color colorShowStrategy = Color.GREEN;
+
+    private final ArrayList<Node> strategyVisuals = new ArrayList<>();
+
+    public StrategyVisualizer(Pane overlayPane, Group shapeLayout,
+                              java.util.function.Supplier<GameState.Player> botSeatSupplier) {
         this.overlayPane = overlayPane;
         this.shapeLayout = shapeLayout;
-        this.bestMoveColor = bestMoveColor;
-        this.otherMoveColor = otherMoveColor;
+        this.botSeatSupplier = botSeatSupplier;
     }
 
-    public Polygon render(ArrayList<Bot.ScoredMove> moves, boolean horizontalPaths) {
-        Map<Integer, Integer> trackCounts = countMovesPerTrack(moves, horizontalPaths);
-        Map<Integer, Integer> trackIndices = new HashMap<>();
-        Polygon bestCell = null;
+    public Position getHintMove() {
+        return hintMove;
+    }
+
+    public void computeAndShow(Bot bot, GameState state, Position moveMadeId, boolean show) {
+        Position nextMove = bot.chooseMove();
+        hintMove = nextMove;
+        if (show && hintMove != null) {
+            lastBestCell = drawStrategy(bot, state, moveMadeId);
+        }
+    }
+
+    public void show(GameState state) {
+        if (hintMove == null) return;
+        Polygon cell = (Polygon) shapeLayout.lookup("#" + hintMove.getRawPosition());
+        if (cell == null) return;
+        cell.setFill(colorShowStrategy);
+        lastBestCell = cell;
+    }
+
+    public void clear(GameState state, Color colorP1, Color colorP2) {
+        if (lastBestCell != null) {
+            Position p = new Position(lastBestCell.getId());
+            QuaxBoard.TileOwner owner = state.getGameBoard().getTileOwner(p.getRow(), p.getCol());
+            if (owner == null) {
+                lastBestCell.setFill(javafx.scene.paint.Paint.valueOf(p.getCol() % 2 == 0 ? "#c98c07" : "#ffb91f"));
+            } else {
+                lastBestCell.setFill(owner == state.getGameBoard().getColor(GameState.Player.P1) ? colorP1 : colorP2);
+            }
+            lastBestCell = null;
+        }
+        hintMove = null;
+        clearVisuals();
+    }
+
+    public void clearVisuals() {
+        for (Node node : strategyVisuals) {
+            overlayPane.getChildren().remove(node);
+        }
+        strategyVisuals.clear();
+    }
+
+    public Polygon drawStrategy(Bot bot, GameState state, Position moveMadeId) {
+        if (moveMadeId == null) return null;
+
+        QuaxBoard.TileOwner botColor = state.getGameBoard().getColor(botSeatSupplier.get());
+        boolean horizontalPaths = (botColor == QuaxBoard.TileOwner.WHITE);
+
+        double rightMarginX = computeRightMarginX();
+        double topMarginY   = computeTopMarginY();
+
+        ArrayList<Bot.ScoredMove> moves = bot.getScoredMoves();
+        double spacing = 12.0;
+
+        java.util.Map<Integer, Integer> trackCount = new java.util.HashMap<>();
+        for (Bot.ScoredMove m : moves) {
+            if (m.getMove() == null) continue;
+            int track = horizontalPaths ? m.getMove().getRow() : m.getMove().getCol();
+            trackCount.merge(track, 1, Integer::sum);
+        }
+
+        java.util.Map<Integer, Integer> trackIndex = new java.util.HashMap<>();
+        Polygon returnPoly = null;
 
         for (int index = moves.size() - 1; index >= 0; index--) {
-            Bot.ScoredMove move = moves.get(index);
-            if (move.getMove() == null) continue;
-            Polygon rendered = renderMove(move, index == 0, horizontalPaths, trackCounts, trackIndices);
-            if (index == 0) bestCell = rendered;
+            Polygon drawn = drawScoredMove(
+                    moves.get(index), index == 0,
+                    horizontalPaths, trackCount, trackIndex,
+                    spacing, rightMarginX, topMarginY
+            );
+            if (index == 0) returnPoly = drawn;
         }
-        return bestCell;
+
+        return returnPoly;
     }
 
-    public void clear() {
-        for (Node visual : visuals) overlayPane.getChildren().remove(visual);
-        visuals.clear();
-    }
+    private Polygon drawScoredMove(Bot.ScoredMove m, boolean isBest,
+                                   boolean horizontalPaths,
+                                   java.util.Map<Integer, Integer> trackCount,
+                                   java.util.Map<Integer, Integer> trackIndex,
+                                   double spacing, double rightMarginX, double topMarginY) {
+        if (m.getMove() == null) return null;
 
-    private Map<Integer, Integer> countMovesPerTrack(ArrayList<Bot.ScoredMove> moves, boolean horizontalPaths) {
-        Map<Integer, Integer> counts = new HashMap<>();
-        for (Bot.ScoredMove move : moves) {
-            if (move.getMove() == null) continue;
-            counts.merge(trackOf(move, horizontalPaths), 1, Integer::sum);
+        int track = horizontalPaths ? m.getMove().getRow() : m.getMove().getCol();
+        int groupSize = trackCount.get(track);
+        int posInGroup = trackIndex.merge(track, 1, Integer::sum) - 1;
+        double lateralOffset = (posInGroup - (groupSize - 1) / 2.0) * spacing;
+
+        Color pathColor = isBest ? Color.GREEN : Color.RED;
+        Polygon returnPoly = null;
+
+        if (isBest) {
+            Polygon bestCell = (Polygon) shapeLayout.lookup("#" + m.getMove().getRawPosition());
+            if (bestCell != null) {
+                bestCell.setFill(colorShowStrategy);
+                returnPoly = bestCell;
+            }
         }
-        return counts;
-    }
 
-    private int trackOf(Bot.ScoredMove move, boolean horizontalPaths) {
-        return horizontalPaths ? move.getMove().getRow() : move.getMove().getCol();
-    }
-
-    private Polygon renderMove(Bot.ScoredMove move, boolean isBest, boolean horizontalPaths,
-                               Map<Integer, Integer> trackCounts, Map<Integer, Integer> trackIndices) {
-        int track = trackOf(move, horizontalPaths);
-        int groupSize = trackCounts.get(track);
-        int positionInGroup = trackIndices.merge(track, 1, Integer::sum) - 1;
-        double lateralOffset = (positionInGroup - (groupSize - 1) / 2.0) * CONNECTOR_SPACING;
-
-        Color color = isBest ? bestMoveColor : otherMoveColor;
-        // removed: Polygon highlightedCell = isBest ? highlightBestCell(move) : null;
-
-        Point2D cellCenter = cellCenterInOverlay(move.getMove());
-        if (cellCenter != null) {
-            drawWeightWithConnector(cellCenter, move.getScore(), color, horizontalPaths, lateralOffset);
+        Point2D center = cellCenterInOverlay(m.getMove());
+        if (center != null) {
+            drawWeightWithConnector(center, m.getScore(), pathColor,
+                    horizontalPaths, rightMarginX, topMarginY, lateralOffset);
         }
-        return null; // we don't paint cells anymore
+
+        return returnPoly;
     }
 
-    private void drawWeightWithConnector(Point2D endpoint, int score, Color color,
-                                         boolean horizontalPaths, double lateralOffset) {
-        ConnectorGeometry geometry = horizontalPaths
-                ? horizontalConnector(endpoint, lateralOffset)
-                : verticalConnector(endpoint, lateralOffset);
+    private void drawWeightWithConnector(Point2D endpoint, int score, Color color, boolean horizontalPaths,
+                                         double rightMarginX, double topMarginY, double lateralOffset) {
+        double[] coords = computeConnectorCoordinates(endpoint, horizontalPaths, rightMarginX, topMarginY, lateralOffset);
+        double lineStartX = coords[0], lineStartY = coords[1];
+        double lineEndX   = coords[2], lineEndY   = coords[3];
+        double labelX     = coords[4], labelY     = coords[5];
 
-        addConnectorLine(geometry, color);
-        addWeightLabel(geometry, score, color);
+        Line connector = new Line(lineStartX, lineStartY, lineEndX, lineEndY);
+        connector.setStroke(color);
+        connector.setStrokeWidth(1.5);
+        connector.setMouseTransparent(true);
+        overlayPane.getChildren().add(connector);
+        strategyVisuals.add(connector);
+
+        Text weightText = new Text(String.valueOf(score));
+        weightText.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        weightText.setFill(color);
+        double textWidth = weightText.getLayoutBounds().getWidth();
+        weightText.setX(labelX - textWidth / 2);
+        weightText.setY(labelY);
+        weightText.setMouseTransparent(true);
+        overlayPane.getChildren().add(weightText);
+        strategyVisuals.add(weightText);
     }
 
-    private ConnectorGeometry horizontalConnector(Point2D endpoint, double lateralOffset) {
-        double y = endpoint.getY() + lateralOffset;
-        double rightMarginX = computeRightMarginX();
-        return new ConnectorGeometry(
-                endpoint.getX(), y,
-                rightMarginX, y,
-                rightMarginX + LABEL_OFFSET_FROM_RIGHT_MARGIN, y + LABEL_BASELINE_OFFSET);
+    private double[] computeConnectorCoordinates(Point2D endpoint, boolean horizontalPaths,
+                                                 double rightMarginX, double topMarginY, double lateralOffset) {
+        double lineStartX, lineStartY, lineEndX, lineEndY, labelX, labelY;
+
+        if (horizontalPaths) {
+            lineStartX = endpoint.getX();
+            lineStartY = endpoint.getY() + lateralOffset;
+            lineEndX   = rightMarginX;
+            lineEndY   = endpoint.getY() + lateralOffset;
+            labelX     = rightMarginX + 6;
+            labelY     = endpoint.getY() + lateralOffset + 5;
+        } else {
+            lineStartX = endpoint.getX() + lateralOffset;
+            lineStartY = endpoint.getY();
+            lineEndX   = endpoint.getX() + lateralOffset;
+            lineEndY   = topMarginY;
+            labelX     = endpoint.getX() + lateralOffset;
+            labelY     = topMarginY - 15;
+        }
+
+        return new double[]{ lineStartX, lineStartY, lineEndX, lineEndY, labelX, labelY };
     }
 
-    private ConnectorGeometry verticalConnector(Point2D endpoint, double lateralOffset) {
-        double x = endpoint.getX() + lateralOffset;
-        double topMarginY = computeTopMarginY();
-        return new ConnectorGeometry(
-                x, endpoint.getY(),
-                x, topMarginY,
-                x, topMarginY - LABEL_DROP_FROM_TOP);
-    }
-
-    private void addConnectorLine(ConnectorGeometry geometry, Color color) {
-        Line line = new Line(geometry.lineStartX, geometry.lineStartY, geometry.lineEndX, geometry.lineEndY);
-        line.setStroke(color);
-        line.setStrokeWidth(CONNECTOR_STROKE_WIDTH);
-        line.setMouseTransparent(true);
-        overlayPane.getChildren().add(line);
-        visuals.add(line);
-    }
-
-    private void addWeightLabel(ConnectorGeometry geometry, int score, Color color) {
-        Text label = new Text(String.valueOf(score));
-        label.setStyle(LABEL_STYLE);
-        label.setFill(color);
-        label.setX(geometry.labelX - label.getLayoutBounds().getWidth() / 2);
-        label.setY(geometry.labelY);
-        label.setMouseTransparent(true);
-        overlayPane.getChildren().add(label);
-        visuals.add(label);
-    }
-
-    private Point2D cellCenterInOverlay(Position position) {
-        Polygon cell = (Polygon) shapeLayout.lookup("#" + position.getRawPosition());
+    private Point2D cellCenterInOverlay(Position p) {
+        Polygon cell = (Polygon) shapeLayout.lookup("#" + p.getRawPosition());
         if (cell == null) return null;
         Point2D scene = cell.localToScene(
                 cell.getBoundsInLocal().getCenterX(),
-                cell.getBoundsInLocal().getCenterY());
+                cell.getBoundsInLocal().getCenterY()
+        );
         return overlayPane.sceneToLocal(scene);
     }
 
     private double computeRightMarginX() {
         double maxX = 0;
         for (Node node : shapeLayout.getChildren()) {
-            if (!(node instanceof Polygon polygon)) continue;
-            double x = rightEdgeXInOverlay(polygon);
-            if (x > maxX) maxX = x;
+            if (node instanceof Polygon) {
+                Polygon p = (Polygon) node;
+                Point2D scene = p.localToScene(
+                        p.getBoundsInLocal().getMaxX(),
+                        p.getBoundsInLocal().getCenterY()
+                );
+                double x = overlayPane.sceneToLocal(scene).getX();
+                if (x > maxX) maxX = x;
+            }
         }
-        return maxX + RIGHT_MARGIN_PADDING;
+        return maxX + 20;
     }
 
     private double computeTopMarginY() {
         double minY = Double.MAX_VALUE;
         for (Node node : shapeLayout.getChildren()) {
-            if (!(node instanceof Polygon polygon)) continue;
-            double y = topEdgeYInOverlay(polygon);
-            if (y < minY) minY = y;
+            if (node instanceof Polygon) {
+                Polygon p = (Polygon) node;
+                Point2D scene = p.localToScene(
+                        p.getBoundsInLocal().getCenterX(),
+                        p.getBoundsInLocal().getMinY()
+                );
+                double y = overlayPane.sceneToLocal(scene).getY();
+                if (y < minY) minY = y;
+            }
         }
-        return minY - TOP_MARGIN_PADDING;
-    }
-
-    private double rightEdgeXInOverlay(Polygon polygon) {
-        Point2D scene = polygon.localToScene(
-                polygon.getBoundsInLocal().getMaxX(),
-                polygon.getBoundsInLocal().getCenterY());
-        return overlayPane.sceneToLocal(scene).getX();
-    }
-
-    private double topEdgeYInOverlay(Polygon polygon) {
-        Point2D scene = polygon.localToScene(
-                polygon.getBoundsInLocal().getCenterX(),
-                polygon.getBoundsInLocal().getMinY());
-        return overlayPane.sceneToLocal(scene).getY();
-    }
-
-    private static class ConnectorGeometry {
-        final double lineStartX, lineStartY;
-        final double lineEndX, lineEndY;
-        final double labelX, labelY;
-
-        ConnectorGeometry(double lineStartX, double lineStartY,
-                          double lineEndX, double lineEndY,
-                          double labelX, double labelY) {
-            this.lineStartX = lineStartX;
-            this.lineStartY = lineStartY;
-            this.lineEndX = lineEndX;
-            this.lineEndY = lineEndY;
-            this.labelX = labelX;
-            this.labelY = labelY;
-        }
+        return minY - 40;
     }
 }
