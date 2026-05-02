@@ -79,7 +79,7 @@ class DijkstraTest {
 
         for (Position move : moves) {
             if (gameState.makeMove(move, QuaxBoard.TileType.OCTAGON)) {
-                int distance = Dijkstra.computeDistance(gameState, gameState.game_board.getColor(gameState.getCurrentPlayer()));
+                int distance = Dijkstra.computeDistance(gameState, gameState.getGameBoard().getColor(gameState.getCurrentPlayer()));
                 assertTrue(distance >= 0, "Distance should be non-negative after move");
             }
         }

@@ -5,9 +5,8 @@ public class Position {
     private int row;
     private int col;
     String regex = "[,_\\s]";
-    ArrayList<Integer> position = new ArrayList<>(); // first index holds row, second index holds colun
+    ArrayList<Integer> position = new ArrayList<>();
 
-    // Two comparators taken from Claude AI
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -26,16 +25,14 @@ public class Position {
         position = extractPosition();
     }
 
-
     public ArrayList<Integer> extractPosition() {
         String[] pos_str = raw_position.split(regex);
         if (pos_str[0].equals("R") || pos_str[0].equals("O")) {
 
-            // O_7_2
             row = Integer.parseInt(pos_str[1]);
             col = Integer.parseInt(pos_str[2]);
 
-            position.clear(); // for clarity
+            position.clear();
             position.add(row);
             position.add(col);
         }

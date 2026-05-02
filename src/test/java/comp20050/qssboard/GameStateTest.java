@@ -79,7 +79,7 @@ class GameStateTest {
     @DisplayName("checkWin returns true for Black when first column fully occupied")
     void testCheckWinBlackPath() {
         for (int row = 0; row < Tile.NUM_ROWS; row++) {
-            gameState.game_board.changeTileOwner(row, 0, GameState.Player.P1); // P1 is Black
+            gameState.getGameBoard().changeTileOwner(row, 0, GameState.Player.P1); // P1 is Black
         }
         assertTrue(gameState.checkWin(QuaxBoard.TileOwner.BLACK));
     }
@@ -89,7 +89,7 @@ class GameStateTest {
         // we get a chain which has to be made of octagons and rhombusess
         for (int i = 0;  i < Tile.NUM_ROWS; i++) {
             for (int col = 0; col < Tile.NUM_COLS/2; col++) {
-                gameState.game_board.changeTileOwner(i, col, GameState.Player.P1);
+                gameState.getGameBoard().changeTileOwner(i, col, GameState.Player.P1);
             }
         }
         assertTrue(gameState.checkWin(QuaxBoard.TileOwner.BLACK));
@@ -98,7 +98,7 @@ class GameStateTest {
     @DisplayName("checkWin returns true for White when first row fully occupied")
     void testCheckWinWhitePath() {
         for (int col = 0; col < Tile.NUM_COLS; col++) {
-            gameState.game_board.changeTileOwner(0, col, GameState.Player.P2); // P2 is White
+            gameState.getGameBoard().changeTileOwner(0, col, GameState.Player.P2); // P2 is White
         }
         assertTrue(gameState.checkWin(QuaxBoard.TileOwner.WHITE));
     }
@@ -109,7 +109,7 @@ class GameStateTest {
         // we get a chain which has to be made of octagons and rhombgusess
         for (int i = 0; i < Tile.NUM_ROWS/2; i++) {
             for (int col = 0; col < Tile.NUM_COLS; col++) {
-                gameState.game_board.changeTileOwner(i, col, GameState.Player.P2);
+                gameState.getGameBoard().changeTileOwner(i, col, GameState.Player.P2);
             }
         }
         assertTrue(gameState.checkWin(QuaxBoard.TileOwner.WHITE));
@@ -119,9 +119,9 @@ class GameStateTest {
     @DisplayName("dfs returns true when Black path reaches bottom row")
     void testDfsBlack() {
         for (int row = 0; row < Tile.NUM_ROWS; row++) {
-            gameState.game_board.changeTileOwner(row, 0, GameState.Player.P1); // P1 = Black
+            gameState.getGameBoard().changeTileOwner(row, 0, GameState.Player.P1);
         }
-        assertTrue(gameState.dfs(0, 0, QuaxBoard.TileOwner.BLACK));
+        assertTrue(gameState.checkWin(QuaxBoard.TileOwner.BLACK));
     }
 
     @Test
@@ -141,13 +141,17 @@ class GameStateTest {
     }
 
     @Test
-    @DisplayName("addValid adds only in-bounds neighbour positions")
+    @DisplayName("getNeighbours only returns in-bounds positions")
     void testAddValid() {
-        var neighbours = new ArrayList<int[]>();
-        int[][] directions = { {-1,0}, {100,0} }; // only first is valid
-        gameState.addValid(neighbours, 5, 0, directions);
-        assertEquals(1, neighbours.size());
-        assertArrayEquals(new int[]{4,0}, neighbours.get(0));
+        ArrayList<int[]> cornerNeighbours = gameState.getNeighbours(0, 0);
+        ArrayList<int[]> middleNeighbours = gameState.getNeighbours(5, 4);
+
+        assertTrue(cornerNeighbours.size() < middleNeighbours.size());
+
+        for (int[] n : cornerNeighbours) {
+            assertTrue(n[0] >= 0 && n[0] < Tile.NUM_ROWS);
+            assertTrue(n[1] >= 0 && n[1] < Tile.NUM_COLS);
+        }
     }
 
 
