@@ -93,9 +93,7 @@ class BotTest {
 
         Position move = bot.chooseMove();
         gameState.makeMove(move, gameState.getGameBoard().getTileType(move.getRow(), move.getCol()));
-
         int after = Dijkstra.computeDistance(gameState, gameState.getGameBoard().getColor(GameState.Player.P2));
-
         assertTrue(after <= before);
     } 
 }
