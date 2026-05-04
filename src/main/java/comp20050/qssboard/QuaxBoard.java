@@ -1,41 +1,32 @@
 package comp20050.qssboard;
 
-
 public class QuaxBoard {
-    public enum TileType {
-        OCTAGON,
-        RHOMBUS
-    };
+    public enum TileType { OCTAGON, RHOMBUS }
     public enum TileOwner { BLACK, WHITE, NONE }
-    TileOwner p1Color = TileOwner.BLACK;
-    TileOwner p2Color = TileOwner.WHITE;
 
-    private Tile[][] state_board;
-
+    private TileOwner p1Color = TileOwner.BLACK;
+    private TileOwner p2Color = TileOwner.WHITE;
+    private Tile[][] stateBoard;
 
     public QuaxBoard() {
-
-        this.state_board = new Tile[11][21];
-        initialise_board();
+        stateBoard = new Tile[Tile.NUM_ROWS][Tile.NUM_COLS];
+        initialiseBoard();
     }
 
-    private void initialise_board() {
-        Tile new_tile;
-        for (int i = 0; i < Tile.NUM_ROWS; i++) {
-            for (int j = 0; j < Tile.NUM_COLS; j++) {
-                if (j % 2 == 0) {
-                    new_tile =  new Tile(TileType.OCTAGON);
-                }
-                else {
-                    new_tile =  new Tile(TileType.RHOMBUS);
-                }
-                state_board[i][j] = new_tile;
+    private void initialiseBoard() {
+        for (int row = 0; row < Tile.NUM_ROWS; row++) {
+            for (int col = 0; col < Tile.NUM_COLS; col++) {
+                stateBoard[row][col] = new Tile(tileTypeForColumn(col));
             }
         }
     }
-    TileOwner getColor(GameState.Player player) {
-        if (player == GameState.Player.P1) return p1Color;
-        else return p2Color;
+
+    private TileType tileTypeForColumn(int col) {
+        return col % 2 == 0 ? TileType.OCTAGON : TileType.RHOMBUS;
+    }
+
+    public TileOwner getColor(GameState.Player player) {
+        return player == GameState.Player.P1 ? p1Color : p2Color;
     }
 
     public void swapColors() {
@@ -44,64 +35,54 @@ public class QuaxBoard {
         p2Color = temp;
     }
 
-    public boolean isMoveValid(int row, int col, TileType t) { // returns if the board position is empty
-        if (t == null) return false;
-        if (state_board[row][col] == null || state_board[row][col].owner == null) return true;
-        else  return false;
-    }
     public boolean isInBounds(int row, int col) {
-        if (row >= 0 && row < Tile.NUM_ROWS && col >= 0 && col < Tile.NUM_COLS)
-            return true;
-        else return false;
+        return row >= 0 && row < Tile.NUM_ROWS
+                && col >= 0 && col < Tile.NUM_COLS;
     }
 
-    public boolean isCorrectCellType (int row, int col, TileType t) {
-        if (t == TileType.RHOMBUS)
-            return col % 2 == 0;
-        else return col % 2 != 0;
+    public boolean isCorrectCellType(int row, int col, TileType tileType) {
+        return tileTypeForColumn(col) == tileType;
     }
 
+    public boolean isMoveValid(int row, int col, TileType tileType) {
+        return isInBounds(row, col) && isCorrectCellType(row, col, tileType) && isTileEmpty(row, col);
+    }
 
     public QuaxBoard copyBoard() {
-        QuaxBoard cpyBoard = new QuaxBoard();
-
+        QuaxBoard boardCopy = new QuaxBoard();
         for (int row = 0; row < Tile.NUM_ROWS; row++) {
             for (int col = 0; col < Tile.NUM_COLS; col++) {
-                Tile originalTile = this.state_board[row][col];
-                Tile copiedTile = new Tile(originalTile.type);
-                copiedTile.owner = originalTile.owner;
-                cpyBoard.state_board[row][col] = copiedTile;
+                boardCopy.stateBoard[row][col].setOwner(getTileOwner(row, col));
             }
         }
-
-        return cpyBoard;
+        return boardCopy;
     }
 
-    public void makeMove(int row, int col, GameState.Player current_player, TileType t) {
-        Tile tile = new Tile(t);
-        state_board[row][col].owner = getColor(current_player);
+    public void makeMove(int row, int col, GameState.Player currentPlayer, TileType tileType) {
+        stateBoard[row][col].setOwner(getColor(currentPlayer));
     }
 
-    public Tile[][] getStateBoard() {
-        return state_board;
-    }
-
-    public void changeTileOwner(int row, int col, GameState.Player current_player) {
-        state_board[row][col].owner = getColor(current_player);
+    public void changeTileOwner(int row, int col, GameState.Player currentPlayer) {
+        stateBoard[row][col].setOwner(getColor(currentPlayer));
     }
 
     public boolean isTileEmpty(int row, int col) {
-        return state_board[row][col].owner == null;
+        return stateBoard[row][col].getOwner() == null;
     }
+
     public TileOwner getTileOwner(int row, int col) {
-        return state_board[row][col].getOwner();
+        return stateBoard[row][col].getOwner();
     }
 
     public TileType getTileType(int row, int col) {
-        return state_board[row][col].type;
-    }
-    public Tile getTile(int row, int col) {
-        return state_board[row][col];
+        return stateBoard[row][col].getType();
     }
 
+    public Tile getTile(int row, int col) {
+        return stateBoard[row][col];
+    }
+
+    public Tile[][] getStateBoard() {
+        return stateBoard;
+    }
 }

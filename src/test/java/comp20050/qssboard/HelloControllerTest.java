@@ -24,6 +24,7 @@ class HelloControllerTest {
     HelloController controller;
     GameState state;
     Pane overlayPane;
+    StrategyVisualizer strategyVisualizer;
 
     @BeforeAll
     static void initJfx() {
@@ -40,9 +41,6 @@ class HelloControllerTest {
         state = new GameState();
         overlayPane = new Pane();
 
-        // Wire every @FXML field so initialize() doesn't NPE.
-        // If more showLabel/line fields are added to HelloController in future,
-        // add them here too.
         controller.ShapeLayout = new Group();
         controller.activatePieButton = new Button();
         controller.activateShowStrategyButton = new Button();
@@ -61,9 +59,10 @@ class HelloControllerTest {
         controller.inputEnabled = true;
 
         controller.initialize();
+
+        strategyVisualizer = new StrategyVisualizer(overlayPane, controller.ShapeLayout, () -> GameState.Player.P2);
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private Polygon addTile(String id) {
         Polygon p = new Polygon();
@@ -74,7 +73,7 @@ class HelloControllerTest {
 
     private Bot.ScoredMove makeScoredMove(Bot bot, String moveId, int score) {
         Position move = new Position(moveId);
-        return bot.new ScoredMove(move, score);
+        return new Bot.ScoredMove(move, score);
     }
 
     private List<Line> getLines() {
@@ -90,8 +89,6 @@ class HelloControllerTest {
                 .map(n -> (Text) n)
                 .collect(Collectors.toList());
     }
-
-    // ── Core init tests ───────────────────────────────────────────────────────
 
     @Test
     void intializeHidePieButton() {
@@ -123,8 +120,6 @@ class HelloControllerTest {
         assertEquals(Color.BLACK, controller.Rhombus_turn.getFill());
     }
 
-    // ── handleCellSelection tests ─────────────────────────────────────────────
-
     @Test
     void handleCellSelection_incrementsMovesMade() {
         Polygon clicked = new Polygon();
@@ -147,10 +142,8 @@ class HelloControllerTest {
         assertEquals(1, controller.moves_made);
     }
 
-    // ── Win condition tests ───────────────────────────────────────────────────
-
     void placeTile(int row, int col, QuaxBoard.TileOwner owner) {
-        state.game_board.getTile(row, col).setOwner(owner);
+        state.getGameBoard().getTile(row, col).setOwner(owner);
     }
 
     @Test
@@ -179,14 +172,12 @@ class HelloControllerTest {
         assertFalse(state.checkWin(QuaxBoard.TileOwner.BLACK));
     }
 
-    // ── drawStrategy tests ────────────────────────────────────────────────────
-
     @Test
     @DisplayName("drawStrategy returns null when moveMadeId is null")
     void drawStrategy_nullMoveMadeId_returnsNull() {
         Bot bot = new Bot(controller.state, null, GameState.Player.P2);
 
-        Polygon result = controller.drawStrategy(bot);
+        Polygon result = strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         assertNull(result);
     }
@@ -198,7 +189,7 @@ class HelloControllerTest {
         addTile("O_0_0");
         Bot bot = new Bot(controller.state, null, GameState.Player.P2);
 
-        Polygon result = controller.drawStrategy(bot);
+        Polygon result = strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         assertNull(result);
         assertTrue(overlayPane.getChildren().isEmpty());
@@ -215,7 +206,7 @@ class HelloControllerTest {
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 1));
         bot.getScoredMoves().add(makeScoredMove(bot, "O_2_0", 2));
 
-        controller.drawStrategy(bot);
+        strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         assertEquals(2, getLines().size());
         assertEquals(2, getTexts().size());
@@ -234,7 +225,7 @@ class HelloControllerTest {
         bot.getScoredMoves().add(makeScoredMove(bot, "O_2_0", 2));
         bot.getScoredMoves().add(makeScoredMove(bot, "O_4_0", 3));
 
-        controller.drawStrategy(bot);
+        strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         assertEquals(3, getTexts().size());
     }
@@ -250,10 +241,8 @@ class HelloControllerTest {
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 1));
         bot.getScoredMoves().add(makeScoredMove(bot, "O_2_0", 2));
 
-        controller.drawStrategy(bot);
+        strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
-        // drawStrategy iterates from last index to 0, so the best move (index 0)
-        // is drawn last and therefore appears last in the overlay children list.
         List<Text> texts = getTexts();
         assertEquals(2, texts.size());
         assertEquals(Color.RED,   texts.get(0).getFill(), "Other move label should be red");
@@ -271,10 +260,7 @@ class HelloControllerTest {
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 1));
         bot.getScoredMoves().add(makeScoredMove(bot, "O_2_0", 2));
 
-        controller.drawStrategy(bot);
-
-        // drawStrategy iterates from last index to 0, so the best move (index 0)
-        // is drawn last and therefore appears last in the overlay children list.
+        strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
         List<Line> lines = getLines();
         assertEquals(2, lines.size());
         assertEquals(Color.RED,   lines.get(0).getStroke(), "Other move connector should be red");
@@ -290,7 +276,7 @@ class HelloControllerTest {
         Bot bot = new Bot(controller.state, null, GameState.Player.P2);
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 1));
 
-        Polygon result = controller.drawStrategy(bot);
+        Polygon result = strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         assertEquals(bestTile, result);
         assertEquals(Color.GREEN, result.getFill());
@@ -307,7 +293,7 @@ class HelloControllerTest {
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 1));
         bot.getScoredMoves().add(makeScoredMove(bot, "O_2_0", 2));
 
-        Polygon result = controller.drawStrategy(bot);
+        Polygon result = strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         assertEquals(bestTile, result);
     }
@@ -323,10 +309,9 @@ class HelloControllerTest {
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 5));
         bot.getScoredMoves().add(makeScoredMove(bot, "O_2_0", 9));
 
-        controller.drawStrategy(bot);
+        strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
-        // drawStrategy iterates from last index to 0, so the best move (index 0)
-        // is drawn last and therefore appears last in the overlay children list.
+
         List<Text> texts = getTexts();
         assertEquals(2, texts.size());
         assertEquals("9", texts.get(0).getText());

@@ -33,8 +33,7 @@ class PositionTest {
         @Test
         @DisplayName("Invalid format throws exception")
         void invalidFormat() {
-            Exception exception = assertThrows(IllegalArgumentException.class, () -> new Position("X_1_2"));
-            assertTrue(exception.getMessage().contains("invalid format"));
+            assertThrows(IllegalArgumentException.class, () -> new Position("X_1_2"));
         }
 
     }

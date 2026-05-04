@@ -1,181 +1,173 @@
 package comp20050.qssboard;
 
-
 import java.util.ArrayList;
 
 public class GameState {
-    public enum Player {
-        P1,
-        P2
+    public enum Player { P1, P2 }
+
+    private static final int[][] OCTAGON_DIRECTIONS = {
+            {-1, 0}, {1, 0},
+            {0, -2}, {0, 2},
+            {-1, -1}, {-1, 1},
+            {0, -1}, {0, 1}
     };
-    public Player current_player;
-    public QuaxBoard game_board = new QuaxBoard(); // allow all classes to access the board
-    public boolean[][] visited = new boolean[11][21];
+
+    private static final int[][] RHOMBUS_DIRECTIONS = {
+            {0, -1}, {0, 1},
+            {1, -1}, {1, 1}
+    };
+
+    private Player currentPlayer;
+    private QuaxBoard gameBoard;
 
     public GameState() {
-        this.game_board = new QuaxBoard();
-        this.current_player = Player.P1;
+        this(new QuaxBoard(), Player.P1);
     }
 
-    public GameState(QuaxBoard game_board, Player current_player) {
-        this.game_board = game_board;
-        this.current_player = current_player;
+    public GameState(QuaxBoard gameBoard, Player currentPlayer) {
+        this.gameBoard = gameBoard;
+        this.currentPlayer = currentPlayer;
     }
 
-    // naming conventions on week seven
-    // functions longer than 30 lines are going to be penalized
+    public QuaxBoard getGameBoard() {
+        return gameBoard;
+    }
 
-    public boolean makeMove(Position pos, QuaxBoard.TileType tileType) { // isMoveValid is called here
+    public void setCurrentPlayer(GameState.Player player) {
+        this.currentPlayer = player;
+    }
+
+    public boolean makeMove(Position pos, QuaxBoard.TileType tileType) {
         pos.extractPosition();
         int row = pos.getRow();
         int col = pos.getCol();
 
+        if (!gameBoard.isMoveValid(row, col, tileType)) return false;
 
-        if (!game_board.isMoveValid(row, col, tileType)){
-            return false;
-        }
-
-        game_board.makeMove(row, col, current_player, tileType);
-
+        gameBoard.makeMove(row, col, currentPlayer, tileType);
         switchPlayerTurn();
         return true;
     }
 
     public boolean checkWin(QuaxBoard.TileOwner colour) {
-        visited = new boolean[Tile.NUM_ROWS][Tile.NUM_COLS]; // RESET HERE
+        boolean[][] visited = new boolean[Tile.NUM_ROWS][Tile.NUM_COLS];
+        return colour == QuaxBoard.TileOwner.BLACK
+                ? hasPathFromTopEdge(colour, visited)
+                : hasPathFromLeftEdge(colour, visited);
+    }
 
-        if (colour == QuaxBoard.TileOwner.BLACK) {
-
-            for (int col = 0; col < Tile.NUM_COLS; col++) {
-                if (game_board.getTileOwner(0, col) == colour && game_board.getTileType(0, col) == QuaxBoard.TileType.OCTAGON) { // this tile is occupied by the player, so we start dfs
-                    if (dfs(0, col, colour)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        else {
-            for (int row = 0; row < Tile.NUM_ROWS; row++) {
-                if (game_board.getTileOwner(row, 0) == colour && game_board.getTileType(row, 0) == QuaxBoard.TileType.OCTAGON) { // this tile is occupied by the player, so we start dfs
-                    if (dfs(row, 0, colour  )) {
-                        return true;
-                    }
-                }
-            }
+    private boolean hasPathFromTopEdge(QuaxBoard.TileOwner colour, boolean[][] visited) {
+        for (int col = 0; col < Tile.NUM_COLS; col++) {
+            if (isStartingTile(0, col, colour) && dfs(0, col, colour, visited)) return true;
         }
         return false;
     }
 
-    public boolean dfs(int row, int col, QuaxBoard.TileOwner colour) {
-        if (colour == QuaxBoard.TileOwner.BLACK && row == 10 && game_board.getTileType(row, col) == QuaxBoard.TileType.OCTAGON) {
-            return true;
+    private boolean hasPathFromLeftEdge(QuaxBoard.TileOwner colour, boolean[][] visited) {
+        for (int row = 0; row < Tile.NUM_ROWS; row++) {
+            if (isStartingTile(row, 0, colour) && dfs(row, 0, colour, visited)) return true;
         }
-        if (colour == QuaxBoard.TileOwner.WHITE && col == 20 && game_board.getTileType(row, col) == QuaxBoard.TileType.OCTAGON) {
-            return true;
-        }
+        return false;
+    }
+
+    private boolean isStartingTile(int row, int col, QuaxBoard.TileOwner colour) {
+        return gameBoard.getTileOwner(row, col) == colour
+                && gameBoard.getTileType(row, col) == QuaxBoard.TileType.OCTAGON;
+    }
+
+    private boolean dfs(int row, int col, QuaxBoard.TileOwner colour, boolean[][] visited) {
+        if (hasReachedGoalEdge(row, col, colour)) return true;
 
         visited[row][col] = true;
 
-        for (int[] n : getNeighbours(row, col) ) {
-            int n_row = n[0];
-            int n_col = n[1];
-
-            if (!visited[n_row][n_col] && game_board.getTileOwner(n_row, n_col) == colour) {
-                if (dfs(n_row, n_col, colour)) {
-                    return true;
-                }
-            }
+        for (int[] neighbour : getNeighbours(row, col)) {
+            int neighbourRow = neighbour[0];
+            int neighbourCol = neighbour[1];
+            if (visited[neighbourRow][neighbourCol]) continue;
+            if (gameBoard.getTileOwner(neighbourRow, neighbourCol) != colour) continue;
+            if (dfs(neighbourRow, neighbourCol, colour, visited)) return true;
         }
-
         return false;
     }
 
+    private boolean hasReachedGoalEdge(int row, int col, QuaxBoard.TileOwner colour) {
+        if (gameBoard.getTileType(row, col) != QuaxBoard.TileType.OCTAGON) return false;
+        if (colour == QuaxBoard.TileOwner.BLACK) return row == Tile.NUM_ROWS - 1;
+        return col == Tile.NUM_COLS - 1;
+    }
+
     public ArrayList<Position> getLegalMoves() {
-        ArrayList<Position> moves = new ArrayList<>();
-        boolean[][] seen = new boolean[Tile.NUM_ROWS][Tile.NUM_COLS];
-
-        for (int i = 0; i < Tile.NUM_ROWS; i++) {
-            for (int j = 0; j < Tile.NUM_COLS; j++) {
-                if (!game_board.isTileEmpty(i, j)) {
-                    for (int[] n : getNeighbours(i, j)) {
-                        int nr = n[0];
-                        int nc = n[1];
-                        if (game_board.isTileEmpty(nr, nc) && !seen[nr][nc]) {
-                            seen[nr][nc] = true;
-                            Tile tile = game_board.getTile(nr, nc);
-                            String prefix = (tile.type == QuaxBoard.TileType.RHOMBUS) ? "R" : "O";
-                            moves.add(new Position(prefix + "_" + nr + "_" + nc));
-                        }
-                    }
-                }
-            }
-        }
-
-        // fallback if board is empty
-        if (moves.isEmpty()) {
-            for (int i = 0; i < Tile.NUM_ROWS; i++) {
-                for (int j = 0; j < Tile.NUM_COLS; j++) {
-                    if (game_board.isTileEmpty(i, j)) {
-                        Tile tile = game_board.getTile(i, j);
-                        String prefix = (tile.type == QuaxBoard.TileType.RHOMBUS) ? "R" : "O";
-                        moves.add(new Position(prefix + "_" + i + "_" + j));
-                    }
-                }
-            }
-        }
-
+        ArrayList<Position> moves = findMovesAdjacentToOccupiedTiles();
+        if (moves.isEmpty()) return findAllEmptyTiles();
         return moves;
     }
 
+    private ArrayList<Position> findMovesAdjacentToOccupiedTiles() {
+        ArrayList<Position> moves = new ArrayList<>();
+        boolean[][] seen = new boolean[Tile.NUM_ROWS][Tile.NUM_COLS];
+        for (int row = 0; row < Tile.NUM_ROWS; row++) {
+            for (int col = 0; col < Tile.NUM_COLS; col++) {
+                if (gameBoard.isTileEmpty(row, col)) continue;
+                collectEmptyNeighboursAsMoves(row, col, moves, seen);
+            }
+        }
+        return moves;
+    }
+
+    private void collectEmptyNeighboursAsMoves(int row, int col, ArrayList<Position> moves, boolean[][] seen) {
+        for (int[] neighbour : getNeighbours(row, col)) {
+            int neighbourRow = neighbour[0];
+            int neighbourCol = neighbour[1];
+            if (!gameBoard.isTileEmpty(neighbourRow, neighbourCol)) continue;
+            if (seen[neighbourRow][neighbourCol]) continue;
+            seen[neighbourRow][neighbourCol] = true;
+            moves.add(positionFor(neighbourRow, neighbourCol));
+        }
+    }
+
+    private ArrayList<Position> findAllEmptyTiles() {
+        ArrayList<Position> moves = new ArrayList<>();
+        for (int row = 0; row < Tile.NUM_ROWS; row++) {
+            for (int col = 0; col < Tile.NUM_COLS; col++) {
+                if (gameBoard.isTileEmpty(row, col)) moves.add(positionFor(row, col));
+            }
+        }
+        return moves;
+    }
+
+    private Position positionFor(int row, int col) {
+        String prefix = gameBoard.getTileType(row, col) == QuaxBoard.TileType.RHOMBUS ? "R" : "O";
+        return new Position(prefix + "_" + row + "_" + col);
+    }
+
     public ArrayList<int[]> getNeighbours(int row, int col) {
+        int[][] directions = gameBoard.getTileType(row, col) == QuaxBoard.TileType.OCTAGON
+                ? OCTAGON_DIRECTIONS
+                : RHOMBUS_DIRECTIONS;
+        return collectInBoundsNeighbours(row, col, directions);
+    }
+
+    private ArrayList<int[]> collectInBoundsNeighbours(int row, int col, int[][] directions) {
         ArrayList<int[]> neighbours = new ArrayList<>();
-
-        if (game_board.getTileType(row, col) == QuaxBoard.TileType.OCTAGON) {
-            // Octagon connections
-            int[][] dirs = {
-                    {-1, 0}, {1, 0},   // UP, DOWN - OCTAGON
-                    {0, -2}, {0, 2},   // LEFT, RIGHT - OCTAGON
-                    {-1, -1}, {-1, 1}, // B_LEFT DIAGONAL, B_RIGHT DIAGONAL - RHOMBUS
-                    {0, -1}, {0, 1}    // U_LEFT DIAGONAL, U_RIGHT DIAGONAL - RHOMBUS
-            };
-
-            addValid(neighbours, row, col, dirs);
+        for (int[] direction : directions) {
+            int newRow = row + direction[0];
+            int newCol = col + direction[1];
+            if (gameBoard.isInBounds(newRow, newCol)) {
+                neighbours.add(new int[]{newRow, newCol});
+            }
         }
-        else {
-            // Rhombus connections
-            int[][] dirs = {
-                    {0, -1}, {0, 1}, // B_LEFT, B_RIGHT - OCTAGON
-                    {1, -1}, {1, 1}  // U_LEFT, U_RIGHT - OCTAGON
-            };
-
-            addValid(neighbours, row, col, dirs);
-        }
-
         return neighbours;
     }
-    public void addValid(ArrayList<int[]> neighbours, int row, int col, int[][] directions) {
-        for (int i = 0; i < directions.length; i++) {
-            int new_row = row + directions[i][0];
-            int new_col = col + directions[i][1];
 
-            if (new_row < 0 || new_row > 10 || new_col < 0 || new_col > 20) {
-                continue;
-            }
-            else {
-                neighbours.add(new int[]{new_row, new_col});
-            }
-        }
-    }
     public void switchPlayerTurn() {
-        current_player = (current_player == Player.P1) ? (Player.P2) : (Player.P1);
+        currentPlayer = currentPlayer == Player.P1 ? Player.P2 : Player.P1;
     }
 
     public GameState copyState() {
-        QuaxBoard copiedBoard = this.game_board.copyBoard();
-        return new GameState(copiedBoard, this.current_player);
+        return new GameState(gameBoard.copyBoard(), currentPlayer);
     }
 
     public Player getCurrentPlayer() {
-        return current_player;
+        return currentPlayer;
     }
 }

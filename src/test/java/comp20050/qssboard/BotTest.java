@@ -24,7 +24,7 @@ class BotTest {
     void makeMoveDoesNotModifyState() {
         int before = gameState.getLegalMoves().size();
 
-        bot.makeMove();
+        bot.chooseMove();
 
         int after = gameState.getLegalMoves().size();
 
@@ -51,7 +51,7 @@ class BotTest {
     @Test
     @DisplayName("computeDistance returns non-negative value")
     void computeDistanceNonNegative() {
-        int dist = Dijkstra.computeDistance(gameState, gameState.game_board.p1Color);
+        int dist = Dijkstra.computeDistance(gameState, gameState.getGameBoard().getColor(GameState.Player.P1));
 
         assertTrue(dist >= 0);
     }
@@ -82,20 +82,18 @@ class BotTest {
 
         bot.applyMove(copy, move);
 
-        assertFalse(copy.game_board.isTileEmpty(move.getRow(), move.getCol()));
+        assertFalse(copy.getGameBoard().isTileEmpty(move.getRow(), move.getCol()));
     }
 
 
     @Test
     @DisplayName("computeDistance decreases after placing own tile")
     void computeDistanceImprovesAfterMove() {
-        int before = Dijkstra.computeDistance(gameState, gameState.game_board.p2Color);
+        int before = Dijkstra.computeDistance(gameState, gameState.getGameBoard().getColor(GameState.Player.P2));
 
-        Position move = bot.makeMove();
-        gameState.makeMove(move, gameState.game_board.getTileType(move.getRow(), move.getCol()));
-
-        int after = Dijkstra.computeDistance(gameState, gameState.game_board.p2Color);
-
+        Position move = bot.chooseMove();
+        gameState.makeMove(move, gameState.getGameBoard().getTileType(move.getRow(), move.getCol()));
+        int after = Dijkstra.computeDistance(gameState, gameState.getGameBoard().getColor(GameState.Player.P2));
         assertTrue(after <= before);
     } 
 }

@@ -33,12 +33,12 @@ class QuaxBoardTest {
         }
 
         @Test
-        @DisplayName("Out-of-bounds move throws exception")
+        @DisplayName("Out-of-bounds move is invalid")
         void outOfBounds() {
-            assertThrows(ArrayIndexOutOfBoundsException.class,
-                    () -> board.isMoveValid(11, 0, QuaxBoard.TileType.OCTAGON));
-            assertThrows(ArrayIndexOutOfBoundsException.class,
-                    () -> board.isMoveValid(0, 21, QuaxBoard.TileType.RHOMBUS));
+            assertFalse(board.isMoveValid(11, 0, QuaxBoard.TileType.OCTAGON));
+            assertFalse(board.isMoveValid(0, 21, QuaxBoard.TileType.RHOMBUS));
+            assertFalse(board.isMoveValid(-1, 0, QuaxBoard.TileType.OCTAGON));
+            assertFalse(board.isMoveValid(0, -1, QuaxBoard.TileType.RHOMBUS));
         }
     }
 

@@ -2,38 +2,43 @@ package comp20050.qssboard;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.PriorityQueue;
 
 public class Bot {
     public GameState state;
     private Position lastMoveMadeId;
     private final GameState.Player botPlayer;
-    private static final int INF = 1_000_000;
 
     public Bot(GameState.Player botPlayer) {
         this.botPlayer = botPlayer;
     }
 
-    public class ScoredMove {
-        public Position move;
-        public int score;
+    public static class ScoredMove {
+        private final Position move;
+        private final int score;
 
         public ScoredMove(Position move, int score) {
             this.move = move;
             this.score = score;
         }
-    };
+
+        public Position getMove() { return move; }
+        public int getScore() { return score; }
+    }
 
     static class Node {
-        int row;
-        int col;
-        int dist;
+        final int row;
+        final int col;
+        final int dist;
 
         Node(int row, int col, int dist) {
             this.row = row;
             this.col = col;
             this.dist = dist;
         }
+
+        public int getRow() { return row; }
+        public int getCol() { return col; }
+        public int getDist() { return dist; }
     }
 
     private ArrayList<ScoredMove> scoredMoves = new ArrayList<>();
@@ -49,13 +54,15 @@ public class Bot {
         return p == GameState.Player.P1 ? GameState.Player.P2 : GameState.Player.P1;
     }
 
-    public ArrayList<ScoredMove> getScoredMoves() {return scoredMoves;}
+    public ArrayList<ScoredMove> getScoredMoves() { return scoredMoves; }
 
-    public void setBestmove(Position bestMove) {this.bestMove = bestMove;}
+    public void setBestMove(Position bestMove) { this.bestMove = bestMove; }
+    public Position chooseMove() {
+        if (state == null) {
+            throw new IllegalStateException("Bot cannot choose a move: game state is null.");
+        }
 
-    public Position makeMove() {
         ArrayList<Position> legalMoves = state.getLegalMoves();
-
 
         if (legalMoves.isEmpty()) return null;
 
@@ -63,21 +70,20 @@ public class Bot {
         int depth = 2;
 
         scoredMoves.clear();
-        setBestmove(null);
+        setBestMove(null);
         for (Position move : legalMoves) {
             GameState child = state.copyState();
             applyMove(child, move);
 
             int eval = minmax(child, depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-            int dist = Dijkstra.computeDistance(child,  child.game_board.getColor(botPlayer));
-            scoredMoves.add(new ScoredMove(move, dist));
+            scoredMoves.add(new ScoredMove(move, eval)); // use eval
             if (this.bestMove == null || eval > bestValue) {
                 bestValue = eval;
-                setBestmove(move);
+                setBestMove(move);
             }
         }
 
-        scoredMoves.sort(Comparator.comparingInt((Bot.ScoredMove a) -> a.score));
+        scoredMoves.sort(Comparator.comparingInt(ScoredMove::getScore));
         scoredMoves = new ArrayList<>(scoredMoves.subList(0, Math.min(5, scoredMoves.size())));
 
         return this.bestMove;
@@ -86,16 +92,12 @@ public class Bot {
     public boolean decideToPressPie() {
         int row = lastMoveMadeId.getRow();
         int col = lastMoveMadeId.getCol();
-
-        if (row == 0 || row == 10 || col == 0 || col == 20 || col % 2 != 0) {
-            return false;
-        }
-        return true;
+        return row != 0 && row != 10 && col != 0 && col != 20 && col % 2 == 0;
     }
 
     public int heuristic(GameState simState) {
-        QuaxBoard.TileOwner botColor = simState.game_board.getColor(botPlayer);
-        QuaxBoard.TileOwner playerColor = simState.game_board.getColor(opponent(botPlayer));
+        QuaxBoard.TileOwner botColor = simState.getGameBoard().getColor(botPlayer);
+        QuaxBoard.TileOwner playerColor = simState.getGameBoard().getColor(opponent(botPlayer));
 
         if (simState.checkWin(botColor)) return 100000;
         if (simState.checkWin(playerColor)) return -100000;
@@ -111,12 +113,12 @@ public class Bot {
         int row = move.getRow();
         int col = move.getCol();
 
-        QuaxBoard.TileType tileType = simState.game_board.getTileType(row, col);
+        QuaxBoard.TileType tileType = simState.getGameBoard().getTileType(row, col);
         simState.makeMove(move, tileType);
     }
 
     public int minmax(GameState simState, int depth, int alpha, int beta, boolean isMax) {
-        if (depth == 0 ) { // LATER: check terminal wins, || simState.getLegalMoves().isEmpty()
+        if (depth == 0) {
             return heuristic(simState);
         }
         ArrayList<Position> legalMoves = simState.getLegalMoves();
@@ -124,43 +126,40 @@ public class Bot {
             return heuristic(simState);
         }
 
-        if (isMax) {
-            int bestValue = Integer.MIN_VALUE;
-
-            for (Position move : legalMoves) {
-
-                GameState child = simState.copyState();
-
-                // Make sure that it's doing a deep copy and not a shallow copy. So we need to find what kind of copy it's doing
-                applyMove(child, move);
-
-                int eval = minmax(child, depth - 1, alpha, beta, false);
-                // System.out.println("Depth " + depth + " moves: " + legalMoves.size());
-                bestValue = Math.max(bestValue, eval);
-                alpha = Math.max(alpha, bestValue);
-
-                if (beta <= alpha) break;
-            }
-
-            return bestValue;
-        }
-
-        // maybe we can check the max inside so we don't do the copy twice if we're in max?
-        else {
-            int bestValue = Integer.MAX_VALUE;
-
-            for (Position move : legalMoves) {
-                GameState child = simState.copyState();
-                applyMove(child, move);
-                int eval = minmax(child, depth - 1, alpha, beta, true);
-                bestValue = Math.min(bestValue, eval);
-                beta = Math.min(beta, bestValue);
-
-                if (beta <= alpha) break;
-            }
-
-            return bestValue;
-        }
+        return isMax ? maximize(simState, depth, alpha, beta) : minimize(simState, depth, alpha, beta);
     }
 
+    private int maximize(GameState simState, int depth, int alpha, int beta) {
+        int bestValue = Integer.MIN_VALUE;
+
+        for (Position move : simState.getLegalMoves()) {
+            GameState child = simState.copyState();
+            applyMove(child, move);
+
+            int eval = minmax(child, depth - 1, alpha, beta, false);
+            bestValue = Math.max(bestValue, eval);
+            alpha = Math.max(alpha, bestValue);
+
+            if (beta <= alpha) break;
+        }
+
+        return bestValue;
+    }
+
+    private int minimize(GameState simState, int depth, int alpha, int beta) {
+        int bestValue = Integer.MAX_VALUE;
+
+        for (Position move : simState.getLegalMoves()) {
+            GameState child = simState.copyState();
+            applyMove(child, move);
+
+            int eval = minmax(child, depth - 1, alpha, beta, true);
+            bestValue = Math.min(bestValue, eval);
+            beta = Math.min(beta, bestValue);
+
+            if (beta <= alpha) break;
+        }
+
+        return bestValue;
+    }
 }
