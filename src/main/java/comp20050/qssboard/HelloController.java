@@ -289,7 +289,7 @@ public class HelloController {
             strategyVisualizer.clear(state, colorP1, colorP2);
         }
     }
-    
+
     public void restartGame() {
         botHasWhiteStones = !botHasWhiteStones;
         state = new GameState();

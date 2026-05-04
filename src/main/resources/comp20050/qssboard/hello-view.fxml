@@ -363,7 +363,7 @@
         </effect>
     </Button>
     <Group scaleX="0.5" scaleY="0.5" translateX="600" translateY="200">
-        <Label fx:id="showLabel" layoutX="1020" layoutY="750" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Chosen Cell" />
+        <Label fx:id="showLabel" layoutX="1020" layoutY="750" maxWidth="300" wrapText="true" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Best move for current board." />
         <Label fx:id="showLabel1" layoutX="1020" layoutY="640" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Main bot path " />
         <Label fx:id="showLabel2" layoutX="1020" layoutY="660" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Alternate bot path" />
         <Label fx:id="showLabel3" layoutX="1020" layoutY="800" maxWidth="300" wrapText="true" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333333; " text="Bot uses minmax agorithm to search 2 deep and then uses dijastras algorithm to find shortest winning path" />
