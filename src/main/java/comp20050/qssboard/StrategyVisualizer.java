@@ -180,8 +180,8 @@ public class StrategyVisualizer {
             lineStartY = endpoint.getY();
             lineEndX   = endpoint.getX() + lateralOffset;
             lineEndY   = topMarginY;
-            labelX     = endpoint.getX() + lateralOffset;
-            labelY     = topMarginY - 15;
+            labelX     = endpoint.getX() + lateralOffset - 5;
+            labelY     = endpoint.getY() - 40;
         }
 
         return new double[]{ lineStartX, lineStartY, lineEndX, lineEndY, labelX, labelY };
