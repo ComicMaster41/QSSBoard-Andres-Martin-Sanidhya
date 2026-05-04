@@ -18,8 +18,8 @@ class GameIntegrationTest {
     @BeforeEach
     void setUp() {
         gameState = new GameState();
-        botP1 = new Bot(GameState.Player.P1);
-        botP2 = new Bot(GameState.Player.P2);
+        botP1 = new Bot(gameState, null, GameState.Player.P1);
+        botP2 = new Bot(gameState, null, GameState.Player.P2);
     }
 
     private boolean makeLegalMove(GameState state) {
@@ -192,7 +192,7 @@ class GameIntegrationTest {
         @Test
         @DisplayName("Bot handles null state gracefully")
         void botHandlesInvalidState() {
-            Bot testBot = new Bot(GameState.Player.P1);
+            Bot testBot = new Bot(null, null, GameState.Player.P1);
             testBot.state = null;
 
             assertThrows(Exception.class, testBot::chooseMove);
@@ -304,7 +304,7 @@ class GameIntegrationTest {
 
     @Test
     void botThrowsOnNullState() {
-        Bot testBot = new Bot(GameState.Player.P1);
+        Bot testBot = new Bot(null, null, GameState.Player.P1);
         testBot.state = null;
         assertThrows(IllegalStateException.class, testBot::chooseMove);
     }

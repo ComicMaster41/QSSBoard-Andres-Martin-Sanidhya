@@ -24,6 +24,7 @@ class HelloControllerTest {
     HelloController controller;
     GameState state;
     Pane overlayPane;
+    StrategyVisualizer strategyVisualizer;
 
     @BeforeAll
     static void initJfx() {
@@ -61,6 +62,8 @@ class HelloControllerTest {
         controller.inputEnabled = true;
 
         controller.initialize();
+
+        strategyVisualizer = new StrategyVisualizer(overlayPane, controller.ShapeLayout, () -> GameState.Player.P2);
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
@@ -186,7 +189,7 @@ class HelloControllerTest {
     void drawStrategy_nullMoveMadeId_returnsNull() {
         Bot bot = new Bot(controller.state, null, GameState.Player.P2);
 
-        Polygon result = controller.drawStrategy(bot);
+        Polygon result = strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         assertNull(result);
     }
@@ -198,7 +201,7 @@ class HelloControllerTest {
         addTile("O_0_0");
         Bot bot = new Bot(controller.state, null, GameState.Player.P2);
 
-        Polygon result = controller.drawStrategy(bot);
+        Polygon result = strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         assertNull(result);
         assertTrue(overlayPane.getChildren().isEmpty());
@@ -215,7 +218,7 @@ class HelloControllerTest {
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 1));
         bot.getScoredMoves().add(makeScoredMove(bot, "O_2_0", 2));
 
-        controller.drawStrategy(bot);
+        strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         assertEquals(2, getLines().size());
         assertEquals(2, getTexts().size());
@@ -234,7 +237,7 @@ class HelloControllerTest {
         bot.getScoredMoves().add(makeScoredMove(bot, "O_2_0", 2));
         bot.getScoredMoves().add(makeScoredMove(bot, "O_4_0", 3));
 
-        controller.drawStrategy(bot);
+        strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         assertEquals(3, getTexts().size());
     }
@@ -250,7 +253,7 @@ class HelloControllerTest {
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 1));
         bot.getScoredMoves().add(makeScoredMove(bot, "O_2_0", 2));
 
-        controller.drawStrategy(bot);
+        strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         // drawStrategy iterates from last index to 0, so the best move (index 0)
         // is drawn last and therefore appears last in the overlay children list.
@@ -271,7 +274,7 @@ class HelloControllerTest {
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 1));
         bot.getScoredMoves().add(makeScoredMove(bot, "O_2_0", 2));
 
-        controller.drawStrategy(bot);
+        strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         // drawStrategy iterates from last index to 0, so the best move (index 0)
         // is drawn last and therefore appears last in the overlay children list.
@@ -290,7 +293,7 @@ class HelloControllerTest {
         Bot bot = new Bot(controller.state, null, GameState.Player.P2);
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 1));
 
-        Polygon result = controller.drawStrategy(bot);
+        Polygon result = strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         assertEquals(bestTile, result);
         assertEquals(Color.GREEN, result.getFill());
@@ -307,7 +310,7 @@ class HelloControllerTest {
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 1));
         bot.getScoredMoves().add(makeScoredMove(bot, "O_2_0", 2));
 
-        Polygon result = controller.drawStrategy(bot);
+        Polygon result = strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         assertEquals(bestTile, result);
     }
@@ -323,7 +326,7 @@ class HelloControllerTest {
         bot.getScoredMoves().add(makeScoredMove(bot, "O_0_0", 5));
         bot.getScoredMoves().add(makeScoredMove(bot, "O_2_0", 9));
 
-        controller.drawStrategy(bot);
+        strategyVisualizer.drawStrategy(bot, controller.state, controller.moveMadeId);
 
         // drawStrategy iterates from last index to 0, so the best move (index 0)
         // is drawn last and therefore appears last in the overlay children list.
