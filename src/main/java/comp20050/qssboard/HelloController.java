@@ -128,7 +128,7 @@ public class HelloController {
     private void triggerBotTurn() {
         if (state.getCurrentPlayer() == botSeat()) {
             setInputEnabled(false);
-            PauseTransition pause = new PauseTransition(Duration.millis(1000));
+            PauseTransition pause = new PauseTransition(Duration.millis(3000));
             pause.setOnFinished(e -> {
                 makeBotMove();
                 setInputEnabled(true);
@@ -246,23 +246,12 @@ public class HelloController {
         line1.setVisible(false);
         line2.setVisible(false);
 
-        if (state.getCurrentPlayer() == botSeat()) {
-            setInputEnabled(false);
-
-            PauseTransition pause = new PauseTransition(Duration.millis(1000));
-            pause.setOnFinished(e ->  {
-                makeBotMove();
-                setInputEnabled(true);
-            });
-            pause.play();
-        }
+        triggerBotTurn();
     }
 
 
     @FXML
     public void handlePieButtonClick() {
-
-
         Polygon cell = (Polygon) ShapeLayout.lookup("#" + moveMadeId.getRawPosition());
         state.getGameBoard().changeTileOwner(moveMadeId.getRow(), moveMadeId.getCol(), GameState.Player.P2);
         paintCell(cell, GameState.Player.P2);
@@ -270,15 +259,7 @@ public class HelloController {
         updateTurnDisplay();
         refreshPieButtonVisibility();
 
-        if (state.getCurrentPlayer() == botSeat()) {
-            setInputEnabled(false);
-            PauseTransition pause = new PauseTransition(Duration.millis(1000));
-            pause.setOnFinished(e -> {
-                makeBotMove();
-                setInputEnabled(true);
-            });
-            pause.play();
-        }
+        triggerBotTurn();
     }
 
     @FXML
@@ -308,8 +289,7 @@ public class HelloController {
             strategyVisualizer.clear(state, colorP1, colorP2);
         }
     }
-
-
+    
     public void restartGame() {
         botHasWhiteStones = !botHasWhiteStones;
         state = new GameState();
