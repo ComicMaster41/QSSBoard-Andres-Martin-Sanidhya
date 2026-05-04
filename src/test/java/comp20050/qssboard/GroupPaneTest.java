@@ -20,7 +20,6 @@ class GroupPaneTest {
         try {
             Platform.startup(() -> {});
         } catch (IllegalStateException e) {
-            // JavaFX already initialized
         }
     }
 
@@ -67,10 +66,8 @@ class GroupPaneTest {
         groupPane.buildBoard(clickHandler);
 
         Pane shapeLayout = groupPane.getShapeLayout();
-        // Board is Tile.NUM_ROWS x Tile.NUM_COLS
         int expectedCells = Tile.NUM_ROWS * Tile.NUM_COLS;
-        assertEquals(expectedCells, shapeLayout.getChildren().size(),
-                "Should create one shape for each board cell");
+        assertEquals(expectedCells, shapeLayout.getChildren().size(), "Should create one shape for each board cell");
     }
 
     @Test
@@ -82,8 +79,7 @@ class GroupPaneTest {
         groupPane.buildBoard(clickHandler);
         int secondBuildSize = groupPane.getChildren().size();
 
-        assertEquals(firstBuildSize, secondBuildSize,
-                "Multiple builds should result in same number of children");
+        assertEquals(firstBuildSize, secondBuildSize, "Multiple builds should result in same number of children");
     }
 
     @Test
@@ -102,7 +98,6 @@ class GroupPaneTest {
 
     @Test
     void buildBoardWithNullClickHandler() {
-        // Should not throw exception
         assertDoesNotThrow(() -> groupPane.buildBoard(null));
     }
 
@@ -112,15 +107,12 @@ class GroupPaneTest {
         groupPane.buildBoard(clickHandler);
 
         assertTrue(groupPane.getChildren().size() > 0);
-        // Board includes title, letters, numbers, frame, and shape layout
     }
 
     @Test
     void buildBoardCreatesLetterLabels() {
         EventHandler<MouseEvent> clickHandler = event -> cellClickCount++;
         groupPane.buildBoard(clickHandler);
-
-        // Should have top and bottom letter labels
         assertTrue(groupPane.getChildren().size() > 0);
     }
 
@@ -128,8 +120,6 @@ class GroupPaneTest {
     void buildBoardCreatesNumberLabels() {
         EventHandler<MouseEvent> clickHandler = event -> cellClickCount++;
         groupPane.buildBoard(clickHandler);
-
-        // Should have left and right number labels
         assertTrue(groupPane.getChildren().size() > 0);
     }
 
@@ -137,8 +127,6 @@ class GroupPaneTest {
     void buildBoardCreatesFrame() {
         EventHandler<MouseEvent> clickHandler = event -> cellClickCount++;
         groupPane.buildBoard(clickHandler);
-
-        // Frame should be created with rectangles
         assertTrue(groupPane.getChildren().size() > 0);
     }
 
@@ -148,7 +136,6 @@ class GroupPaneTest {
         groupPane.buildBoard(clickHandler);
 
         Pane shapeLayout = groupPane.getShapeLayout();
-        // Layout should be scaled
         assertEquals(0.75, shapeLayout.getScaleX(), 0.001);
         assertEquals(0.75, shapeLayout.getScaleY(), 0.001);
     }
@@ -177,7 +164,6 @@ class GroupPaneTest {
                 } else {
                     expectedId = "R_" + row + "_" + col;
                 }
-                // ID should be set in the polygon
             }
         }
         assertEquals(Tile.NUM_ROWS * Tile.NUM_COLS, shapeLayout.getChildren().size());
@@ -189,7 +175,6 @@ class GroupPaneTest {
         groupPane.buildBoard(clickHandler);
 
         Pane shapeLayout = groupPane.getShapeLayout();
-        // Even columns (0, 2, 4, ...) should have octagons
         assertTrue(shapeLayout.getChildren().size() > 0);
     }
 
@@ -197,9 +182,7 @@ class GroupPaneTest {
     void rhombusCellsAreCreatedForOddColumns() {
         EventHandler<MouseEvent> clickHandler = event -> cellClickCount++;
         groupPane.buildBoard(clickHandler);
-
         Pane shapeLayout = groupPane.getShapeLayout();
-        // Odd columns (1, 3, 5, ...) should have rhombuses
         assertTrue(shapeLayout.getChildren().size() > 0);
     }
 
@@ -248,8 +231,6 @@ class GroupPaneTest {
     void boardHasAllRequiredComponents() {
         EventHandler<MouseEvent> clickHandler = event -> cellClickCount++;
         groupPane.buildBoard(clickHandler);
-
-        // Should have: title, topLetters, bottomLetters, frame, leftNums, rightNums, shapeLayout
         assertTrue(groupPane.getChildren().size() >= 7,
                 "Board should have at least 7 main components");
     }
@@ -258,16 +239,13 @@ class GroupPaneTest {
     void cellsAreMouseClickable() {
         EventHandler<MouseEvent> clickHandler = event -> cellClickCount++;
         groupPane.buildBoard(clickHandler);
-
         Pane shapeLayout = groupPane.getShapeLayout();
         assertNotNull(shapeLayout);
-        // Each cell should have an event handler attached
     }
 
     @Test
     void buildBoardIsRepeatable() {
         EventHandler<MouseEvent> clickHandler = event -> cellClickCount++;
-
         assertDoesNotThrow(() -> {
             for (int i = 0; i < 5; i++) {
                 groupPane.buildBoard(clickHandler);
@@ -279,10 +257,8 @@ class GroupPaneTest {
     void getShapeLayoutConsistentAfterBuild() {
         EventHandler<MouseEvent> clickHandler = event -> cellClickCount++;
         groupPane.buildBoard(clickHandler);
-
         Pane layout1 = groupPane.getShapeLayout();
         Pane layout2 = groupPane.getShapeLayout();
-
         assertSame(layout1, layout2, "getShapeLayout should return the same Pane instance");
     }
 }

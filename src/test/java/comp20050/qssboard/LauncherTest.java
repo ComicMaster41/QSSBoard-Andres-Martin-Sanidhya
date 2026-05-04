@@ -50,12 +50,8 @@ class LauncherTest {
 
     @Test
     void mainMethodCanBeCalledWithEmptyArgs() {
-        // Note: In a real scenario, this would launch the application
-        // For unit testing, we're just verifying the method can be called
         assertDoesNotThrow(() -> {
             String[] args = {};
-            // We don't actually call main() here as it would launch the GUI
-            // which would block the test. Instead, we verify it exists.
             Launcher.class.getMethod("main", String[].class);
         });
     }
@@ -64,25 +60,18 @@ class LauncherTest {
     void mainMethodCanBeCalledWithArguments() {
         assertDoesNotThrow(() -> {
             String[] args = {"--argument1", "value1"};
-            // We don't actually call main() here as it would launch the GUI
             Launcher.class.getMethod("main", String[].class);
         });
     }
 
     @Test
     void launcherIsIntendedAsEntryPoint() {
-        // Launcher should be the entry point to the application
-        // It should have minimal implementation - just calling Application.launch()
         assertNotNull(Launcher.class);
     }
 
     @Test
     void launcherDoesNotContainApplicationLogic() {
-        // Launcher is only supposed to start the JavaFX application
-        // All logic should be in HelloApplication or HelloController
         java.lang.reflect.Method[] methods = Launcher.class.getDeclaredMethods();
-
-        // Launcher should only have the main method
         int methodCount = (int) java.util.Arrays.stream(methods)
                 .filter(m -> !m.getName().equals("main"))
                 .count();
@@ -92,9 +81,7 @@ class LauncherTest {
 
     @Test
     void launcherCallsHelloApplication() throws NoSuchMethodException {
-        // The main method should launch HelloApplication
         assertDoesNotThrow(() -> {
-            // Verify HelloApplication exists
             Class.forName("comp20050.qssboard.HelloApplication");
         });
     }
